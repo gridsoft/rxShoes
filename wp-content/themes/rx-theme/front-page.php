@@ -17,9 +17,10 @@ get_header();
 
 get_template_part( 'template-parts/front-page/hero' );
 get_template_part( 'template-parts/front-page/category-cards' );
+get_template_part( 'template-parts/front-page/power-rotation' );
 
-// Remaining homepage sections (Power Rotation tiers, Best Sellers grid,
-// Educational comparison, Shop by Brand, Community Rotations) land here
-// as their own template-parts, in Figma order.
+// Remaining homepage sections (Best Sellers grid, Educational
+// comparison, Shop by Brand, Community Rotations) land here as their
+// own template-parts, in Figma order.
 
 get_footer();

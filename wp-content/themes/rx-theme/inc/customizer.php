@@ -43,6 +43,7 @@ function rx_theme_customize_register( WP_Customize_Manager $wp_customize ): void
 
 	rx_theme_register_hero_section( $wp_customize );
 	rx_theme_register_category_cards_section( $wp_customize );
+	rx_theme_register_rotation_section( $wp_customize );
 }
 add_action( 'customize_register', 'rx_theme_customize_register' );
 
@@ -228,6 +229,185 @@ function rx_theme_register_hero_section( WP_Customize_Manager $wp_customize ): v
 }
 
 /**
+ * Field definitions for the Power Rotation section (Figma: "Section -
+ * 3", "Build Your 3-Stage Power Rotation") — eyebrow/heading/
+ * description plus 7 fields per tier card × 3 fixed tiers, plus the
+ * example calculator box. This is the most content-heavy homepage
+ * section so far; still flat Customizer fields rather than a custom
+ * post type / repeater, same reasoning as Category Cards: exactly 3
+ * fixed tiers, not a variable-length list, so there's nothing a
+ * repeater buys here that grouped fields don't already give.
+ *
+ * Copy/values verified 2026-09-21 against a client-supplied clean
+ * export of this exact section, cross-checked with pixel-sampling —
+ * Figma's API was rate-limited for this build (see PROJECT.md §13).
+ *
+ * The 2-pair/3-pair toggle % (-40%/-55%) again conflicts with the
+ * tier cards' own numbers (30%/45%) and the calculator's own computed
+ * total (which matches 45%, not 55%) — same unresolved inconsistency
+ * as Hero's tier badges (§6.2 dev log). Kept as separate editable
+ * fields rather than silently reconciled.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_rotation_fields(): array {
+	$fields = array(
+		'rx_rotation_eyebrow'     => array(
+			'default'   => __( 'How the RX Rotation Works', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_heading'     => array(
+			'default'   => __( 'Build Your 3-Stage Power Rotation', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_description' => array(
+			'default'   => __( 'Specialised footwear doubles shoe lifespan and prevents overuse injury. Combine any brand or discipline to instantly unlock automated tiered savings.', 'rx-theme' ),
+			'label'     => __( 'Description', 'rx-theme' ),
+			'type'      => 'textarea',
+			'sanitize'  => 'sanitize_textarea_field',
+			'transport' => 'postMessage',
+		),
+	);
+
+	// Per-tier fields: tag_primary, tag_secondary (empty on tier 1 — no
+	// second tag there), title, description, example product + price,
+	// and the bottom status line. Built from compact data so 3×7
+	// nearly-identical fields don't have to be hand-repeated.
+	$tiers = array(
+		1 => array(
+			'tag_primary'     => 'Base Foundation',
+			'tag_secondary'   => '',
+			'title'           => 'Pair 1: Daily Training / Metcon',
+			'description'     => 'High-durability all-rounder for box jumps, kettlebell work, short shuttles, and rope climbs.',
+			'example_product' => 'R.A.D ONE V2',
+			'example_price'   => '$240.00 AUD',
+			'status_text'     => 'Status: Standard Pricing',
+		),
+		2 => array(
+			'tag_primary'     => 'Unlock 30% Off',
+			'tag_secondary'   => '30% Tier Active',
+			'title'           => 'Pair 2: Heavy Lifting / Stability',
+			'description'     => 'Zero-drop grounding or elevated wooden/TPU heel wedges for squats, cleans, snatches, and deadlifts.',
+			'example_product' => 'TYR DropZero Lifter',
+			'example_price'   => '$210.00 AUD',
+			'status_text'     => 'Bundle 2 Pairs: Save 30% Instantly',
+		),
+		3 => array(
+			'tag_primary'     => 'Max Tier: Unlock 45% Off',
+			'tag_secondary'   => 'Best Value',
+			'title'           => 'Pair 3: Intervals / Road Running',
+			'description'     => 'High-cushion nitrogen-infused superfoam for track tempo workouts, recovery miles, and aerobic conditioning.',
+			'example_product' => 'Inov-8 F-Fly Speed',
+			'example_price'   => '$200.00 AUD',
+			'status_text'     => 'Bundle 3 Pairs: Save 45% on Entire Cart',
+		),
+	);
+
+	$field_labels = array(
+		'tag_primary'     => 'Tag',
+		'tag_secondary'   => 'Second tag (leave blank for none)',
+		'title'           => 'Title',
+		'description'     => 'Description',
+		'example_product' => 'Example product',
+		'example_price'   => 'Example price',
+		'status_text'     => 'Bottom status line',
+	);
+
+	foreach ( $tiers as $n => $tier_data ) {
+		foreach ( $tier_data as $key => $default ) {
+			$id = "rx_rotation_tier_{$n}_{$key}";
+
+			$fields[ $id ] = array(
+				'default'   => $default,
+				/* translators: 1: tier number (1-3), 2: field label, e.g. "Title". */
+				'label'     => sprintf( __( 'Pair %1$d — %2$s', 'rx-theme' ), $n, $field_labels[ $key ] ),
+				'type'      => 'description' === $key ? 'textarea' : 'text',
+				'sanitize'  => 'description' === $key ? 'sanitize_textarea_field' : 'sanitize_text_field',
+				'transport' => 'postMessage',
+			);
+		}
+	}
+
+	// Example calculator box.
+	$fields += array(
+		'rx_rotation_calc_heading'      => array(
+			'default'   => __( 'Example Athlete Rotation Calculation', 'rx-theme' ),
+			'label'     => __( 'Calculator — heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_formula'      => array(
+			'default'   => __( 'R.A.D ONE V2 ($240) + TYR DropZero ($210) + Inov-8 F-Fly ($200) = $650.00 AUD', 'rx-theme' ),
+			'label'     => __( 'Calculator — formula line', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_toggle_2pair' => array(
+			'default'   => __( '2-Pair Rotation (-40%)', 'rx-theme' ),
+			'label'     => __( 'Calculator — 2-pair toggle label', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_toggle_3pair' => array(
+			'default'   => __( '3-Pair Rotation (-55%)', 'rx-theme' ),
+			'label'     => __( 'Calculator — 3-pair toggle label', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_total_label'  => array(
+			'default'   => __( 'Bundle Checkout Total', 'rx-theme' ),
+			'label'     => __( 'Calculator — total label', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_total_price'  => array(
+			'default'   => '$357.50',
+			'label'     => __( 'Calculator — total price', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_save_text'    => array(
+			'default'   => __( 'You Save $292.50 AUD (45%)', 'rx-theme' ),
+			'label'     => __( 'Calculator — savings line', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+	);
+
+	return $fields;
+}
+
+/**
+ * Register the Power Rotation section's controls.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_rotation_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_rotation',
+		array(
+			'title' => __( 'Power Rotation', 'rx-theme' ),
+			'panel' => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_rotation', rx_theme_rotation_fields() );
+}
+
+/**
  * Field definitions for the Category Cards section (eyebrow, heading,
  * description only — the three cards themselves come from the Men/
  * Women/Unisex product categories, not from separate Customizer
@@ -284,8 +464,13 @@ function rx_theme_register_category_cards_section( WP_Customize_Manager $wp_cust
 }
 
 /**
- * Selective-refresh partials for the postMessage-transport hero fields,
- * so the Customizer preview updates live without a full page reload.
+ * Selective-refresh partials for every postMessage-transport field
+ * across every homepage section, so the Customizer preview updates
+ * live without a full page reload. Auto-derived from
+ * rx_theme_all_mod_fields() (see inc/template-tags.php) rather than a
+ * manually maintained ID list — with 40+ fields across Hero/Category
+ * Cards/Power Rotation and more sections still to come, hand-listing
+ * every ID here would drift out of sync fast.
  *
  * @param WP_Customize_Manager $wp_customize Customizer manager.
  */
@@ -294,33 +479,21 @@ function rx_theme_customize_partials( WP_Customize_Manager $wp_customize ): void
 		return;
 	}
 
-	$partial_fields = array(
-		'rx_hero_eyebrow',
-		'rx_hero_heading',
-		'rx_hero_subheading',
-		'rx_hero_description',
-		'rx_hero_tier_1_flag',
-		'rx_hero_tier_1_text',
-		'rx_hero_tier_2_flag',
-		'rx_hero_tier_2_text',
-		'rx_hero_tier_note',
-		'rx_hero_cta_primary_text',
-		'rx_hero_cta_secondary_text',
-		'rx_category_cards_eyebrow',
-		'rx_category_cards_heading',
-		'rx_category_cards_description',
-	);
+	// Known multi-line fields need the <br>-joining helper, not a
+	// plain esc_html(), to render the same way the template does.
+	$multiline_ids = array( 'rx_hero_heading' );
 
-	foreach ( $partial_fields as $id ) {
+	foreach ( rx_theme_all_mod_fields() as $id => $field ) {
+		if ( 'postMessage' !== ( $field['transport'] ?? '' ) ) {
+			continue;
+		}
+
 		$wp_customize->selective_refresh->add_partial(
 			$id,
 			array(
 				'selector'        => '[data-customize-partial="' . $id . '"]',
-				'render_callback' => function () use ( $id ) {
-					// Heading is multi-line (2-line headline in the Figma
-					// design) — render it the same way the template does,
-					// via the shared helper, so the live preview matches.
-					if ( 'rx_hero_heading' === $id ) {
+				'render_callback' => function () use ( $id, $multiline_ids ) {
+					if ( in_array( $id, $multiline_ids, true ) ) {
 						return rx_theme_multiline_html( $id );
 					}
 					return esc_html( rx_theme_get_mod( $id ) );

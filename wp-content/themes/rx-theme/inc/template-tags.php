@@ -15,9 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * All theme_mod field definitions, keyed by ID, merged from every
  * homepage section's field-definition function — add each new
  * section's function name to the list below as it's built. Single
- * source of truth for rx_theme_get_mod()'s fallback default.
+ * source of truth for both rx_theme_get_mod()'s fallback default and
+ * the Customizer's auto-derived selective-refresh partials (see
+ * rx_theme_customize_partials() in inc/customizer.php).
  *
- * @return array<string,array{default:string}>
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
  */
 function rx_theme_all_mod_fields(): array {
 	static $fields = null;
@@ -27,6 +29,7 @@ function rx_theme_all_mod_fields(): array {
 		$section_field_sources = array(
 			'rx_theme_hero_fields',
 			'rx_theme_category_cards_fields',
+			'rx_theme_rotation_fields',
 		);
 		foreach ( $section_field_sources as $source ) {
 			if ( function_exists( $source ) ) {

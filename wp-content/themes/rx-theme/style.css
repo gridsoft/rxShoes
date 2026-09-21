@@ -494,6 +494,228 @@ a {
 	content: ' \2192'; /* → */
 }
 
+/* Power Rotation (template-parts/front-page/power-rotation.php).
+   Colours verified 2026-09-21 against a clean client-supplied export
+   of this exact section, cross-checked with pixel-sampling. Tag tint
+   backgrounds (30% Tier Active / Best Value) are the red/lime tokens
+   at low opacity rather than new hardcoded hex values, since that's
+   visually what they are — a light tint of the same accent colour
+   used solidly elsewhere in the same card. */
+.rx-rotation {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3em;
+	padding-inline: var( --rx-container-pad );
+	background: #f3f3f3;
+	text-align: center;
+}
+.rx-rotation__header {
+	max-width: 40em;
+	margin: 0 auto 2em;
+}
+.rx-rotation__heading {
+	font-size: var( --rx-text-3xl );
+	text-transform: uppercase;
+	margin: 0.3em 0;
+}
+.rx-rotation__description {
+	font-family: var( --rx-font-body );
+	color: #555;
+	line-height: 1.5;
+	margin: 0;
+}
+.rx-rotation__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1em;
+	text-align: left;
+	margin-bottom: 1.5em;
+}
+.rx-rotation-card {
+	background: var( --rx-color-white );
+	padding: 1.5em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+}
+.rx-rotation-card__top {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.5em;
+}
+.rx-rotation-card__number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.2em;
+	height: 2.2em;
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+	font-family: var( --rx-font-display );
+	font-weight: 700;
+	font-size: var( --rx-text-lg );
+	border-radius: var( --rx-radius-sm );
+}
+/* Tier 2's number badge is blue; tier 3's stays ink but the number
+   itself is lime, not white — confirmed from the reference export. */
+.rx-rotation-card--tier-2 .rx-rotation-card__number {
+	background: var( --rx-color-blue );
+}
+.rx-rotation-card--tier-3 .rx-rotation-card__number {
+	color: var( --rx-color-lime );
+}
+.rx-rotation-card__tags {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.4em;
+}
+.rx-rotation-card__tag {
+	padding: 0.3em 0.6em;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+.rx-rotation-card--tier-1 .rx-rotation-card__tag--primary {
+	background: var( --rx-color-gray-200 );
+	color: var( --rx-color-ink );
+}
+.rx-rotation-card--tier-2 .rx-rotation-card__tag--primary {
+	background: var( --rx-color-red );
+	color: var( --rx-color-white );
+}
+.rx-rotation-card--tier-2 .rx-rotation-card__tag--secondary {
+	background: rgba( 229, 57, 53, 0.12 ); /* --rx-color-red tint */
+	color: var( --rx-color-red );
+}
+.rx-rotation-card--tier-3 .rx-rotation-card__tag--primary {
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-rotation-card--tier-3 .rx-rotation-card__tag--secondary {
+	background: rgba( 170, 253, 48, 0.15 ); /* --rx-color-lime tint */
+	color: #2e5a0a;
+}
+.rx-rotation-card__title {
+	font-family: var( --rx-font-display );
+	font-weight: 800;
+	font-size: var( --rx-text-lg );
+	text-transform: uppercase;
+	margin: 0;
+}
+.rx-rotation-card__description {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-base );
+	color: #555;
+	line-height: 1.5;
+	margin: 0;
+}
+.rx-rotation-card__example {
+	border-top: 1px solid var( --rx-color-gray-200 );
+	padding-top: 0.75em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	font-size: var( --rx-text-sm );
+}
+.rx-rotation-card__example-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 1em;
+	color: var( --rx-color-ink );
+}
+.rx-rotation-card__status {
+	margin: 0;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #555;
+}
+.rx-rotation-card--tier-2 .rx-rotation-card__status {
+	color: var( --rx-color-red );
+}
+.rx-rotation-card--tier-3 .rx-rotation-card__status {
+	color: var( --rx-color-ink );
+}
+
+/* Example calculator box */
+.rx-rotation-calc {
+	background: var( --rx-color-white );
+	padding: 1.5em;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5em;
+	text-align: left;
+	max-width: 55em;
+	margin-inline: auto;
+}
+.rx-rotation-calc__heading {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	font-family: var( --rx-font-display );
+	font-weight: 700;
+	font-size: var( --rx-text-base );
+	text-transform: uppercase;
+	margin: 0 0 0.5em;
+}
+.rx-rotation-calc__icon {
+	width: 1em;
+	height: 1em;
+	background: var( --rx-color-lime );
+	border-radius: var( --rx-radius-sm );
+	flex-shrink: 0;
+}
+.rx-rotation-calc__formula {
+	font-family: var( --rx-font-body );
+	color: #555;
+	margin: 0 0 1em;
+}
+.rx-rotation-calc__toggle {
+	display: flex;
+	gap: 0.5em;
+}
+.rx-rotation-calc__toggle-option {
+	flex: 1;
+	padding: 0.75em 1em;
+	background: var( --rx-color-gray-100 );
+	color: var( --rx-color-ink );
+	font-family: var( --rx-font-display );
+	font-weight: 700;
+	text-align: center;
+}
+.rx-rotation-calc__toggle-option--active {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-rotation-calc__total {
+	background: var( --rx-color-gray-100 );
+	padding: 1.25em 1.5em;
+	text-align: center;
+}
+.rx-rotation-calc__total-label {
+	margin: 0 0 0.4em;
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #555;
+}
+.rx-rotation-calc__total-price {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-weight: 800;
+	font-size: var( --rx-text-3xl );
+	color: var( --rx-color-blue );
+}
+.rx-rotation-calc__save {
+	margin: 0.4em 0 0;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+
 /* Desktop enhancements */
 @media ( min-width: 62em ) {
 	/* One shared inset for every section's container — see
@@ -548,6 +770,26 @@ a {
 	.rx-category-cards__grid {
 		grid-template-columns: repeat( 3, 1fr );
 		gap: 1.5em;
+	}
+	.rx-rotation {
+		padding-block: 4em;
+	}
+	.rx-rotation__grid {
+		grid-template-columns: repeat( 3, 1fr );
+		gap: 1.5em;
+	}
+	.rx-rotation-calc__example {
+		flex: 1;
+	}
+	.rx-rotation-calc {
+		flex-direction: row;
+		align-items: stretch;
+	}
+	.rx-rotation-calc__total {
+		flex: 0 0 16em;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	.rx-hero {
 		padding-block: 5em;

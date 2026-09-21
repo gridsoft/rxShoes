@@ -1,0 +1,35 @@
+# WordPress core is not versioned here — only the custom theme, plugin, and project config are.
+/wp-admin/
+/wp-includes/
+/wp-*.php
+!/wp-config-sample.php
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+
+# Third-party / contrib content (WooCommerce, default themes, etc.) is not versioned.
+/wp-content/plugins/*
+!/wp-content/plugins/rx-core/
+/wp-content/themes/*
+!/wp-content/themes/rx-theme/
+/wp-content/upgrade/
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/index.php
+
+# Secrets — never commit real credentials/keys.
+wp-config.php
+
+# Dependency & build output
+/wp-content/plugins/rx-core/vendor/
+/wp-content/plugins/rx-core/node_modules/
+/wp-content/themes/rx-theme/node_modules/
+/wp-content/themes/rx-theme/vendor/
+/**/composer.lock
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+.vscode/
+*.log

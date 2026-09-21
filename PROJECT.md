@@ -148,9 +148,7 @@ All business logic lives in a site-specific plugin: `[project]-core`
 
 * **Add-to-cart:** AJAX add-to-cart on PDP and archives, side/mini-cart per Figma, cart fragments optimised (or replaced by Store API calls).
 * **Custom purchasing flows:** [describe — e.g., build-your-own bundle, upsell step, quick-buy]
-* **Cart/Checkout implementation:** [Classic shortcode checkout with hooks] / [Cart & Checkout Blocks with Store API extensions] — decision: [ ] and reason: [ ].
-  * Classic = full hook control, easier custom flows.
-  * Blocks = future-proof, but custom logic needs `ExtendSchema` / Store API / JS filters.
+* **Cart/Checkout implementation — DECIDED (2026-09-21): classic shortcode checkout with hooks.** Reason: the payment-method-conditional promotion (PayID-only discount, live re-price + popup if switched to Card/PayPal) is straightforward via `woocommerce_checkout_update_order_review` / `woocommerce_before_calculate_totals`; the same behaviour on Blocks needs a custom Store API `ExtendSchema` extension plus React-side UI work — more build, less mature pattern for this exact case. Accepted risk: WooCommerce's ecosystem direction favours Blocks long-term, so this may need revisiting/migrating later in the retainer.
 * **Checkout flow:** [single-page / multi-step], guest checkout [yes/no], custom fields: [list].
 * Validation server-side always; client-side only as UX.
 
@@ -261,6 +259,7 @@ You are a **senior WordPress core developer and WooCommerce architect** working 
 | 2026-09-21 | Decision | Repo pushed to `https://github.com/gridsoft/rxShoes.git` (`main`). Only `rx-theme`/`rx-core`/`PROJECT.md` are tracked, per the existing `.gitignore` — no WP core, no WooCommerce, no default themes pushed. |
 | 2026-09-21 | Answered | Client answered several §15 questions: target market AU/AUD (Q1), bundles built as custom code not a plugin (Q2, platform half only — config half still open), coupon stacking allowed but low priority (Q3), payment methods Card/PayPal/PayID (Q4, PayID's PSP still unnamed), email/SMS platform is Omnisend with an unpaid-PayID nudge workflow (Q5). See §1, §6, §8, §9, §15 for detail. |
 | 2026-09-21 | Requirement | New, not in the original scope list: promotions can be tied to payment method (PayID-only discount), with live removal + a popup notice if the customer switches to Card/PayPal at checkout. This is a hard input into the still-undecided §7 checkout architecture (classic vs. Blocks) — flagged to the client as a decision needed before Cart/Checkout services are built. |
+| 2026-09-21 | Decision | §7 checkout architecture: classic shortcode checkout, confirmed. See §7 for reasoning and accepted risk. |
 
 ---
 

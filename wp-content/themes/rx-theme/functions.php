@@ -21,6 +21,7 @@ require RX_THEME_DIR . '/inc/customizer.php';
 require RX_THEME_DIR . '/inc/taxonomy-fields.php';
 require RX_THEME_DIR . '/inc/woocommerce.php';
 require RX_THEME_DIR . '/inc/product-fields.php';
+require RX_THEME_DIR . '/inc/customizer-bundle.php';
 
 /**
  * Theme setup: supports, menus, image sizes.

@@ -59,13 +59,15 @@ add_filter(
 
 /**
  * Whether a product shows the bundle treatment ("Bundle eligible"
- * badge, "as low as" pricing, "Add to bundle" button) or the normal
- * buy treatment.
+ * badge, "as low as" pricing, rotation row, and an "Add to bundle"
+ * button) — or the plain "Add to basket" button instead. Either way the
+ * button is the same standard add-to-cart action.
  *
- * Returns true for every product for now, as agreed — the real rule
- * will be an admin checkbox on the product edit screen, owned by
- * rx-core. That plugin should hook this filter rather than the
- * template changing.
+ * The answer comes from the "Eligible for bundle" checkbox on the
+ * product edit screen, which the rx-core plugin owns (a business rule,
+ * not presentation — see RX\Core\Bundles\BundleEligibility). It hooks
+ * this filter. With that plugin inactive nothing hooks it, so the
+ * default is false: every product falls back to the plain buy button.
  *
  * @param WC_Product $product Product being rendered.
  */
@@ -73,28 +75,69 @@ function rx_theme_product_is_bundle_eligible( WC_Product $product ): bool {
 	/**
 	 * Filters whether a product is bundle-eligible.
 	 *
-	 * @param bool       $eligible Default true until the admin checkbox exists.
+	 * @param bool       $eligible Default false; rx-core answers from the product checkbox.
 	 * @param WC_Product $product  Product being rendered.
 	 */
-	return (bool) apply_filters( 'rx_theme_product_is_bundle_eligible', true, $product );
+	return (bool) apply_filters( 'rx_theme_product_is_bundle_eligible', false, $product );
 }
 
 /**
- * The top bundle discount tier, as a percentage (e.g. 45.0).
+ * Fallback for the top bundle discount tier when nothing has been set
+ * in the Customizer. 45 is the number the Figma cards' own maths uses
+ * ($199 → $109.45 in a 3-pack is exactly 45% off).
+ */
+function rx_theme_bundle_default_discount_percent(): float {
+	return 45.0;
+}
+
+/**
+ * The top (3-pack) bundle discount, as a percentage (e.g. 45.0).
  *
- * The client's 30%/45% vs. 40%/55% tier numbers are still unconfirmed
- * (see PROJECT.md §6.2). 45 is the number the Figma cards' own maths
- * uses ($199 → $109.45 in a 3-pack is exactly 45% off), so it's the
- * default here, but this is a pricing rule: the rx-core pricing engine
- * should own it via this filter, not the theme.
+ * Set under Appearance > Customize > Bundle Discount. The Customizer
+ * control is registered as an *option* setting, not a theme_mod, so the
+ * value lives in wp_options as `rx_bundle_max_discount_percent` and
+ * survives a theme switch — and the rx-core pricing engine can read the
+ * same option without depending on this theme. The client's 30/45 vs.
+ * 40/55 tier numbers are still unresolved (PROJECT.md §6.2); this is
+ * the one number the shop card uses.
  */
 function rx_theme_bundle_max_discount_percent(): float {
+	$stored  = get_option( 'rx_bundle_max_discount_percent', '' );
+	$percent = '' === $stored ? rx_theme_bundle_default_discount_percent() : (float) $stored;
+
 	/**
-	 * Filters the best (3-pack) bundle discount percentage.
+	 * Filters the best (3-pack) bundle discount percentage, e.g. so the
+	 * pricing engine can override the Customizer value.
 	 *
-	 * @param float $percent Default 45.0.
+	 * @param float $percent Value from the Customizer option (or the default).
 	 */
-	return (float) apply_filters( 'rx_theme_bundle_max_discount_percent', 45.0 );
+	return (float) apply_filters( 'rx_theme_bundle_max_discount_percent', $percent );
+}
+
+/**
+ * Sanitize the bundle discount % from the Customizer: a number clamped
+ * to 0–100 (a discount outside that range is never valid).
+ *
+ * @param mixed $value Raw submitted value.
+ */
+function rx_theme_sanitize_percent( $value ): float {
+	return min( 100.0, max( 0.0, (float) $value ) );
+}
+
+/**
+ * The card's "Best for:" text, from the product's "Best for" field
+ * (see inc/product-fields.php). One item per line is joined with a
+ * bullet — "Functional Training • Strength" — so an admin can list
+ * items on separate lines instead of typing the separators; free text
+ * on a single line is shown as typed. Empty string when not set.
+ *
+ * @param WC_Product $product Product being rendered.
+ */
+function rx_theme_product_best_for( WC_Product $product ): string {
+	$lines = preg_split( '/\r\n|\r|\n/', (string) $product->get_meta( '_rx_best_for' ) );
+	$lines = array_filter( array_map( 'trim', is_array( $lines ) ? $lines : array() ) );
+
+	return implode( ' • ', $lines );
 }
 
 /**

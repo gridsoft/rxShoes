@@ -28,8 +28,8 @@ final class Plugin {
 	private static ?Plugin $instance = null;
 
 	/**
-	 * Registered feature services, added to the array via a future
-	 * `add_service()` as each one is built.
+	 * Registered feature services, populated in boot() from
+	 * default_services().
 	 *
 	 * @var Service[]
 	 */
@@ -56,6 +56,8 @@ final class Plugin {
 	 * after WooCommerce is confirmed active.
 	 */
 	public function boot(): void {
+		$this->services = $this->default_services();
+
 		foreach ( $this->services as $service ) {
 			$service->register();
 		}
@@ -67,6 +69,18 @@ final class Plugin {
 		 * @param Plugin $plugin The booted plugin instance.
 		 */
 		do_action( 'rx_core_plugin_booted', $this );
+	}
+
+	/**
+	 * The feature services this plugin ships. Add each new service here
+	 * as it's built (Pricing, Cart, Checkout, ... per PROJECT.md §4.2).
+	 *
+	 * @return Service[]
+	 */
+	private function default_services(): array {
+		return array(
+			new Bundles\BundleEligibility(),
+		);
 	}
 
 	/**

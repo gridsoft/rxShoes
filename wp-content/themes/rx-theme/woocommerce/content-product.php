@@ -13,9 +13,14 @@
  * their callbacks (link wrapper, title, rating, price, add-to-cart)
  * would duplicate the markup below. Nothing in this project hooks them.
  *
- * Bundle-eligible products get the bundle treatment; everything else
- * gets the normal buy button. Eligibility is filtered — see
- * rx_theme_product_is_bundle_eligible() in inc/woocommerce.php.
+ * One button per card, always WooCommerce's standard add-to-cart.
+ * Bundle-eligible products (the "Eligible for bundle" checkbox, owned by
+ * rx-core, read via rx_theme_product_is_bundle_eligible() in
+ * inc/woocommerce.php) get the bundle badge, "as low as" pricing,
+ * rotation row and the blue "Add to bundle" button. Everything else
+ * gets the black "Add to basket". Both are the same add-to-cart action
+ * under a different label — the bundle discount is calculated later
+ * from the cart contents, not from which button was pressed.
  *
  * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
@@ -42,36 +47,26 @@ $rx_theme_rating_label = sprintf(
 	$rx_theme_rating['rating'],
 	$rx_theme_rating['count']
 );
-$rx_theme_best_for    = trim( wp_strip_all_tags( $product->get_short_description() ) );
-$rx_theme_price       = rx_theme_product_price( $product );
-$rx_theme_is_bundle   = rx_theme_product_is_bundle_eligible( $product );
-$rx_theme_percent     = rx_theme_bundle_max_discount_percent();
-$rx_theme_button_href = $rx_theme_permalink;
-$rx_theme_button_text = __( 'Add to bundle', 'rx-theme' );
-$rx_theme_button_cls  = 'rx-product-card__button rx-product-card__button--bundle';
-$rx_theme_button_attr = '';
+$rx_theme_best_for  = rx_theme_product_best_for( $product );
+$rx_theme_price     = rx_theme_product_price( $product );
+$rx_theme_is_bundle = rx_theme_product_is_bundle_eligible( $product );
+$rx_theme_percent   = rx_theme_bundle_max_discount_percent();
 
-if ( ! $rx_theme_is_bundle ) {
-	// Normal buy: standard WooCommerce behaviour (AJAX add-to-cart for
-	// simple products, "Select options" link for variable ones).
-	$rx_theme_button_href = $product->add_to_cart_url();
-	$rx_theme_button_text = $product->add_to_cart_text();
-	$rx_theme_button_cls  = 'rx-product-card__button rx-product-card__button--cart';
-
-	if ( $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ) {
-		$rx_theme_button_cls .= ' add_to_cart_button ajax_add_to_cart';
-	}
-
-	$rx_theme_button_attr = sprintf(
-		' data-product_id="%1$d" data-product_sku="%2$s" aria-label="%3$s" rel="nofollow"',
-		$product->get_id(),
-		esc_attr( $product->get_sku() ),
-		esc_attr( $product->add_to_cart_description() )
-	);
-}
-// Bundle-eligible: no bundle engine yet (Milestone 4), so "Add to
-// bundle" goes to the product page to pick size/colour rather than
-// adding straight to the cart, which would be the wrong behaviour.
+// "Add to basket" and "Add to bundle" are the SAME action — WooCommerce's
+// standard add-to-cart (AJAX for simple products, a link to the product
+// page for variable ones, which need a size chosen first) — under
+// different labels. The bundle discount is worked out later from what's
+// in the cart, not by which button was pressed, so there's deliberately
+// nothing bundle-specific in the link itself.
+$rx_theme_cart_href = $product->add_to_cart_url();
+$rx_theme_cart_ajax = ( $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() )
+	? ' add_to_cart_button ajax_add_to_cart'
+	: '';
+$rx_theme_cart_attr = sprintf(
+	' data-product_id="%1$d" data-product_sku="%2$s" rel="nofollow"',
+	$product->get_id(),
+	esc_attr( $product->get_sku() )
+);
 ?>
 <li <?php wc_product_class( 'rx-product-card', $product ); ?>>
 	<div class="rx-product-card__media">
@@ -118,7 +113,7 @@ if ( ! $rx_theme_is_bundle ) {
 			<p class="rx-product-card__best-for">
 				<?php
 				printf(
-					/* translators: %s: short product description, e.g. "Functional Training • Strength". */
+					/* translators: %s: the product's "Best for" field, e.g. "Functional Training • Strength". */
 					esc_html__( 'Best for: %s', 'rx-theme' ),
 					esc_html( $rx_theme_best_for )
 				);
@@ -160,12 +155,16 @@ if ( ! $rx_theme_is_bundle ) {
 				</p>
 			<?php endif; ?>
 
-			<a class="<?php echo esc_attr( $rx_theme_button_cls ); ?>" href="<?php echo esc_url( $rx_theme_button_href ); ?>"<?php echo $rx_theme_button_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_attr()-escaped values only. ?>>
-				<?php if ( $rx_theme_is_bundle ) : ?>
+			<?php if ( $rx_theme_is_bundle ) : ?>
+				<a class="rx-product-card__button rx-product-card__button--bundle<?php echo esc_attr( $rx_theme_cart_ajax ); ?>" href="<?php echo esc_url( $rx_theme_cart_href ); ?>"<?php echo $rx_theme_cart_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_attr()-escaped values only. ?> aria-label="<?php echo esc_attr( sprintf( /* translators: %s: product name. */ __( 'Add “%s” to your bundle', 'rx-theme' ), $product->get_name() ) ); ?>">
 					<svg class="rx-product-card__button-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-				<?php endif; ?>
-				<span><?php echo esc_html( $rx_theme_button_text ); ?></span>
-			</a>
+					<span><?php esc_html_e( 'Add to bundle', 'rx-theme' ); ?></span>
+				</a>
+			<?php else : ?>
+				<a class="rx-product-card__button rx-product-card__button--cart<?php echo esc_attr( $rx_theme_cart_ajax ); ?>" href="<?php echo esc_url( $rx_theme_cart_href ); ?>"<?php echo $rx_theme_cart_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_attr()-escaped values only. ?> aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>">
+					<span><?php esc_html_e( 'Add to basket', 'rx-theme' ); ?></span>
+				</a>
+			<?php endif; ?>
 		</div>
 	</div>
 </li>

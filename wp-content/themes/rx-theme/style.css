@@ -940,6 +940,17 @@ a {
 .rx-product-card__button:focus-visible {
 	filter: brightness( 1.15 );
 }
+/* WooCommerce's add-to-cart script marks a button .loading while the
+   request runs, then appends a "View cart" link after it. */
+.rx-product-card__button.loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+.rx-product-card .added_to_cart {
+	font-size: var( --rx-text-sm );
+	text-align: center;
+	text-decoration: underline;
+}
 
 /* Two-up on larger phones/tablets; four-up is in the desktop block. */
 @media ( min-width: 40em ) {

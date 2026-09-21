@@ -555,7 +555,7 @@ a {
 	font-family: var( --rx-font-display );
 	font-weight: 700;
 	font-size: var( --rx-text-lg );
-	border-radius: var( --rx-radius-sm );
+	border-radius: var( --rx-radius-xl ); /* 12px */
 }
 /* Tier 2's number badge is blue; tier 3's stays ink but the number
    itself is lime, not white — confirmed from the reference export. */
@@ -613,12 +613,12 @@ a {
 	margin: 0;
 }
 .rx-rotation-card__example {
-	border-top: 1px solid var( --rx-color-gray-200 );
-	padding-top: 0.75em;
 	display: flex;
 	flex-direction: column;
 	gap: 0.35em;
 	font-size: var( --rx-text-sm );
+	background: var( --rx-color-gray-50 );
+	padding: 0.625em;
 }
 .rx-rotation-card__example-row {
 	display: flex;

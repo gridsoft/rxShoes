@@ -36,6 +36,9 @@ For PayID this is straightforward, but **PayTo specifically requires "Checkout A
 ### 8. Product catalog (Excel file)
 Still waiting on this — product names, descriptions, sizes, colours, and 3-5 images per product. Reminder on the image side: if you can put all the images in one shared folder (Google Drive/Dropbox) with predictable filenames (e.g. `SKU-1.jpg`, `SKU-2.jpg`), we can bulk-import everything in one pass rather than uploading each photo by hand — much faster and repeatable if we ever need to rebuild the catalog on staging.
 
+### 9. Figma account is on the Starter plan — API access keeps running out
+To build each page accurately we pull exact colours/spacing/text straight from your Figma file via its API, rather than guessing off a screenshot (guessing caused a real rework earlier — see the hero section history). That API access is tied to your Figma account's plan, and it's currently on **Starter**, which has a low request allowance. We've already hit it once this week, and it doesn't reset for about 4-5 days each time. Since we'll be pulling data like this for every remaining page (not just the homepage — checkout, shop, product pages, the bundle builder), this will likely keep happening and slow the build down unless the Figma account is upgraded to a plan with a higher API limit. Worth doing sooner rather than later if you want steady progress.
+
 ---
 
 ## Good to know — not urgent, nothing to action yet

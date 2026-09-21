@@ -611,6 +611,15 @@ a {
 	color: #555;
 	line-height: 1.5;
 	margin: 0;
+	/* Grid stretches all 3 cards to match the tallest (card 3's 3-line
+	   description), but with no flex-grow that leftover height just
+	   sat unused after the status line in the shorter cards — the
+	   example box stayed pinned to its own card's natural content
+	   height instead of aligning across cards. Growing the
+	   description absorbs that slack directly above the example box,
+	   which both aligns it across all 3 cards and keeps the gap above/
+	   below it equal (the flex `gap` is already uniform either way). */
+	flex-grow: 1;
 }
 .rx-rotation-card__example {
 	display: flex;
@@ -657,7 +666,9 @@ a {
 	gap: 0.5em;
 	font-family: var( --rx-font-display );
 	font-weight: 700;
-	font-size: var( --rx-text-base );
+	font-size: var( --rx-text-xl ); /* 22px, confirmed against Figma inspect */
+	line-height: 26px;
+	letter-spacing: 0.66px;
 	text-transform: uppercase;
 	margin: 0 0 0.5em;
 }

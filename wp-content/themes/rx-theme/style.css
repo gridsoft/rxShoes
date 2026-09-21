@@ -228,6 +228,93 @@ a {
 	margin: 0;
 }
 
+/* Hero (front-page.php > template-parts/front-page/hero.php).
+   First pass: real copy/colours/type from Figma, but exact layout
+   positioning for this section hasn't been measured node-by-node yet —
+   refine once that pass happens. Background image comes from the
+   Customizer (--rx-hero-image custom property); a flat colour is the
+   fallback so the section still works with no image set. */
+.rx-hero {
+	position: relative;
+	padding: 2em 1em 2.5em;
+	background-color: var( --rx-color-gray-50 );
+	background-image:
+		linear-gradient( to bottom, rgba( 0, 0, 0, 0.55 ), rgba( 0, 0, 0, 0.15 ) 60% ),
+		var( --rx-hero-image, none );
+	background-size: cover;
+	background-position: center;
+	color: var( --rx-color-white );
+}
+.rx-hero__content {
+	max-width: 40em;
+}
+.rx-hero__eyebrow {
+	margin: 0 0 0.75em;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-hero__heading {
+	font-size: var( --rx-text-3xl );
+	margin-bottom: 0.3em;
+}
+.rx-hero__subheading {
+	font-family: var( --rx-font-display );
+	font-weight: 700;
+	font-size: var( --rx-text-xl );
+	color: var( --rx-color-blue );
+	margin: 0 0 0.6em;
+}
+.rx-hero__description {
+	font-size: var( --rx-text-base );
+	line-height: 1.5;
+	margin: 0 0 1.25em;
+	max-width: 32em;
+}
+.rx-hero__tiers {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75em;
+	margin-bottom: 1.5em;
+}
+.rx-hero__tier {
+	position: relative;
+	padding: 0.6em 1em;
+	background: var( --rx-color-white );
+	color: var( --rx-color-ink );
+	border-radius: var( --rx-radius-md );
+	font-weight: 700;
+	font-size: var( --rx-text-sm );
+}
+.rx-hero__tier--flagged {
+	padding-top: 1.1em;
+}
+.rx-hero__tier-flag {
+	position: absolute;
+	top: -0.6em;
+	left: 0.75em;
+	padding: 0.15em 0.5em;
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+	border-radius: var( --rx-radius-sm );
+	font-size: var( --rx-text-xs );
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.rx-hero__actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+}
+.rx-btn--outline {
+	background: transparent;
+	border: 1px solid var( --rx-color-white );
+	color: var( --rx-color-white );
+	text-align: center;
+}
+
 /* Desktop enhancements */
 @media ( min-width: 62em ) {
 	.rx-nav {
@@ -255,6 +342,22 @@ a {
 	}
 	.rx-logo__tagline {
 		display: block;
+	}
+	.rx-hero {
+		padding: 5em 3em;
+		min-height: 34em;
+		display: flex;
+		align-items: center;
+	}
+	.rx-hero__heading {
+		font-size: var( --rx-text-4xl );
+	}
+	.rx-hero__actions {
+		flex-direction: row;
+	}
+	.rx-btn--bundle,
+	.rx-btn--outline {
+		padding: 0.85em 1.75em;
 	}
 	.rx-footer__columns {
 		flex-direction: row;

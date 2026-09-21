@@ -16,6 +16,9 @@ define( 'RX_THEME_VERSION', '0.1.0' );
 define( 'RX_THEME_DIR', get_template_directory() );
 define( 'RX_THEME_URI', get_template_directory_uri() );
 
+require RX_THEME_DIR . '/inc/template-tags.php';
+require RX_THEME_DIR . '/inc/customizer.php';
+
 /**
  * Theme setup: supports, menus, image sizes.
  *

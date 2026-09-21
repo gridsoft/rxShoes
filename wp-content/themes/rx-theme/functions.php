@@ -19,6 +19,8 @@ define( 'RX_THEME_URI', get_template_directory_uri() );
 require RX_THEME_DIR . '/inc/template-tags.php';
 require RX_THEME_DIR . '/inc/customizer.php';
 require RX_THEME_DIR . '/inc/taxonomy-fields.php';
+require RX_THEME_DIR . '/inc/woocommerce.php';
+require RX_THEME_DIR . '/inc/product-fields.php';
 
 /**
  * Theme setup: supports, menus, image sizes.

@@ -29,17 +29,20 @@ This is the last unanswered question from the original project brief. It affects
 ### 7. Should the site be full-width or contained (capped at a fixed width, like it is now)?
 Figma's file is a fixed-width mockup (1280px), which doesn't by itself tell us what should happen on screens wider than that — a big desktop monitor or ultrawide display. Two options: **contained** (what we've built so far) keeps everything at a fixed max width and centers it, so on a wide screen you see the design plus plain background on either side, same as most e-commerce sites; **full-width** stretches sections (and their photos) to fill the entire screen on anything wider than the design, which can look great with big photography but changes proportions Figma didn't specify and needs a decision on how each section should stretch. This affects the whole site, not one section, so worth settling now before more pages are built on top of whichever choice we make.
 
+### 8. Star ratings on product cards — real reviews, or drop them?
+The product card design has a star rating line ("★ 4.8 (142)"). You told us reviews are out of scope, so there's no real rating data behind it — for now we're showing made-up numbers (stable per product, so they don't jump around) purely so the card can be built and judged. **These can't go live**: displaying invented ratings on a real store is misleading to customers and carries consumer-law risk in Australia. Two options: drop the star line from the cards, or bring reviews into scope so the numbers are real (a real feature, with moderation and so on). Either is fine; we just need to know which before launch.
+
 ---
 
 ## Access / info we need from you
 
-### 8. AzuPay account setup
+### 9. AzuPay account setup
 For PayID this is straightforward, but **PayTo specifically requires "Checkout App V3" to be enabled** on your AzuPay account (per their own documentation) — it won't work otherwise. When you're setting up the AzuPay account, please make sure that's turned on, and send us the API sandbox credentials once you have them so we can start building and testing the payment integration.
 
-### 9. Product catalog (Excel file)
+### 10. Product catalog (Excel file)
 Still waiting on this — product names, descriptions, sizes, colours, and 3-5 images per product. Reminder on the image side: if you can put all the images in one shared folder (Google Drive/Dropbox) with predictable filenames (e.g. `SKU-1.jpg`, `SKU-2.jpg`), we can bulk-import everything in one pass rather than uploading each photo by hand — much faster and repeatable if we ever need to rebuild the catalog on staging.
 
-### 10. Figma file access keeps running out — needs whoever owns the file's team
+### 11. Figma file access keeps running out — needs whoever owns the file's team
 To build each page accurately we pull exact colours/spacing/text straight from your Figma file via its API, rather than guessing off a screenshot (guessing caused a real rework earlier — see the hero section history). That access runs out fast and takes 4-5 days to reset each time — we've hit it twice already. We checked: this **isn't fixed by buying yourself a cheaper Figma seat** (we looked into the $12-15/mo Dev seat option specifically — it has the same limit as a full seat). What actually controls it is the *plan* of whichever Figma team the file itself lives in, and you mentioned you don't know who owns that. So the actual next step is finding out who does — likely whoever built the mockup — and either asking them to upgrade that team's plan, or having the file duplicated/moved into a Figma team you control and pay for. Until that's sorted, we can keep working around it using cached screenshots (slower and slightly less precise, but workable), which is what we did for the section built most recently.
 
 ---

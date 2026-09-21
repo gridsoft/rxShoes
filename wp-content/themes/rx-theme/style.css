@@ -510,7 +510,7 @@ a {
 	text-align: center;
 }
 .rx-rotation__header {
-	max-width: 40em;
+	max-width: 55em;
 	margin: 0 auto 2em;
 }
 .rx-rotation__heading {
@@ -657,7 +657,7 @@ a {
 	flex-direction: column;
 	gap: 1.5em;
 	text-align: left;
-	max-width: 55em;
+	max-width: 70em;
 	margin-inline: auto;
 }
 .rx-rotation-calc__heading {
@@ -690,6 +690,7 @@ a {
 	   sentence, crossed out", not a visually distinct element. */
 	font: inherit;
 	color: inherit;
+	
 }
 .rx-rotation-calc__toggle {
 	display: flex;
@@ -703,6 +704,8 @@ a {
 	font-family: var( --rx-font-display );
 	font-weight: 700;
 	text-align: center;
+	text-transform: uppercase;
+	font-size: 22px;
 }
 .rx-rotation-calc__toggle-option--active {
 	background: var( --rx-color-ink );
@@ -729,9 +732,220 @@ a {
 }
 .rx-rotation-calc__save {
 	margin: 0.4em 0 0;
-	font-size: var( --rx-text-sm );
+	font-size: var( --rx-text-base ); /* 14px */
 	font-weight: 700;
 	color: var( --rx-color-red );
+}
+
+/* Shop loop + product card (woocommerce/content-product.php).
+   Measured 2026-09-21 from the reference card image supplied by the
+   client: image area #F5F5F5 (~288x220), badges stacked and stretched
+   to equal width (#111 / #E53935, 20px tall, 4px gap), body copy #555,
+   lime #AAFD30 star, red "as low as" line, rotation row #F5F5F5 30px
+   tall, #0066FF 42px button. Colours all map to existing tokens except
+   the #F5F5F5 surface, which now has its own (--rx-color-surface). */
+.rx-shop {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 2em;
+	padding-inline: var( --rx-container-pad );
+}
+.rx-shop ul.products {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1em;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-product-card {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	overflow: hidden;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+	list-style: none;
+}
+.rx-product-card__media {
+	position: relative;
+	aspect-ratio: 72 / 55; /* 288x220 in the reference */
+	background: var( --rx-color-surface );
+}
+.rx-product-card__image-link {
+	display: block;
+	height: 100%;
+}
+.rx-product-card__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 6% 16%;
+	object-fit: contain;
+	/* Lets a white-backdrop product photo sit on the grey surface
+	   without a visible box around it. */
+	mix-blend-mode: multiply;
+}
+.rx-product-card__badges {
+	position: absolute;
+	top: 0.25rem;
+	left: 0.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	width: max-content; /* children stretch, so both badges match the widest */
+}
+.rx-product-card__badge {
+	padding-inline: 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	line-height: 1.25rem; /* 20px tall */
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-product-card__badge--category {
+	background: var( --rx-color-ink );
+}
+.rx-product-card__badge--bundle {
+	background: var( --rx-color-red );
+}
+.rx-product-card__colours {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	padding: 0.3em 0.6em;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-sm );
+	font-size: var( --rx-text-sm );
+	font-weight: 500;
+	color: var( --rx-color-ink );
+}
+.rx-product-card__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 0.75rem 0.5rem 0.5rem;
+}
+.rx-product-card__meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	font-size: 0.6875rem; /* 11px */
+}
+.rx-product-card__type {
+	color: #555;
+	text-transform: uppercase;
+}
+.rx-product-card__rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 500;
+	color: var( --rx-color-ink );
+}
+.rx-product-card__star {
+	color: var( --rx-color-lime );
+}
+.rx-product-card__title {
+	margin: 0.25rem 0 0;
+	font-size: var( --rx-text-xl );
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.rx-product-card__best-for {
+	display: -webkit-box;
+	margin: 0.25rem 0 0;
+	overflow: hidden;
+	font-size: 0.6875rem; /* 11px */
+	color: #555;
+	text-transform: uppercase;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.rx-product-card__pricing {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.25rem 0.5rem;
+	/* margin-top: auto pins price + actions to the card bottom, so a
+	   1-line vs 2-line "best for" no longer nudges the price out of line
+	   across a row — the slack collects above it instead. */
+	margin: auto 0 0;
+	padding-top: 0.75rem;
+}
+.rx-product-card__price {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	line-height: 1;
+	color: var( --rx-color-ink );
+}
+.rx-product-card__as-low-as {
+	font-size: 0.6875rem; /* 11px */
+	font-weight: 700;
+	color: var( --rx-color-red );
+	text-transform: uppercase;
+}
+.rx-product-card__actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding-top: 0.75rem;
+}
+.rx-product-card__rotation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	min-height: 1.875rem; /* 30px */
+	margin: 0;
+	padding-inline: 0.625rem;
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-sm );
+	color: #555;
+}
+.rx-product-card__rotation strong {
+	font-weight: 700;
+	color: var( --rx-color-blue );
+	text-transform: uppercase;
+}
+.rx-product-card__button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35rem;
+	min-height: 2.625rem; /* 42px */
+	border-radius: var( --rx-radius-sm );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-product-card__button--bundle {
+	background: var( --rx-color-blue );
+}
+/* Normal-buy button: same shape, black for now per the client. */
+.rx-product-card__button--cart {
+	background: var( --rx-color-ink );
+}
+.rx-product-card__button:hover,
+.rx-product-card__button:focus-visible {
+	filter: brightness( 1.15 );
+}
+
+/* Two-up on larger phones/tablets; four-up is in the desktop block. */
+@media ( min-width: 40em ) {
+	.rx-shop ul.products {
+		grid-template-columns: repeat( 2, 1fr );
+	}
 }
 
 /* Desktop enhancements */
@@ -743,8 +957,13 @@ a {
 	.rx-header__row,
 	.rx-category-cards,
 	.rx-footer__inner,
-	.rx-hero {
+	.rx-hero,
+	.rx-shop {
 		padding-inline: var( --rx-container-pad-desktop );
+	}
+	.rx-shop ul.products {
+		grid-template-columns: repeat( 4, 1fr );
+		gap: 1.5em;
 	}
 	.rx-nav {
 		display: block;

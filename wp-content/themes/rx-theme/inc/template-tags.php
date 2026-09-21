@@ -56,7 +56,7 @@ function rx_theme_get_mod( string $theme_mod_id ): string {
 	$fields  = rx_theme_all_mod_fields();
 	$default = $fields[ $theme_mod_id ]['default'] ?? '';
 
-	return (string) get_theme_mod( $theme_mod_id, $default );
+	return rx_theme_apply_bundle_tokens( (string) get_theme_mod( $theme_mod_id, $default ) );
 }
 
 /**

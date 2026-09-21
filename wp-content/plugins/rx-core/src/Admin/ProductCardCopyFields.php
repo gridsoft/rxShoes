@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Adds and saves the two copy fields inside the Shop card tab.
+ * Adds and saves the copy field inside the Shop card tab.
  */
 final class ProductCardCopyFields implements Service {
 
@@ -33,11 +33,6 @@ final class ProductCardCopyFields implements Service {
 	 * Meta key for the small line above the product title.
 	 */
 	public const TYPE_LABEL = '_rx_type_label';
-
-	/**
-	 * Meta key for the "Best for" text (one item per line).
-	 */
-	public const BEST_FOR = '_rx_best_for';
 
 	/**
 	 * Hook the fields into the tab and the product save.
@@ -48,7 +43,7 @@ final class ProductCardCopyFields implements Service {
 	}
 
 	/**
-	 * Render both fields.
+	 * Render the field.
 	 */
 	public function render_fields(): void {
 		global $product_object;
@@ -63,22 +58,10 @@ final class ProductCardCopyFields implements Service {
 				'value'       => $product_object instanceof WC_Product ? $product_object->get_meta( self::TYPE_LABEL ) : '',
 			)
 		);
-
-		woocommerce_wp_textarea_input(
-			array(
-				'id'          => self::BEST_FOR,
-				'label'       => __( 'Best for', 'rx-core' ),
-				'placeholder' => __( "Functional Training\nStrength", 'rx-core' ),
-				'desc_tip'    => true,
-				'description' => __( 'Shown on shop cards as "Best for: …". Put one item per line and they are joined with a bullet, or type one line of free text. Leave blank to hide it.', 'rx-core' ),
-				'rows'        => 3,
-				'value'       => $product_object instanceof WC_Product ? $product_object->get_meta( self::BEST_FOR ) : '',
-			)
-		);
 	}
 
 	/**
-	 * Save both fields through the product CRUD object. WooCommerce has
+	 * Save the field through the product CRUD object. WooCommerce has
 	 * already verified the product-save nonce and the user's capability
 	 * before this action fires.
 	 *
@@ -89,13 +72,6 @@ final class ProductCardCopyFields implements Service {
 		if ( isset( $_POST[ self::TYPE_LABEL ] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- as above.
 			$product->update_meta_data( self::TYPE_LABEL, sanitize_text_field( wp_unslash( $_POST[ self::TYPE_LABEL ] ) ) );
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- as above.
-		if ( isset( $_POST[ self::BEST_FOR ] ) ) {
-			// sanitize_textarea_field() keeps the line breaks, which are the item separators.
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- as above.
-			$product->update_meta_data( self::BEST_FOR, sanitize_textarea_field( wp_unslash( $_POST[ self::BEST_FOR ] ) ) );
 		}
 	}
 }

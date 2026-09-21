@@ -148,7 +148,7 @@ $rx_theme_cart_attr = sprintf(
 						printf(
 							/* translators: %s: top-tier discount percentage, e.g. "45". */
 							esc_html__( 'Pair 3 (+%s%% tier)', 'rx-theme' ),
-							esc_html( rtrim( rtrim( number_format( $rx_theme_percent, 2 ), '0' ), '.' ) )
+							esc_html( rx_theme_format_percent( $rx_theme_percent ) )
 						);
 						?>
 					</strong>

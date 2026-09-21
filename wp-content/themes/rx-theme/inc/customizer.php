@@ -131,7 +131,7 @@ function rx_theme_hero_fields(): array {
 			'transport' => 'postMessage',
 		),
 		'rx_hero_tier_1_text'        => array(
-			'default'   => __( '2 PAIRS → SAVE 40%', 'rx-theme' ),
+			'default'   => __( '2 PAIRS → SAVE {two_pack}%', 'rx-theme' ),
 			'label'     => __( 'Tier 1 text', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -145,7 +145,7 @@ function rx_theme_hero_fields(): array {
 			'transport' => 'postMessage',
 		),
 		'rx_hero_tier_2_text'        => array(
-			'default'   => __( '3 PAIRS → SAVE 55%', 'rx-theme' ),
+			'default'   => __( '3 PAIRS → SAVE {three_pack}%', 'rx-theme' ),
 			'label'     => __( 'Tier 2 text (blue)', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -199,8 +199,9 @@ function rx_theme_register_hero_section( WP_Customize_Manager $wp_customize ): v
 	$wp_customize->add_section(
 		'rx_hero',
 		array(
-			'title' => __( 'Hero', 'rx-theme' ),
-			'panel' => 'rx_homepage',
+			'title'       => __( 'Hero', 'rx-theme' ),
+			'description' => rx_theme_bundle_tokens_help(),
+			'panel'       => 'rx_homepage',
 		)
 	);
 
@@ -290,22 +291,22 @@ function rx_theme_rotation_fields(): array {
 			'status_text'     => 'Status: Standard Pricing',
 		),
 		2 => array(
-			'tag_primary'     => 'Unlock 30% Off',
-			'tag_secondary'   => '30% Tier Active',
+			'tag_primary'     => 'Unlock {two_pack}% Off',
+			'tag_secondary'   => '{two_pack}% Tier Active',
 			'title'           => 'Pair 2: Heavy Lifting / Stability',
 			'description'     => 'Zero-drop grounding or elevated wooden/TPU heel wedges for squats, cleans, snatches, and deadlifts.',
 			'example_product' => 'TYR DropZero Lifter',
 			'example_price'   => '$210.00 AUD',
-			'status_text'     => 'Bundle 2 Pairs: Save 30% Instantly',
+			'status_text'     => 'Bundle 2 Pairs: Save {two_pack}% Instantly',
 		),
 		3 => array(
-			'tag_primary'     => 'Max Tier: Unlock 45% Off',
+			'tag_primary'     => 'Max Tier: Unlock {three_pack}% Off',
 			'tag_secondary'   => 'Best Value',
 			'title'           => 'Pair 3: Intervals / Road Running',
 			'description'     => 'High-cushion nitrogen-infused superfoam for track tempo workouts, recovery miles, and aerobic conditioning.',
 			'example_product' => 'Inov-8 F-Fly Speed',
 			'example_price'   => '$200.00 AUD',
-			'status_text'     => 'Bundle 3 Pairs: Save 45% on Entire Cart',
+			'status_text'     => 'Bundle 3 Pairs: Save {three_pack}% on Entire Cart',
 		),
 	);
 
@@ -361,14 +362,14 @@ function rx_theme_rotation_fields(): array {
 			'transport' => 'postMessage',
 		),
 		'rx_rotation_calc_toggle_2pair'   => array(
-			'default'   => __( '2-Pair Rotation (-40%)', 'rx-theme' ),
+			'default'   => __( '2-Pair Rotation (-{two_pack}%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — 2-pair toggle label', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
 		'rx_rotation_calc_toggle_3pair'   => array(
-			'default'   => __( '3-Pair Rotation (-55%)', 'rx-theme' ),
+			'default'   => __( '3-Pair Rotation (-{three_pack}%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — 3-pair toggle label', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -382,14 +383,14 @@ function rx_theme_rotation_fields(): array {
 			'transport' => 'postMessage',
 		),
 		'rx_rotation_calc_total_price'    => array(
-			'default'   => '$357.50',
+			'default'   => '{three_pack_total}',
 			'label'     => __( 'Calculator — total price', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
 		'rx_rotation_calc_save_text'      => array(
-			'default'   => __( 'You Save $292.50 AUD (45%)', 'rx-theme' ),
+			'default'   => __( 'You Save {three_pack_savings} AUD ({three_pack}%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — savings line', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -409,8 +410,9 @@ function rx_theme_register_rotation_section( WP_Customize_Manager $wp_customize 
 	$wp_customize->add_section(
 		'rx_rotation',
 		array(
-			'title' => __( 'Power Rotation', 'rx-theme' ),
-			'panel' => 'rx_homepage',
+			'title'       => __( 'Power Rotation', 'rx-theme' ),
+			'description' => rx_theme_bundle_tokens_help(),
+			'panel'       => 'rx_homepage',
 		)
 	);
 

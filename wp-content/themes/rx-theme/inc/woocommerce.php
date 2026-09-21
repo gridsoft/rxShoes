@@ -115,6 +115,118 @@ function rx_theme_bundle_max_discount_percent(): float {
 }
 
 /**
+ * Fallback for the 2-pack bundle discount when nothing has been set in
+ * the Customizer. 35 is the client's stated default (2026-09-21) — note
+ * it matches neither Figma's 30% (most places) nor its 40% (hero copy);
+ * see the open question in TODO.md #3.
+ */
+function rx_theme_bundle_default_two_pack_discount_percent(): float {
+	return 35.0;
+}
+
+/**
+ * The 2-pack bundle discount, as a percentage (e.g. 35.0) — what a
+ * customer gets for buying two, as opposed to the top (3-pack) tier.
+ *
+ * Same storage story as the 3-pack value: an *option* setting, stored
+ * as `rx_bundle_two_pack_discount_percent`, edited under Appearance >
+ * Customize > Bundle Discount. Nothing on the shop card displays it
+ * yet (the card only advertises the 3-pack price); it's stored and
+ * readable now so the cart-level discount calculation can use both
+ * tiers later.
+ */
+function rx_theme_bundle_two_pack_discount_percent(): float {
+	$stored  = get_option( 'rx_bundle_two_pack_discount_percent', '' );
+	$percent = '' === $stored ? rx_theme_bundle_default_two_pack_discount_percent() : (float) $stored;
+
+	/**
+	 * Filters the 2-pack bundle discount percentage, e.g. so the pricing
+	 * engine can override the Customizer value.
+	 *
+	 * @param float $percent Value from the Customizer option (or the default).
+	 */
+	return (float) apply_filters( 'rx_theme_bundle_two_pack_discount_percent', $percent );
+}
+
+/**
+ * A percentage the way it reads in copy: "45", "35", "12.5" — no
+ * trailing zeros.
+ *
+ * @param float $percent Percentage, e.g. 45.0.
+ */
+function rx_theme_format_percent( float $percent ): string {
+	return rtrim( rtrim( number_format( $percent, 2, '.', '' ), '0' ), '.' );
+}
+
+/**
+ * The placeholders admins can type into homepage copy fields, mapped to
+ * what they print. The tier percentages always come from Appearance >
+ * Customize > Bundle Discount, so changing that setting updates every
+ * mention at once instead of leaving stale numbers in the copy.
+ *
+ * The money tokens work out the example basket in the Power Rotation
+ * calculator: the base is the number in its "original total" field
+ * ($650.00 AUD), less the tier's discount.
+ *
+ * @return array<string,string> Token (with braces) => replacement.
+ */
+function rx_theme_bundle_token_values(): array {
+	static $cache = array();
+
+	$two   = rx_theme_bundle_two_pack_discount_percent();
+	$three = rx_theme_bundle_max_discount_percent();
+	$key   = $two . '|' . $three . '|' . (string) get_theme_mod( 'rx_rotation_calc_original_total', '' );
+
+	if ( ! isset( $cache[ $key ] ) ) {
+		$fields = rx_theme_all_mod_fields();
+		$raw    = (string) get_theme_mod( 'rx_rotation_calc_original_total', $fields['rx_rotation_calc_original_total']['default'] ?? '' );
+		$base   = (float) preg_replace( '/[^0-9.]/', '', $raw );
+		$money  = static function ( float $percent ) use ( $base ): array {
+			$total = round( $base * ( 1 - $percent / 100 ), 2 );
+
+			return array(
+				'total'   => $base > 0 ? rx_theme_format_money( $total, false, false ) : '',
+				'savings' => $base > 0 ? rx_theme_format_money( round( $base - $total, 2 ), false, false ) : '',
+			);
+		};
+		$m2     = $money( $two );
+		$m3     = $money( $three );
+
+		$cache[ $key ] = array(
+			'{two_pack}'           => rx_theme_format_percent( $two ),
+			'{three_pack}'         => rx_theme_format_percent( $three ),
+			'{two_pack_total}'     => $m2['total'],
+			'{two_pack_savings}'   => $m2['savings'],
+			'{three_pack_total}'   => $m3['total'],
+			'{three_pack_savings}' => $m3['savings'],
+		);
+	}
+
+	return $cache[ $key ];
+}
+
+/**
+ * Replace the bundle placeholders ({two_pack}, {three_pack}, …) in a
+ * piece of copy. Text without a "{" is returned untouched.
+ *
+ * @param string $text Copy as stored in the Customizer.
+ */
+function rx_theme_apply_bundle_tokens( string $text ): string {
+	if ( false === strpos( $text, '{' ) ) {
+		return $text;
+	}
+
+	return strtr( $text, rx_theme_bundle_token_values() );
+}
+
+/**
+ * Help text for the Customizer sections that accept the placeholders.
+ */
+function rx_theme_bundle_tokens_help(): string {
+	return __( 'Discount numbers in these texts come from Appearance > Customize > Bundle Discount. Type {two_pack} or {three_pack} where a percentage should appear (e.g. "Save {three_pack}%"). In the calculator, {three_pack_total} and {three_pack_savings} (also {two_pack_total}, {two_pack_savings}) work out dollar amounts from its "original total".', 'rx-theme' );
+}
+
+/**
  * Sanitize the bundle discount % from the Customizer: a number clamped
  * to 0–100 (a discount outside that range is never valid).
  *
@@ -125,21 +237,23 @@ function rx_theme_sanitize_percent( $value ): float {
 }
 
 /**
- * The card's "Best for:" text, from the product's "Best for" field
- * (the "Shop card" tab on the product edit screen, owned by rx-core —
- * RX\Core\Admin\ProductCardCopyFields; this reads its `_rx_best_for`
- * meta key). One item per line is joined with a
- * bullet — "Functional Training • Strength" — so an admin can list
- * items on separate lines instead of typing the separators; free text
- * on a single line is shown as typed. Empty string when not set.
+ * The card's "Best for:" text: the names of the "Best for" terms ticked
+ * on the product, joined with a bullet — "Functional Training •
+ * Strength". The taxonomy is registered and managed by the rx-core
+ * plugin (RXCoreCatalogBestForTaxonomy, key `rx_best_for`); with
+ * that plugin inactive the taxonomy doesn't exist and this returns an
+ * empty string, so the line is simply hidden.
  *
  * @param WC_Product $product Product being rendered.
  */
 function rx_theme_product_best_for( WC_Product $product ): string {
-	$lines = preg_split( '/\r\n|\r|\n/', (string) $product->get_meta( '_rx_best_for' ) );
-	$lines = array_filter( array_map( 'trim', is_array( $lines ) ? $lines : array() ) );
+	$terms = get_the_terms( $product->get_id(), 'rx_best_for' );
 
-	return implode( ' • ', $lines );
+	if ( ! is_array( $terms ) ) {
+		return '';
+	}
+
+	return implode( ' • ', wp_list_pluck( $terms, 'name' ) );
 }
 
 /**

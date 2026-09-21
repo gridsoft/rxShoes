@@ -79,6 +79,7 @@ final class Plugin {
 	 */
 	private function default_services(): array {
 		return array(
+			new Catalog\BestForTaxonomy(),
 			new Admin\ProductCardTab(),
 			new Admin\ProductCardCopyFields(),
 			new Bundles\BundleEligibility(),

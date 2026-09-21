@@ -375,9 +375,14 @@ a {
 }
 
 /* Category Cards (template-parts/front-page/category-cards.php).
-   LAYOUT ONLY for now — colours/badge treatment/exact image aspect
-   ratio intentionally not guessed here; this section's precise Figma
-   node data hasn't been pulled yet. Neutral tokens only until it has. */
+   Values below verified 2026-09-21 against a full-resolution crop of
+   the cached home.png export + pixel-sampled hex values (Figma's API
+   was rate-limited when this was built — see PROJECT.md §13 — so this
+   used the already-downloaded screenshot rather than guessing from
+   memory). Every colour here turned out to already exist in
+   tokens.css — same design system as Hero, nothing new needed.
+   Cards are full-bleed photo with a badge (top-left) and a bottom
+   gradient text overlay — not a separate photo-then-body layout. */
 .rx-eyebrow {
 	margin: 0 0 0.5em;
 	font-size: var( --rx-text-xs );
@@ -390,7 +395,6 @@ a {
 	padding: 3em 1em;
 }
 .rx-category-cards__header {
-	max-width: 40em;
 	margin: 0 0 2em;
 }
 .rx-category-cards__heading {
@@ -401,7 +405,8 @@ a {
 	font-family: var( --rx-font-body );
 	color: #555;
 	line-height: 1.5;
-	margin: 0;
+	margin: 1em 0 0;
+	max-width: 28em;
 }
 .rx-category-cards__grid {
 	display: grid;
@@ -409,46 +414,69 @@ a {
 	gap: 1em;
 }
 .rx-category-card {
-	display: flex;
-	flex-direction: column;
-	border-radius: var( --rx-radius-md );
-	overflow: hidden;
-	background: var( --rx-color-gray-50 );
-}
-.rx-category-card__media {
+	position: relative;
 	display: block;
-	aspect-ratio: 4 / 3;
-	background: var( --rx-color-gray-200 );
+	aspect-ratio: 4 / 5; /* measured from the cached screenshot, not an exact Figma figure */
+	overflow: hidden;
+	background: var( --rx-color-gray-200 ); /* shows while the image loads / if none is set */
 }
 .rx-category-card__image {
-	display: block;
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 }
-.rx-category-card__body {
+.rx-category-card__badge {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	padding: 0.4em 0.75em;
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+/* Unisex badge is blue, not ink — confirmed by pixel sampling, not a
+   generalisable rule; this list is fixed to Men/Women/Unisex anyway. */
+.rx-category-card[ data-category="unisex" ] .rx-category-card__badge {
+	background: var( --rx-color-blue );
+}
+.rx-category-card__overlay {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0.25em;
-	padding: 1em 1.25em 1.5em;
+	gap: 0.2em;
+	padding: 3em 1.25em 1.25em;
+	background: linear-gradient( to top, rgba( 0, 0, 0, 0.85 ), rgba( 0, 0, 0, 0 ) );
 }
 .rx-category-card__name {
 	font-family: var( --rx-font-display );
 	font-weight: 800;
-	font-size: var( --rx-text-2xl );
-	color: var( --rx-color-ink );
+	font-size: var( --rx-text-3xl );
+	line-height: 1;
+	color: var( --rx-color-white );
 	text-transform: uppercase;
 }
 .rx-category-card__meta {
 	font-size: var( --rx-text-sm );
-	color: #555;
+	color: var( --rx-color-white );
 }
 .rx-category-card__cta {
-	margin-top: 0.5em;
-	font-weight: 600;
+	margin-top: 0.4em;
+	font-weight: 700;
 	font-size: var( --rx-text-sm );
-	color: var( --rx-color-blue );
+	color: var( --rx-color-lime );
 	text-transform: uppercase;
+}
+.rx-category-card__cta::after {
+	content: ' \2192'; /* → */
 }
 
 /* Desktop enhancements */
@@ -481,6 +509,16 @@ a {
 	}
 	.rx-category-cards {
 		padding: 4em 3em;
+	}
+	.rx-category-cards__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 2em;
+	}
+	.rx-category-cards__description {
+		margin-top: 0;
+		text-align: right;
 	}
 	.rx-category-cards__grid {
 		grid-template-columns: repeat( 3, 1fr );

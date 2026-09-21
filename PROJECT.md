@@ -6,9 +6,10 @@
 
 ## 1. Project Overview
 
-* **Project Name:** [Insert Project Name]
+* **Project Name:** [Insert Project Name] — repo currently `rxShoes`
 * **Client:** [Client Name] — via Upwork
-* **Target Market:** [e.g., UK/EU DTC consumers] — currency: [GBP/EUR/USD], tax: [VAT inclusive/exclusive]
+* **Target Market:** Australia — currency: AUD, tax: GST **[Guessing: standard 10% GST-inclusive pricing assumed — not client-confirmed, needs sign-off before checkout/tax setup]**
+* **Product category:** Shoes/footwear
 * **Core Goal:** A fast, scalable, maintainable WooCommerce store built from scratch from supplied Figma designs. Custom functionality over plugin stacking.
 * **Catalog Size:** ~50 core products, 250+ variations
 * **Design Source:** Figma — [link]. Pixel-accurate implementation across desktop / tablet / mobile.
@@ -125,8 +126,10 @@ All business logic lives in a site-specific plugin: `[project]-core`
 ## 6. Bundles, Pricing & Discounts
 
 ### 6.1 Bundles
+* **Build vs. buy — DECIDED:** custom product type, not a commercial bundle plugin (e.g. WooCommerce Product Bundles). Client asked for a recommendation; reasoning: (1) §3 already rules out commercial bundle/discount plugins unless explicitly agreed, (2) §8 now requires bundle pricing to react live to the selected payment method at checkout (PayID-only promo, removed + popup if the customer switches to Card/PayPal) — a commercial bundle extension's pricing hooks aren't built for that and fighting a third-party plugin's internals mid-checkout is a maintenance liability on a retainer contract. Custom code keeps the whole pricing → cart → checkout → order-meta chain in one place we control.
 * Custom product type: `WC_Product_Prj_Bundle extends WC_Product` (type `prj_bundle`).
 * Bundle defines: component products/variations, fixed or customer-selectable options, quantities.
+* **Still open — NOT answered by "build custom" above:** fixed bundles vs. customer-assembled ("build-your-own") vs. both? Mixed variants (e.g. two different shoe sizes in one bundle) allowed? Need an explicit answer — this shapes the product-type UI and cart data model.
 * **Cart representation:** [Parent line + child lines linked by cart item key] OR [single line with component meta] — decide early, affects stock, shipping, refunds, and analytics.
 * **Stock:** Components reduce their own stock; bundle availability derived from components.
 * **Order data:** Component details stored as order item meta for fulfilment/export.
@@ -134,7 +137,8 @@ All business logic lives in a site-specific plugin: `[project]-core`
 ### 6.2 Pricing Rules Engine
 * Rule types: bundle discount (% / fixed), quantity tiers, BOGO, cart-level promos, date-limited promotions, [customer-group pricing?]
 * Applied via `woocommerce_before_calculate_totals` (line prices) or cart fees/coupons — **one consistent strategy**, documented here: [decision].
-* Rule precedence and stacking with coupons must be defined: [stacking rules].
+* **Coupon stacking:** allowed in principle (bundle discounts + coupons can combine) but **explicitly low priority — not in MVP scope**. Build the rule-evaluation logic so a stacking rule can be added later without a rewrite (don't hard-code "bundle discount is the only discount").
+* **New requirement (from client, 2026-09-21): payment-method-conditional promotions.** A promo (at minimum, one tied to paying via PayID) must apply while PayID is selected at checkout and stop applying — with a popup notice — if the customer switches to Card or PayPal. This needs live re-pricing on payment-method change, not just on cart contents change. This is now a hard input into the §7 checkout-architecture decision below.
 * Price display: show original vs discounted price consistently on PDP, cart, mini-cart, checkout, emails.
 * Admin UI for managing rules without code.
 
@@ -154,7 +158,10 @@ All business logic lives in a site-specific plugin: `[project]-core`
 
 ## 8. Payments, Shipping & Orders
 
-* **Gateways:** [Stripe (cards, Apple Pay, Google Pay), PayPal, Klarna/Clearpay?]
+* **Gateways (from client, 2026-09-21):** Card, PayPal, and **PayID**.
+  * **PayID is unresolved at the technical level.** PayID is Australia's NPP real-time addressing scheme, not a single off-the-shelf WooCommerce gateway — it's offered through a specific PSP/bank integration (e.g. Zepto, Azupay, Monoova, or a bank's own API), and none has been named yet. **Open question for client: which PSP/provider handles the PayID integration?** Blocks gateway selection and webhook work in Milestone 6.
+  * Client's own description implies PayID payment is **not instantly confirmed** at checkout — order sits unpaid until reconciled. Recommend modelling this the same way WooCommerce's built-in BACS/bank-transfer gateway does: order created as `on-hold` (or a custom `wc-awaiting-payment` status), moved to `processing`/`completed` only once payment is confirmed (manually or via the PSP's webhook, if the chosen provider offers one).
+  * **Order-status-driven follow-up workflow:** while a PayID order is unpaid, trigger Omnisend email + SMS reminders. Needs deciding: does WC push order-status-change events to Omnisend (webhook / Omnisend's own WC plugin, if its unpaid-nudge flow is built in) or does `rx-core` schedule the reminders itself via Action Scheduler and just report state to Omnisend? Research Omnisend's native WooCommerce integration capabilities before deciding — don't build a custom scheduler if Omnisend already does this.
 * Test mode on staging; webhooks configured per environment.
 * **Shipping:** Zones [list], methods [flat / free over X / carrier rates via ___], bundle shipping rules.
 * **Order workflow:** Custom statuses if needed [e.g., `wc-awaiting-fulfilment`], fulfilment/3PL integration: [yes/no — which].
@@ -166,9 +173,9 @@ All business logic lives in a site-specific plugin: `[project]-core`
 
 * **Customer accounts:** Registration, order history, addresses, [reorder, wishlist, subscriptions?] — styled per Figma.
 * **Transactional emails:** Custom-styled WC email templates; custom `WC_Email` classes for new workflows.
-* **Email platform:** [Klaviyo / other] — customer sync, placed order, abandoned cart, product viewed events. Consent respected.
+* **Email platform — DECIDED: Omnisend** (was placeholder). Client confirmed via correspondence, plus a specific automation requirement: unpaid-PayID orders trigger an Omnisend email + SMS workflow prompting payment (see §8). Standard events still apply: customer sync, placed order, abandoned cart, product viewed. Consent respected.
 * **Analytics:** GA4 enhanced ecommerce (`view_item`, `add_to_cart`, `begin_checkout`, `purchase` with bundle/variant data), Meta Pixel + CAPI with event dedup, [TikTok / Google Ads conversions].
-* **Consent:** Cookie banner + Consent Mode v2 (GDPR).
+* **Consent:** Market is Australia, not EU/UK — Consent Mode v2/GDPR banner as written here is the wrong default. Needs an actual decision against the Australian Privacy Act (and any state-based SMS/email marketing consent rules relevant to the Omnisend SMS flow), not GDPR boilerplate. Flagging, not deciding — not asked yet.
 * **Other APIs:** [ERP / inventory / reviews / 3PL]
 
 ---
@@ -251,6 +258,9 @@ You are a **senior WordPress core developer and WooCommerce architect** working 
 | 2026-09-21 | Decision | `.gitignore` excludes WP core and third-party plugins/themes (WooCommerce, default themes) — only `rx-theme` and `rx-core` are versioned. Revisit if the team wants full-core versioning instead. |
 | 2026-09-21 | Issue | WAMP's default CLI/Apache PHP is 7.4.33; this plan targets 8.2+. PHP 8.2.13 is installed under WAMP but not selected. Composer/WP-CLI must be invoked via the explicit 8.2 binary until WAMP is switched over. |
 | 2026-09-21 | Milestone | Milestone 1 (setup/architecture/scaffold) done: git init, `rx-theme` scaffold, `rx-core` plugin scaffold (HPOS-declared, PSR-4, PHPCS/WPCS + PHPStan lvl 5 clean), both activated and smoke-tested with no fatals. Milestones 2+ (catalog, bundles, pricing, checkout, payments, etc.) are blocked on Section 15 client answers — no business logic invented ahead of real requirements. |
+| 2026-09-21 | Decision | Repo pushed to `https://github.com/gridsoft/rxShoes.git` (`main`). Only `rx-theme`/`rx-core`/`PROJECT.md` are tracked, per the existing `.gitignore` — no WP core, no WooCommerce, no default themes pushed. |
+| 2026-09-21 | Answered | Client answered several §15 questions: target market AU/AUD (Q1), bundles built as custom code not a plugin (Q2, platform half only — config half still open), coupon stacking allowed but low priority (Q3), payment methods Card/PayPal/PayID (Q4, PayID's PSP still unnamed), email/SMS platform is Omnisend with an unpaid-PayID nudge workflow (Q5). See §1, §6, §8, §9, §15 for detail. |
+| 2026-09-21 | Requirement | New, not in the original scope list: promotions can be tied to payment method (PayID-only discount), with live removal + a popup notice if the customer switches to Card/PayPal at checkout. This is a hard input into the still-undecided §7 checkout architecture (classic vs. Blocks) — flagged to the client as a decision needed before Cart/Checkout services are built. |
 
 ---
 
@@ -271,13 +281,15 @@ You are a **senior WordPress core developer and WooCommerce architect** working 
 
 ## 15. Open Questions for Client
 
-1. Target countries, currency, tax setup?
-2. Bundle behaviour: fixed or build-your-own? Mixed variants allowed?
-3. Discount stacking: can bundle discounts combine with coupons/promos?
-4. Which payment methods are required at launch?
-5. Which email platform and which events/flows?
+1. ~~Target countries, currency, tax setup?~~ **Answered:** Australia, AUD. Tax (GST) treatment still needs explicit confirmation — see §1.
+2. Bundle behaviour: fixed or build-your-own? Mixed variants allowed? — **Partially answered.** Client answered "build custom code, not a plugin" (recorded in §6.1) — that's a different question (platform, not product config). Fixed vs. build-your-own vs. mixed variants is **still open**.
+3. ~~Discount stacking: can bundle discounts combine with coupons/promos?~~ **Answered:** yes in principle, but explicitly low priority / not MVP. See §6.2.
+4. Which payment methods are required at launch? — **Partially answered:** Card, PayPal, PayID. PayID's actual PSP/provider is still unnamed — see §8.
+5. ~~Which email platform and which events/flows?~~ **Answered:** Omnisend, including an unpaid-PayID-order nudge workflow (email + SMS). See §9.
 6. Fulfilment: in-house or 3PL/ERP integration?
 7. Hosting: client-provided or our recommendation?
 8. Subscriptions, wishlists, reviews, loyalty — in scope?
 9. Migration from an existing store (products, customers, orders, URLs)?
 10. Post-launch support: hours/month and response times?
+
+**New question raised by the PayID/promotion exchange, not in the original list:** Which side owns the "unpaid order → send reminder" workflow logic — WooCommerce (order status + Action Scheduler) or Omnisend (its own automation triggers off order data)? Client's message frames this as still undecided on their end too ("how much of that lives in WooCommerce versus in Omnisend") — needs resolving before Milestone 6/7 build, not urgent now.

@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * All theme_mod field definitions, keyed by ID, merged from every
- * homepage section's field-definition function (currently just
- * rx_theme_hero_fields() — more get added here as sections are built).
- * Single source of truth for rx_theme_get_mod()'s fallback default.
+ * homepage section's field-definition function — add each new
+ * section's function name to the list below as it's built. Single
+ * source of truth for rx_theme_get_mod()'s fallback default.
  *
  * @return array<string,array{default:string}>
  */
@@ -23,9 +23,15 @@ function rx_theme_all_mod_fields(): array {
 	static $fields = null;
 
 	if ( null === $fields ) {
-		$fields = array();
-		if ( function_exists( 'rx_theme_hero_fields' ) ) {
-			$fields += rx_theme_hero_fields();
+		$fields                = array();
+		$section_field_sources = array(
+			'rx_theme_hero_fields',
+			'rx_theme_category_cards_fields',
+		);
+		foreach ( $section_field_sources as $source ) {
+			if ( function_exists( $source ) ) {
+				$fields += $source();
+			}
 		}
 	}
 

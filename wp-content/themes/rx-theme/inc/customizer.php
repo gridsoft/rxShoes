@@ -42,8 +42,41 @@ function rx_theme_customize_register( WP_Customize_Manager $wp_customize ): void
 	);
 
 	rx_theme_register_hero_section( $wp_customize );
+	rx_theme_register_category_cards_section( $wp_customize );
 }
 add_action( 'customize_register', 'rx_theme_customize_register' );
+
+/**
+ * Register a Customizer section's settings/controls from a field
+ * definitions array (shape: rx_theme_hero_fields()'s return type).
+ * Shared by every homepage section so each one doesn't repeat the same
+ * add_setting()/add_control() loop.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ * @param string               $section_id   Registered section ID.
+ * @param array<string,array>  $fields       Field definitions.
+ */
+function rx_theme_register_fields( WP_Customize_Manager $wp_customize, string $section_id, array $fields ): void {
+	foreach ( $fields as $id => $field ) {
+		$wp_customize->add_setting(
+			$id,
+			array(
+				'default'           => $field['default'],
+				'sanitize_callback' => $field['sanitize'],
+				'transport'         => $field['transport'],
+			)
+		);
+
+		$wp_customize->add_control(
+			$id,
+			array(
+				'section' => $section_id,
+				'label'   => $field['label'],
+				'type'    => $field['type'],
+			)
+		);
+	}
+}
 
 /**
  * Field definitions for the Hero section: id => [default, label, type,
@@ -170,25 +203,7 @@ function rx_theme_register_hero_section( WP_Customize_Manager $wp_customize ): v
 		)
 	);
 
-	foreach ( rx_theme_hero_fields() as $id => $field ) {
-		$wp_customize->add_setting(
-			$id,
-			array(
-				'default'           => $field['default'],
-				'sanitize_callback' => $field['sanitize'],
-				'transport'         => $field['transport'],
-			)
-		);
-
-		$wp_customize->add_control(
-			$id,
-			array(
-				'section' => 'rx_hero',
-				'label'   => $field['label'],
-				'type'    => $field['type'],
-			)
-		);
-	}
+	rx_theme_register_fields( $wp_customize, 'rx_hero', rx_theme_hero_fields() );
 
 	// Background image — own setting/control type (WP_Customize_Image_Control).
 	$wp_customize->add_setting(
@@ -210,6 +225,62 @@ function rx_theme_register_hero_section( WP_Customize_Manager $wp_customize ): v
 			)
 		)
 	);
+}
+
+/**
+ * Field definitions for the Category Cards section (eyebrow, heading,
+ * description only — the three cards themselves come from the Men/
+ * Women/Unisex product categories, not from separate Customizer
+ * fields, so category data stays in one place. See
+ * inc/taxonomy-fields.php for the per-category "Shop label" and
+ * thumbnail fields on the category edit screen).
+ *
+ * Defaults match the Figma "Home" frame's copy for this section.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_category_cards_fields(): array {
+	return array(
+		'rx_category_cards_eyebrow'     => array(
+			'default'   => __( 'CURATED CATEGORIES', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_category_cards_heading'     => array(
+			'default'   => __( 'Discover by Fit & Gender', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_category_cards_description' => array(
+			'default'   => __( 'Precision-molded lasts engineered for anatomical performance profiles across Olympic lifting, cross-training, and track conditioning.', 'rx-theme' ),
+			'label'     => __( 'Description', 'rx-theme' ),
+			'type'      => 'textarea',
+			'sanitize'  => 'sanitize_textarea_field',
+			'transport' => 'postMessage',
+		),
+	);
+}
+
+/**
+ * Register the Category Cards section's controls.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_category_cards_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_category_cards',
+		array(
+			'title'       => __( 'Category Cards', 'rx-theme' ),
+			'description' => __( 'The three cards themselves (image, name, product count) come from the Men/Women/Unisex product categories — edit those under Products > Categories, including the category image (native "Thumbnail" field) and the "Shop label" field this theme adds there.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_category_cards', rx_theme_category_cards_fields() );
 }
 
 /**
@@ -235,6 +306,9 @@ function rx_theme_customize_partials( WP_Customize_Manager $wp_customize ): void
 		'rx_hero_tier_note',
 		'rx_hero_cta_primary_text',
 		'rx_hero_cta_secondary_text',
+		'rx_category_cards_eyebrow',
+		'rx_category_cards_heading',
+		'rx_category_cards_description',
 	);
 
 	foreach ( $partial_fields as $id ) {

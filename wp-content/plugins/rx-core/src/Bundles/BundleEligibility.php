@@ -2,7 +2,8 @@
 /**
  * Per-product "Eligible for bundle" flag.
  *
- * A checkbox on the product edit screen (General tab). It's a business
+ * A checkbox in the product edit screen's "Shop card" tab (not General —
+ * WooCommerce hides that tab for variable products, i.e. every shoe). It's a business
  * rule, so it lives here rather than in the theme: the theme only asks
  * "is this product bundle-eligible?" through the
  * rx_theme_product_is_bundle_eligible filter (see the theme's
@@ -21,6 +22,7 @@ declare(strict_types=1);
 
 namespace RX\Core\Bundles;
 
+use RX\Core\Admin\ProductCardTab;
 use RX\Core\Service;
 use WC_Product;
 
@@ -44,7 +46,7 @@ final class BundleEligibility implements Service {
 	 * Add the field, its save handler, and the theme-facing filter.
 	 */
 	public function register(): void {
-		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'render_field' ) );
+		add_action( ProductCardTab::FIELDS_ACTION, array( $this, 'render_field' ) );
 		add_action( 'woocommerce_admin_process_product_object', array( $this, 'save_field' ) );
 		add_filter( 'rx_theme_product_is_bundle_eligible', array( $this, 'filter_is_eligible' ), 10, 2 );
 	}

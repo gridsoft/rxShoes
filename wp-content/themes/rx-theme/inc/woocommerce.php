@@ -126,7 +126,9 @@ function rx_theme_sanitize_percent( $value ): float {
 
 /**
  * The card's "Best for:" text, from the product's "Best for" field
- * (see inc/product-fields.php). One item per line is joined with a
+ * (the "Shop card" tab on the product edit screen, owned by rx-core —
+ * RX\Core\Admin\ProductCardCopyFields; this reads its `_rx_best_for`
+ * meta key). One item per line is joined with a
  * bullet — "Functional Training • Strength" — so an admin can list
  * items on separate lines instead of typing the separators; free text
  * on a single line is shown as typed. Empty string when not set.
@@ -218,8 +220,9 @@ function rx_theme_product_colour_count( WC_Product $product ): int {
 
 /**
  * The small "type" line above the title ("NIKE PERFORMANCE"), from the
- * Type label field on the product edit screen — see
- * inc/product-fields.php. Empty string when not set.
+ * Type label field in the "Shop card" tab of the product edit screen
+ * (owned by rx-core — RX\Core\Admin\ProductCardCopyFields; this reads
+ * its `_rx_type_label` meta key). Empty string when not set.
  *
  * @param WC_Product $product Product being rendered.
  */

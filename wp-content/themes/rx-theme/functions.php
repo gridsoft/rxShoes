@@ -20,7 +20,6 @@ require RX_THEME_DIR . '/inc/template-tags.php';
 require RX_THEME_DIR . '/inc/customizer.php';
 require RX_THEME_DIR . '/inc/taxonomy-fields.php';
 require RX_THEME_DIR . '/inc/woocommerce.php';
-require RX_THEME_DIR . '/inc/product-fields.php';
 require RX_THEME_DIR . '/inc/customizer-bundle.php';
 
 /**

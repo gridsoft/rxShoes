@@ -1,6 +1,8 @@
 # Project Plan & System Prompt: Custom WooCommerce Build
 
 > Keep this file at the repo root (or as `CLAUDE.md`). Update **Section 12 (Current Phase)** and **Section 13 (Dev Log)** before every new session.
+>
+> See also **[TODO.md](./TODO.md)** — the client-facing punch list of decisions/access/files we're waiting on. This file (PROJECT.md) is the internal engineering log; TODO.md is the trimmed, plain-language version meant to be forwarded to the client. When a §15 question or a dev-log "still open" item gets resolved here, update TODO.md too.
 
 ---
 

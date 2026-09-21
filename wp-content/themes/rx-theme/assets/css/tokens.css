@@ -1,0 +1,100 @@
+/**
+ * Design tokens extracted from Figma (file 0Q5iFcBVniwb0HnBJRXbKc, "Home" and
+ * "Wordmark" frames, 2026-09-21) via the Figma REST API — not eyeballed off
+ * a screenshot. Values are exact (converted from the API's 0-1 RGB floats).
+ *
+ * Coverage note: colours/sizes here are the ones confirmed consistent across
+ * the Home and Bundle Builder frames (shared global header/footer + core UI).
+ * Page-specific accent colours (status reds/oranges on badges, etc.) will be
+ * added as each page is actually built — don't assume this list is final.
+ *
+ * @package RX_Theme
+ */
+
+/* Self-hosted fonts (Figma: Barlow Condensed = headings/display, Inter = body/UI).
+   Self-hosted rather than Google Fonts CDN — one less third-party request,
+   matches the performance targets in PROJECT.md §10. Latin subset only. */
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-500.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-600.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-700.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-800.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 900;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-900.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url('../fonts/inter-variable.woff2') format('woff2');
+}
+
+:root {
+	/* Brand */
+	--rx-color-blue: #0066ff;       /* primary CTA / link / accent — wordmark + buttons */
+	--rx-color-lime: #aafd30;       /* "SAVE 45%" / best-value badges */
+	--rx-color-ink: #111111;        /* primary text, near-black (not pure black) */
+	--rx-color-black: #000000;      /* announcement bar / footer backgrounds */
+	--rx-color-white: #ffffff;
+
+	/* Status accents (seen on tier badges / sale flags — exact usage TBC per component) */
+	--rx-color-orange: #f59e0b;
+	--rx-color-red: #e53935;
+
+	/* Neutrals */
+	--rx-color-gray-50: #f7f7f7;
+	--rx-color-gray-100: #f2f2f2;
+	--rx-color-gray-200: #e8e8e8;
+	--rx-color-gray-300: #d9d9d9;
+	--rx-color-gray-600: #545454;
+	--rx-color-gray-900: #17171b;
+
+	/* Typography */
+	--rx-font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+	--rx-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+	/* Type scale (px sizes found in the Figma file) */
+	--rx-text-xs: 0.625rem;   /* 10px */
+	--rx-text-sm: 0.75rem;    /* 12px */
+	--rx-text-base: 0.875rem; /* 14px */
+	--rx-text-md: 1rem;       /* 16px */
+	--rx-text-lg: 1.125rem;   /* 18px */
+	--rx-text-xl: 1.375rem;   /* 22px */
+	--rx-text-2xl: 2rem;      /* 32px */
+	--rx-text-3xl: 3rem;      /* 48px */
+	--rx-text-4xl: 5rem;      /* 80px — hero headline */
+
+	/* Radii (from Figma cornerRadius values) */
+	--rx-radius-sm: 2px;
+	--rx-radius-md: 4px;
+	--rx-radius-lg: 6px;
+	--rx-radius-xl: 12px;
+}

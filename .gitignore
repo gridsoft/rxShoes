@@ -20,6 +20,9 @@
 
 # Secrets — never commit real credentials/keys.
 wp-config.php
+.figma-token
+.env
+.env.*
 
 # Dependency & build output
 /wp-content/plugins/rx-core/vendor/
@@ -27,6 +30,9 @@ wp-config.php
 /wp-content/themes/rx-theme/node_modules/
 /wp-content/themes/rx-theme/vendor/
 /**/composer.lock
+
+# Figma frame exports — reference only, regenerable from the API via .figma-token.
+/design-reference/
 
 # Editor / OS cruft
 .DS_Store

@@ -49,7 +49,8 @@ add_action( 'after_setup_theme', 'rx_theme_setup' );
  * Enqueue theme assets, conditionally.
  */
 function rx_theme_enqueue_assets(): void {
-	wp_enqueue_style( 'rx-theme-style', get_stylesheet_uri(), array(), RX_THEME_VERSION );
+	wp_enqueue_style( 'rx-theme-tokens', RX_THEME_URI . '/assets/css/tokens.css', array(), RX_THEME_VERSION );
+	wp_enqueue_style( 'rx-theme-style', get_stylesheet_uri(), array( 'rx-theme-tokens' ), RX_THEME_VERSION );
 }
 add_action( 'wp_enqueue_scripts', 'rx_theme_enqueue_assets' );
 
@@ -59,3 +60,30 @@ add_action( 'wp_enqueue_scripts', 'rx_theme_enqueue_assets' );
  * Re-enable selectively if a WC component's markup is reused as-is.
  */
 add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
+/**
+ * Static fallback for the primary nav until an admin sets one up under
+ * Appearance > Menus. Labels match the Figma header (Home/Bundle Builder
+ * frames) — Men/Women/Unisex/Brands/Sale. These will become WooCommerce
+ * product category links once the catalog exists (Milestone 2); plain
+ * anchors for now so the header isn't empty before that.
+ */
+function rx_theme_primary_nav_fallback(): void {
+	$items = array(
+		__( 'Men', 'rx-theme' )    => '/product-category/men/',
+		__( 'Women', 'rx-theme' )  => '/product-category/women/',
+		__( 'Unisex', 'rx-theme' ) => '/product-category/unisex/',
+		__( 'Brands', 'rx-theme' ) => '/brands/',
+		__( 'Sale', 'rx-theme' )   => '/sale/',
+	);
+
+	echo '<nav class="rx-nav"><ul class="rx-nav__list">';
+	foreach ( $items as $label => $path ) {
+		printf(
+			'<li><a href="%1$s">%2$s</a></li>',
+			esc_url( home_url( $path ) ),
+			esc_html( $label )
+		);
+	}
+	echo '</ul></nav>';
+}

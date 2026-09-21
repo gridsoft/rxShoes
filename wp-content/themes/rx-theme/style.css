@@ -12,3 +12,252 @@ WC requires at least: 8.0
 WC tested up to: 9.0
 Text Domain: rx-theme
 */
+
+/*
+ * Base styles are written mobile-first (the client confirmed ~90% of
+ * traffic is mobile, 2026-09-21) — this file starts at phone width and
+ * adds complexity via min-width media queries, not the other way round.
+ * Colour/font/spacing values come from tokens.css, loaded before this file.
+ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-base );
+	color: var( --rx-color-ink );
+	background: var( --rx-color-white );
+}
+
+h1,
+h2,
+h3 {
+	font-family: var( --rx-font-display );
+	font-weight: 800;
+	line-height: 1.05;
+	margin: 0;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect( 1px, 1px, 1px, 1px );
+	white-space: nowrap;
+}
+
+.skip-link:focus {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	padding: 0.75em 1em;
+	background: var( --rx-color-black );
+	color: var( --rx-color-white );
+	clip: auto;
+	width: auto;
+	height: auto;
+}
+
+/* Announcement bar */
+.rx-announcement-bar {
+	background: var( --rx-color-black );
+	color: var( --rx-color-white );
+	text-align: center;
+	padding: 0.5em 1em;
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+.rx-announcement-bar p {
+	margin: 0;
+}
+
+/* Header — mobile: logo + actions row, nav/search collapse (menu toggle
+   is a follow-up interaction pass once the mobile nav pattern is
+   confirmed against Figma's mobile frames). */
+.rx-header {
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.rx-header__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75em;
+	padding: 0.75em 1em;
+}
+.rx-nav {
+	display: none;
+}
+.rx-search {
+	display: none;
+}
+.rx-header__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75em;
+	margin-left: auto;
+}
+
+/* Logo */
+.rx-logo {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.15em;
+	font-family: var( --rx-font-display );
+	font-weight: 900;
+	white-space: nowrap;
+}
+.rx-logo__mark {
+	font-size: var( --rx-text-xl );
+	color: var( --rx-color-ink );
+}
+.rx-logo__slash {
+	color: var( --rx-color-blue );
+}
+.rx-logo__word {
+	display: flex;
+	flex-direction: column;
+	line-height: 1;
+}
+.rx-logo__shoe {
+	font-size: var( --rx-text-lg );
+	color: var( --rx-color-ink );
+}
+.rx-logo__tagline {
+	display: none;
+	font-family: var( --rx-font-body );
+	font-weight: 600;
+	font-size: 0.5rem;
+	letter-spacing: 0.08em;
+	color: var( --rx-color-blue );
+}
+
+/* Buttons */
+.rx-btn {
+	display: inline-block;
+	padding: 0.6em 1em;
+	border-radius: var( --rx-radius-md );
+	font-weight: 600;
+	font-size: var( --rx-text-sm );
+	white-space: nowrap;
+}
+.rx-btn--bundle {
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+}
+
+.rx-icon-link {
+	position: relative;
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+}
+.rx-icon-link__count {
+	position: absolute;
+	top: -0.4em;
+	right: -0.4em;
+	min-width: 1.2em;
+	padding: 0 0.3em;
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+	font-size: var( --rx-text-xs );
+	text-align: center;
+	line-height: 1.2em;
+}
+
+/* Footer */
+.rx-footer {
+	background: var( --rx-color-gray-900 );
+	color: var( --rx-color-white );
+	padding: 2em 1em;
+}
+.rx-footer__trust {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	font-size: var( --rx-text-sm );
+	margin-bottom: 1.5em;
+}
+.rx-footer__columns {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5em;
+	margin-bottom: 1.5em;
+}
+.rx-footer__nav h2 {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-sm );
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin-bottom: 0.75em;
+}
+.rx-footer__nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	font-size: var( --rx-text-sm );
+}
+.rx-footer__payments {
+	display: flex;
+	gap: 1em;
+	font-size: var( --rx-text-xs );
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var( --rx-color-gray-300 );
+	margin-bottom: 1em;
+}
+.rx-footer__copyright {
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-300 );
+	margin: 0;
+}
+
+/* Desktop enhancements */
+@media ( min-width: 62em ) {
+	.rx-nav {
+		display: block;
+	}
+	.rx-nav__list {
+		display: flex;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		gap: 1.5em;
+		font-weight: 600;
+		font-size: var( --rx-text-sm );
+	}
+	.rx-search {
+		display: block;
+		flex: 1;
+		max-width: 20em;
+	}
+	.rx-search input {
+		width: 100%;
+		padding: 0.5em 0.85em;
+		border: 1px solid var( --rx-color-gray-200 );
+		border-radius: var( --rx-radius-md );
+	}
+	.rx-logo__tagline {
+		display: block;
+	}
+	.rx-footer__columns {
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}

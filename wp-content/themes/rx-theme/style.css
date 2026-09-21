@@ -684,6 +684,13 @@ a {
 	color: #555;
 	margin: 0 0 1em;
 }
+.rx-rotation-calc__original-total {
+	/* Inherit the formula's own font/colour rather than the browser's
+	   default <s> styling — it should read as "part of the same
+	   sentence, crossed out", not a visually distinct element. */
+	font: inherit;
+	color: inherit;
+}
 .rx-rotation-calc__toggle {
 	display: flex;
 	gap: 0.5em;

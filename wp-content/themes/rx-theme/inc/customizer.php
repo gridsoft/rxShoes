@@ -336,49 +336,59 @@ function rx_theme_rotation_fields(): array {
 
 	// Example calculator box.
 	$fields += array(
-		'rx_rotation_calc_heading'      => array(
+		'rx_rotation_calc_heading'        => array(
 			'default'   => __( 'Example Athlete Rotation Calculation', 'rx-theme' ),
 			'label'     => __( 'Calculator — heading', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_formula'      => array(
-			'default'   => __( 'R.A.D ONE V2 ($240) + TYR DropZero ($210) + Inov-8 F-Fly ($200) = $650.00 AUD', 'rx-theme' ),
-			'label'     => __( 'Calculator — formula line', 'rx-theme' ),
+		'rx_rotation_calc_formula'        => array(
+			'default'   => __( 'R.A.D ONE V2 ($240) + TYR DropZero ($210) + Inov-8 F-Fly ($200) =', 'rx-theme' ),
+			'label'     => __( 'Calculator — formula (sum expression, before the total)', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_toggle_2pair' => array(
+		// Split from the formula above so the original (pre-discount)
+		// total can be struck through in the template — a single text
+		// blob has no way to style just part of itself.
+		'rx_rotation_calc_original_total' => array(
+			'default'   => '$650.00 AUD',
+			'label'     => __( 'Calculator — original total (shown crossed out)', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_rotation_calc_toggle_2pair'   => array(
 			'default'   => __( '2-Pair Rotation (-40%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — 2-pair toggle label', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_toggle_3pair' => array(
+		'rx_rotation_calc_toggle_3pair'   => array(
 			'default'   => __( '3-Pair Rotation (-55%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — 3-pair toggle label', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_total_label'  => array(
+		'rx_rotation_calc_total_label'    => array(
 			'default'   => __( 'Bundle Checkout Total', 'rx-theme' ),
 			'label'     => __( 'Calculator — total label', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_total_price'  => array(
+		'rx_rotation_calc_total_price'    => array(
 			'default'   => '$357.50',
 			'label'     => __( 'Calculator — total price', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_rotation_calc_save_text'    => array(
+		'rx_rotation_calc_save_text'      => array(
 			'default'   => __( 'You Save $292.50 AUD (45%)', 'rx-theme' ),
 			'label'     => __( 'Calculator — savings line', 'rx-theme' ),
 			'type'      => 'text',

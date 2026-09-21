@@ -100,8 +100,9 @@ $rx_theme_tiers = array( 1, 2, 3 );
 				<span class="rx-rotation-calc__icon" aria-hidden="true"></span>
 				<span data-customize-partial="rx_rotation_calc_heading"><?php echo esc_html( rx_theme_get_mod( 'rx_rotation_calc_heading' ) ); ?></span>
 			</p>
-			<p class="rx-rotation-calc__formula" data-customize-partial="rx_rotation_calc_formula">
-				<?php echo esc_html( rx_theme_get_mod( 'rx_rotation_calc_formula' ) ); ?>
+			<p class="rx-rotation-calc__formula">
+				<span data-customize-partial="rx_rotation_calc_formula"><?php echo esc_html( rx_theme_get_mod( 'rx_rotation_calc_formula' ) ); ?></span>
+				<s class="rx-rotation-calc__original-total" data-customize-partial="rx_rotation_calc_original_total"><?php echo esc_html( rx_theme_get_mod( 'rx_rotation_calc_original_total' ) ); ?></s>
 			</p>
 			<div class="rx-rotation-calc__toggle" role="group" aria-label="<?php esc_attr_e( 'Example rotation size (illustrative only)', 'rx-theme' ); ?>">
 				<span class="rx-rotation-calc__toggle-option" data-customize-partial="rx_rotation_calc_toggle_2pair">

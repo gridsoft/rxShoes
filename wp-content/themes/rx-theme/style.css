@@ -229,35 +229,51 @@ a {
 }
 
 /* Hero (front-page.php > template-parts/front-page/hero.php).
-   First pass: real copy/colours/type from Figma, but exact layout
-   positioning for this section hasn't been measured node-by-node yet —
-   refine once that pass happens. Background image comes from the
-   Customizer (--rx-hero-image custom property); a flat colour is the
-   fallback so the section still works with no image set. */
+   Values below are exact, pulled from the Figma node tree via the API
+   (node 1:2842, "Section - 1. HERO SECTION") on 2026-09-21 — not
+   eyeballed. Key structural fact that the first pass got backwards:
+   this is a LIGHT hero — full-bleed photo with a white-to-transparent
+   gradient fading in from the left (not a dark top-to-bottom overlay),
+   dark ink text throughout (not white). Background image comes from
+   the Customizer (--rx-hero-image custom property). */
 .rx-hero {
 	position: relative;
 	padding: 2em 1em 2.5em;
-	background-color: var( --rx-color-gray-50 );
+	background-color: #f3f3f3; /* exact Figma section fill */
 	background-image:
-		linear-gradient( to bottom, rgba( 0, 0, 0, 0.55 ), rgba( 0, 0, 0, 0.15 ) 60% ),
+		linear-gradient( to right, #fff 0%, rgba( 255, 255, 255, 0.8 ) 50%, rgba( 255, 255, 255, 0 ) 100% ),
 		var( --rx-hero-image, none );
 	background-size: cover;
 	background-position: center;
-	color: var( --rx-color-white );
+	color: var( --rx-color-ink );
 }
 .rx-hero__content {
 	max-width: 40em;
 }
 .rx-hero__eyebrow {
-	margin: 0 0 0.75em;
-	font-size: var( --rx-text-xs );
-	font-weight: 700;
-	letter-spacing: 0.08em;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	margin: 0 0 1em;
+	padding: 0.3em 0.6em;
+	background: var( --rx-color-ink );
+	border-radius: var( --rx-radius-sm );
+	font-family: var( --rx-font-body );
+	font-size: 0.6875rem; /* 11px */
+	font-weight: 500;
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	color: var( --rx-color-white );
+	color: var( --rx-color-lime );
+}
+.rx-hero__eyebrow-icon {
+	width: 0.6em;
+	height: 0.7em;
+	background: var( --rx-color-lime );
+	border-radius: 1px;
 }
 .rx-hero__heading {
-	font-size: var( --rx-text-3xl );
+	font-size: 2.5rem; /* scales up at desktop to the Figma 80px */
+	color: var( --rx-color-ink );
 	margin-bottom: 0.3em;
 }
 .rx-hero__subheading {
@@ -268,51 +284,94 @@ a {
 	margin: 0 0 0.6em;
 }
 .rx-hero__description {
-	font-size: var( --rx-text-base );
-	line-height: 1.5;
+	font-family: var( --rx-font-body );
+	font-weight: 400;
+	font-size: var( --rx-text-lg ); /* 18px, matches Figma */
+	line-height: 1.6;
+	color: #555;
 	margin: 0 0 1.25em;
-	max-width: 32em;
+	max-width: 30em;
+}
+
+/* "Bundle Offer Callout Box" — white/95% card with the two tier badges. */
+.rx-hero__callout {
+	background: rgba( 255, 255, 255, 0.95 );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.1 );
+	padding: 1em;
+	margin-bottom: 1.5em;
 }
 .rx-hero__tiers {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75em;
-	margin-bottom: 1.5em;
+	gap: 1em;
 }
 .rx-hero__tier {
-	position: relative;
-	padding: 0.6em 1em;
-	background: var( --rx-color-white );
-	color: var( --rx-color-ink );
-	border-radius: var( --rx-radius-md );
-	font-weight: 700;
-	font-size: var( --rx-text-sm );
-}
-.rx-hero__tier--flagged {
-	padding-top: 1.1em;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
 }
 .rx-hero__tier-flag {
-	position: absolute;
-	top: -0.6em;
-	left: 0.75em;
-	padding: 0.15em 0.5em;
+	display: inline-block;
+	padding: 0.3em 0.6em;
+	border-radius: var( --rx-radius-sm );
+	font-family: var( --rx-font-display );
+	font-weight: 700;
+	font-size: 0.75rem; /* 14px */
+	line-height: 1.15;
+	text-align: center;
+	text-transform: uppercase;
+}
+.rx-hero__tier-flag--tier1 {
+	background: var( --rx-color-red );
+	color: var( --rx-color-white );
+}
+.rx-hero__tier-flag--tier2 {
 	background: var( --rx-color-lime );
 	color: var( --rx-color-ink );
-	border-radius: var( --rx-radius-sm );
-	font-size: var( --rx-text-xs );
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 }
+.rx-hero__tier-text {
+	font-family: var( --rx-font-display );
+	font-weight: 600;
+	font-size: var( --rx-text-xl ); /* 22px */
+	line-height: 1.2;
+}
+.rx-hero__tier-text--ink {
+	color: var( --rx-color-ink );
+}
+.rx-hero__tier-text--blue {
+	color: var( --rx-color-blue );
+}
+.rx-hero__tier-note {
+	margin: 0.75em 0 0;
+	font-family: var( --rx-font-body );
+	font-weight: 500;
+	font-size: 0.6875rem; /* 11px */
+	color: #555;
+}
+
 .rx-hero__actions {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75em;
 }
-.rx-btn--outline {
-	background: transparent;
-	border: 1px solid var( --rx-color-white );
-	color: var( --rx-color-white );
+.rx-btn--secondary {
+	background: var( --rx-color-white );
+	color: var( --rx-color-ink );
 	text-align: center;
+	box-shadow: 0 2px 8px rgba( 0, 0, 0, 0.05 );
+}
+/* Hero buttons specifically match the Figma spec exactly (Barlow
+   Condensed 600, radius 2px, 16px/40px padding) — scoped to .rx-hero
+   rather than changed on the shared .rx-btn base, since the header's
+   "Build a Bundle" button hasn't been measured node-by-node yet and
+   may turn out to use different sizing. */
+.rx-hero .rx-btn {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl ); /* 22px */
+	padding: 1em 2.5em;
+	border-radius: var( --rx-radius-sm ); /* 2px */
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.1 );
 }
 
 /* Desktop enhancements */
@@ -354,10 +413,6 @@ a {
 	}
 	.rx-hero__actions {
 		flex-direction: row;
-	}
-	.rx-btn--bundle,
-	.rx-btn--outline {
-		padding: 0.85em 1.75em;
 	}
 	.rx-footer__columns {
 		flex-direction: row;

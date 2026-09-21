@@ -15,9 +15,9 @@
  * Field definitions (rx_theme_hero_fields()) are the single source of
  * truth for both registration and runtime defaults — get_theme_mod()
  * does NOT automatically use a Customizer setting's 'default', it only
- * pre-fills the Customizer UI itself, so every template read goes
- * through rx_theme_get_mod() (see inc/template-tags.php) instead of a
- * raw get_theme_mod() call.
+ * pre-fills the Customizer UI, so every template read goes through
+ * rx_theme_get_mod() (see inc/template-tags.php) instead of a raw
+ * get_theme_mod() call.
  *
  * @package RX_Theme
  */
@@ -50,10 +50,11 @@ add_action( 'customize_register', 'rx_theme_customize_register' );
  * sanitize callback, transport]. Shared between registration
  * (add_setting/add_control) and rx_theme_get_mod()'s default lookup.
  *
- * Defaults match the Figma "Home" frame's hero copy as-is (2026-09-21) —
- * including the 2-pairs/3-pairs percentages, which are known to conflict
- * with other numbers elsewhere in the Figma file (see PROJECT.md §6.2 dev
- * log). That's exactly why these are editable fields and not hardcoded:
+ * Defaults and copy casing match the Figma "Home" frame's hero node tree
+ * exactly, pulled from the Figma API (2026-09-21) — not eyeballed off a
+ * screenshot. The 2-pairs/3-pairs percentages are known to conflict with
+ * other numbers elsewhere in the Figma file (see PROJECT.md §6.2 dev
+ * log); that's exactly why they're editable fields and not hardcoded —
  * whoever confirms the real number can fix it here without a code change.
  *
  * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
@@ -61,22 +62,22 @@ add_action( 'customize_register', 'rx_theme_customize_register' );
 function rx_theme_hero_fields(): array {
 	return array(
 		'rx_hero_eyebrow'            => array(
-			'default'   => __( 'Athlete Spec Training Rotation', 'rx-theme' ),
-			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'default'   => __( 'ATHLETE SPEC TRAINING ROTATION', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text (black pill badge)', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
 		'rx_hero_heading'            => array(
-			'default'   => __( "One shoe can't do everything.", 'rx-theme' ),
+			'default'   => __( "ONE SHOE CAN'T DO\nEVERYTHING.", 'rx-theme' ),
 			'label'     => __( 'Headline', 'rx-theme' ),
 			'type'      => 'textarea',
 			'sanitize'  => 'sanitize_textarea_field',
 			'transport' => 'postMessage',
 		),
 		'rx_hero_subheading'         => array(
-			'default'   => __( 'Build your training rotation.', 'rx-theme' ),
-			'label'     => __( 'Sub-headline (accent colour)', 'rx-theme' ),
+			'default'   => __( 'BUILD YOUR TRAINING ROTATION.', 'rx-theme' ),
+			'label'     => __( 'Sub-headline (blue)', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
@@ -88,29 +89,43 @@ function rx_theme_hero_fields(): array {
 			'sanitize'  => 'sanitize_textarea_field',
 			'transport' => 'postMessage',
 		),
-		'rx_hero_tier_1_text'        => array(
-			'default'   => __( '2 Pairs → Save 40%', 'rx-theme' ),
-			'label'     => __( 'Tier badge 1', 'rx-theme' ),
+		'rx_hero_tier_1_flag'        => array(
+			'default'   => __( 'TIER 1', 'rx-theme' ),
+			'label'     => __( 'Tier 1 badge (red)', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
-		'rx_hero_tier_2_text'        => array(
-			'default'   => __( '3 Pairs → Save 55%', 'rx-theme' ),
-			'label'     => __( 'Tier badge 2', 'rx-theme' ),
+		'rx_hero_tier_1_text'        => array(
+			'default'   => __( '2 PAIRS → SAVE 40%', 'rx-theme' ),
+			'label'     => __( 'Tier 1 text', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
 		'rx_hero_tier_2_flag'        => array(
-			'default'   => __( 'Max Value', 'rx-theme' ),
-			'label'     => __( 'Tier badge 2 flag (e.g. "Max Value")', 'rx-theme' ),
+			'default'   => __( 'MAX VALUE', 'rx-theme' ),
+			'label'     => __( 'Tier 2 badge (lime)', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_hero_tier_2_text'        => array(
+			'default'   => __( '3 PAIRS → SAVE 55%', 'rx-theme' ),
+			'label'     => __( 'Tier 2 text (blue)', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_hero_tier_note'          => array(
+			'default'   => __( 'Mix brands. Mix styles. Pick your colours and sizes. Discount applied automatically at checkout.', 'rx-theme' ),
+			'label'     => __( 'Tier box footnote', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
 			'transport' => 'postMessage',
 		),
 		'rx_hero_cta_primary_text'   => array(
-			'default'   => __( 'Build My Bundle', 'rx-theme' ),
+			'default'   => __( 'BUILD MY BUNDLE', 'rx-theme' ),
 			'label'     => __( 'Primary button text', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -124,7 +139,7 @@ function rx_theme_hero_fields(): array {
 			'transport' => 'refresh',
 		),
 		'rx_hero_cta_secondary_text' => array(
-			'default'   => __( 'Shop All Shoes', 'rx-theme' ),
+			'default'   => __( 'SHOP ALL SHOES', 'rx-theme' ),
 			'label'     => __( 'Secondary button text', 'rx-theme' ),
 			'type'      => 'text',
 			'sanitize'  => 'sanitize_text_field',
@@ -213,9 +228,11 @@ function rx_theme_customize_partials( WP_Customize_Manager $wp_customize ): void
 		'rx_hero_heading',
 		'rx_hero_subheading',
 		'rx_hero_description',
+		'rx_hero_tier_1_flag',
 		'rx_hero_tier_1_text',
-		'rx_hero_tier_2_text',
 		'rx_hero_tier_2_flag',
+		'rx_hero_tier_2_text',
+		'rx_hero_tier_note',
 		'rx_hero_cta_primary_text',
 		'rx_hero_cta_secondary_text',
 	);

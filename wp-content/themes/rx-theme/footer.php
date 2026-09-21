@@ -13,6 +13,7 @@
 
 ?>
 <footer id="site-footer" class="rx-footer">
+	<div class="rx-footer__inner">
 	<div class="rx-footer__trust">
 		<p><?php esc_html_e( 'Free Australian Shipping', 'rx-theme' ); ?></p>
 		<p><?php esc_html_e( 'Easy 30-Day Returns', 'rx-theme' ); ?></p>
@@ -49,6 +50,7 @@
 	<p class="rx-footer__copyright">
 		&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'All rights reserved.', 'rx-theme' ); ?>
 	</p>
+	</div>
 </footer>
 
 <?php wp_footer(); ?>

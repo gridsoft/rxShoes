@@ -95,7 +95,10 @@ a {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.75em;
-	padding: 0.75em 1em;
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 0.75em;
+	padding-inline: var( --rx-container-pad );
 }
 .rx-nav {
 	display: none;
@@ -182,7 +185,12 @@ a {
 .rx-footer {
 	background: var( --rx-color-gray-900 );
 	color: var( --rx-color-white );
-	padding: 2em 1em;
+}
+.rx-footer__inner {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 2em;
+	padding-inline: var( --rx-container-pad );
 }
 .rx-footer__trust {
 	display: flex;
@@ -238,7 +246,10 @@ a {
    the Customizer (--rx-hero-image custom property). */
 .rx-hero {
 	position: relative;
-	padding: 2em 1em 2.5em;
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 2em 2.5em;
+	padding-inline: var( --rx-container-pad );
 	background-color: #f3f3f3; /* exact Figma section fill */
 	background-image:
 		linear-gradient( to right, #fff 0%, rgba( 255, 255, 255, 0.8 ) 50%, rgba( 255, 255, 255, 0 ) 100% ),
@@ -248,7 +259,7 @@ a {
 	color: var( --rx-color-ink );
 }
 .rx-hero__content {
-	max-width: 40em;
+	max-width: 42em; /* 672px — Figma's own hero content column width, measured, not a text-wrap guess */
 }
 .rx-hero__eyebrow {
 	display: inline-flex;
@@ -392,7 +403,10 @@ a {
 	color: var( --rx-color-blue );
 }
 .rx-category-cards {
-	padding: 3em 1em;
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3em;
+	padding-inline: var( --rx-container-pad );
 }
 .rx-category-cards__header {
 	margin: 0 0 2em;
@@ -482,6 +496,16 @@ a {
 
 /* Desktop enhancements */
 @media ( min-width: 62em ) {
+	/* One shared inset for every section's container — see
+	   --rx-container-pad-desktop in tokens.css for where the 40px
+	   value comes from. This is what keeps every section's content
+	   aligned on the same left/right edges, matching Figma. */
+	.rx-header__row,
+	.rx-category-cards,
+	.rx-footer__inner,
+	.rx-hero {
+		padding-inline: var( --rx-container-pad-desktop );
+	}
 	.rx-nav {
 		display: block;
 	}
@@ -509,7 +533,7 @@ a {
 		display: block;
 	}
 	.rx-category-cards {
-		padding: 4em 3em;
+		padding-block: 4em;
 	}
 	.rx-category-cards__header {
 		display: flex;
@@ -526,7 +550,7 @@ a {
 		gap: 1.5em;
 	}
 	.rx-hero {
-		padding: 5em 3em;
+		padding-block: 5em;
 		min-height: 34em;
 		display: flex;
 		align-items: center;

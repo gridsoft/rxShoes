@@ -97,4 +97,23 @@
 	--rx-radius-md: 4px;
 	--rx-radius-lg: 6px;
 	--rx-radius-xl: 12px;
+
+	/* Every Home frame section measured so far is exactly 1280px wide
+	   in Figma. Without a matching cap here, sections stretch to fill
+	   whatever the browser viewport is — on anything wider than 1280px
+	   that makes every measurement (card sizes, spacing) run bigger
+	   than the Figma design actually specifies. Apply to each section's
+	   outer element as max-width + margin-inline: auto. */
+	--rx-container-max: 1280px;
+
+	/* Horizontal inset from the 1280px container's edge — measured
+	   exactly once, from Hero's own inner content container in Figma
+	   (padding 40px left/right within the 1280px frame), then applied
+	   to every section consistently rather than each guessing its own
+	   value. This is what makes every section's content actually line
+	   up on the same left/right edges, the way Figma has it. Mobile
+	   value (16px) is a standard default, not yet verified against a
+	   Figma mobile frame. */
+	--rx-container-pad: 1em;        /* 16px, mobile */
+	--rx-container-pad-desktop: 2.5em; /* 40px, verified against Figma */
 }

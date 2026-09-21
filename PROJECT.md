@@ -292,6 +292,8 @@ You are a **senior WordPress core developer and WooCommerce architect** working 
 
 ## 14. QA Checklist (pre-launch)
 
+- [ ] **Remove dev/test products** (R.A.D ONE V2, TYR L-1 Lifter, Inov-8 F-Fly, Strike Mvmnt Haze — created 2026-09-21, see §13):
+  `wp post delete $(wp post list --post_type=product --product_tag=dev-test-data --field=ID) --force`
 - [ ] Every product/variation: price, stock, images, add-to-cart
 - [ ] Bundles: all configurations, discounts, stock deduction, order meta, refunds
 - [ ] Promo rules: stacking, coupons, edge cases (qty 0, out-of-stock component, expired promo)

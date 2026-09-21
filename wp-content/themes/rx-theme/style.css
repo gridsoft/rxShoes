@@ -398,8 +398,9 @@ a {
 	margin: 0 0 2em;
 }
 .rx-category-cards__heading {
-	font-size: var( --rx-text-2xl );
+	font-size: var( --rx-text-3xl ); /* 48px, confirmed against Figma */
 	margin-bottom: 0.4em;
+	text-transform: uppercase;
 }
 .rx-category-cards__description {
 	font-family: var( --rx-font-body );
@@ -518,7 +519,7 @@ a {
 	}
 	.rx-category-cards__description {
 		margin-top: 0;
-		text-align: right;
+		text-align: left;
 	}
 	.rx-category-cards__grid {
 		grid-template-columns: repeat( 3, 1fr );

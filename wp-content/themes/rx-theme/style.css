@@ -70,18 +70,68 @@ a {
 	height: auto;
 }
 
-/* Announcement bar */
+/* Announcement bar: brand tagline (left) / rotation + shipping + returns
+   promo (center) / dispatch status (right) on wide screens; only the
+   center promo — the one line that actually matters if space is tight —
+   below that, same breakpoint the nav/search show at. */
 .rx-announcement-bar {
 	background: var( --rx-color-black );
 	color: var( --rx-color-white );
-	text-align: center;
 	padding: 0.5em 1em;
 	font-size: var( --rx-text-xs );
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 }
+.rx-announcement-bar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em 1.5em;
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+}
 .rx-announcement-bar p {
 	margin: 0;
+}
+.rx-announcement-bar__brand,
+.rx-announcement-bar__status {
+	display: none;
+	align-items: center;
+	gap: 0.4em;
+	flex: none;
+	white-space: nowrap;
+}
+.rx-announcement-bar__brand svg,
+.rx-announcement-bar__status-dot {
+	color: var( --rx-color-lime );
+}
+.rx-announcement-bar__status-dot {
+	width: 0.5em;
+	height: 0.5em;
+	border-radius: 999px;
+	background: var( --rx-color-lime );
+}
+.rx-announcement-bar__promo {
+	text-align: center;
+}
+.rx-announcement-bar__promo-link {
+	font-weight: 700;
+	color: var( --rx-color-lime );
+	text-decoration: none;
+}
+.rx-announcement-bar__sep {
+	margin: 0 0.3em;
+	opacity: 0.5;
+}
+
+@media ( min-width: 62em ) {
+	.rx-announcement-bar__inner {
+		justify-content: space-between;
+	}
+	.rx-announcement-bar__brand,
+	.rx-announcement-bar__status {
+		display: inline-flex;
+	}
 }
 
 /* Header — mobile: logo + actions row, nav/search collapse (menu toggle
@@ -157,15 +207,33 @@ a {
 	white-space: nowrap;
 }
 .rx-btn--bundle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
 	background: var( --rx-color-blue );
 	color: var( --rx-color-white );
+}
+.rx-btn--bundle__badge {
+	padding: 0.2em 0.5em;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-lime );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	color: var( --rx-color-ink );
 }
 
 .rx-icon-link {
 	position: relative;
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	width: 1.5em;
 	height: 1.5em;
+	color: var( --rx-color-ink );
+}
+.rx-icon-link svg {
+	width: 1.2em;
+	height: 1.2em;
 }
 .rx-icon-link__count {
 	position: absolute;

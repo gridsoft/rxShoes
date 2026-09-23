@@ -49,6 +49,15 @@ $rx_theme_eligible   = $args['eligible_entries'] ?? array();
 $rx_theme_slot_tier  = rx_theme_bundle_builder_tier( $rx_theme_pair );
 $rx_theme_filled     = count( $rx_theme_eligible );
 $rx_theme_add_toggle_id = 'rx-pair-add-toggle-' . $rx_theme_pair;
+/**
+ * "Browse shoe vault" has to land on bundle-eligible products only —
+ * browsing to a shoe that can't actually earn a rotation slot would be a
+ * dead end. Reuses the shop's own real "Bundle eligible" filter
+ * (?rx_bundle=1, see rx_theme_shop_bundle_only() in inc/shop-filters.php),
+ * the same toggle already on the shop filter bar, rather than a second
+ * filtering mechanism.
+ */
+$rx_theme_vault_url = add_query_arg( 'rx_bundle', '1', wc_get_page_permalink( 'shop' ) );
 ?>
 <div class="rx-bundle-pair rx-bundle-pair--empty" id="rx-pair-<?php echo esc_attr( $rx_theme_pair ); ?>">
 	<?php if ( $rx_theme_recommend instanceof WC_Product ) : ?>
@@ -85,12 +94,12 @@ $rx_theme_add_toggle_id = 'rx-pair-add-toggle-' . $rx_theme_pair;
 
 	<div class="rx-bundle-pair__empty-grid">
 		<div class="rx-bundle-pair__vault">
-			<a class="rx-bundle-pair__vault-icon" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" aria-label="<?php esc_attr_e( 'Browse shoe vault', 'rx-theme' ); ?>">
+			<a class="rx-bundle-pair__vault-icon" href="<?php echo esc_url( $rx_theme_vault_url ); ?>" aria-label="<?php esc_attr_e( 'Browse shoe vault', 'rx-theme' ); ?>">
 				<svg viewBox="0 0 24 24" width="20" height="20" focusable="false" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
 			</a>
 			<p class="rx-bundle-pair__vault-heading"><?php esc_html_e( 'Empty rotation slot', 'rx-theme' ); ?></p>
 			<p class="rx-bundle-pair__vault-text"><?php echo esc_html( rx_theme_bundle_builder_complement_text( $rx_theme_eligible ) ); ?></p>
-			<a class="rx-btn rx-btn--dark" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Browse shoe vault', 'rx-theme' ); ?></a>
+			<a class="rx-btn rx-btn--dark" href="<?php echo esc_url( $rx_theme_vault_url ); ?>"><?php esc_html_e( 'Browse shoe vault', 'rx-theme' ); ?></a>
 		</div>
 
 		<?php if ( $rx_theme_recommend instanceof WC_Product ) : ?>

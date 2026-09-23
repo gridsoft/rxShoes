@@ -87,9 +87,19 @@ add_action( 'product_cat_edit_form_fields', 'rx_theme_product_cat_edit_fields' )
  * category" form nonce action is fixed ('add-tag'), unlike the edit
  * form's (which is per-term-id) — these need separate handlers.
  *
+ * `created_product_cat` also fires for terms created programmatically
+ * (REST API, WP-CLI, importers, other plugins) — there's no "Add
+ * category" form submission at all in that case, so no nonce to check
+ * and nothing here to save. Bail before check_admin_referer() would
+ * otherwise wp_die() on a legitimate non-admin term creation.
+ *
  * @param int $term_id Newly created term ID.
  */
 function rx_theme_save_product_cat_fields_on_create( int $term_id ): void {
+	if ( ! isset( $_POST['_wpnonce'] ) ) {
+		return;
+	}
+
 	check_admin_referer( 'add-tag' );
 
 	foreach ( array_keys( rx_theme_category_text_fields() ) as $meta_key ) {
@@ -103,9 +113,16 @@ add_action( 'created_product_cat', 'rx_theme_save_product_cat_fields_on_create' 
 /**
  * Save this theme's fields when an existing category is edited.
  *
+ * Same non-admin-context guard as the create handler above —
+ * `edited_product_cat` fires for programmatic term updates too.
+ *
  * @param int $term_id Edited term ID.
  */
 function rx_theme_save_product_cat_fields_on_edit( int $term_id ): void {
+	if ( ! isset( $_POST['_wpnonce'] ) ) {
+		return;
+	}
+
 	check_admin_referer( 'update-tag_' . $term_id );
 
 	foreach ( array_keys( rx_theme_category_text_fields() ) as $meta_key ) {

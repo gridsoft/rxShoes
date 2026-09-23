@@ -71,7 +71,7 @@ if ( empty( $rx_theme_ordered_categories ) ) {
 			<p class="rx-eyebrow" data-customize-partial="rx_category_cards_eyebrow">
 				<?php echo esc_html( rx_theme_get_mod( 'rx_category_cards_eyebrow' ) ); ?>
 			</p>
-			<h2 class="rx-category-cards__heading" data-customize-partial="rx_category_cards_heading">
+			<h2 class="rx-section-heading" data-customize-partial="rx_category_cards_heading">
 				<?php echo esc_html( rx_theme_get_mod( 'rx_category_cards_heading' ) ); ?>
 			</h2>
 		</div>

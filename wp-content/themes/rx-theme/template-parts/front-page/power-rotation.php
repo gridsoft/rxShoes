@@ -37,7 +37,7 @@ $rx_theme_tiers = array( 1, 2, 3 );
 		<p class="rx-eyebrow" data-customize-partial="rx_rotation_eyebrow">
 			<?php echo esc_html( rx_theme_get_mod( 'rx_rotation_eyebrow' ) ); ?>
 		</p>
-		<h2 class="rx-rotation__heading" data-customize-partial="rx_rotation_heading">
+		<h2 class="rx-section-heading" data-customize-partial="rx_rotation_heading">
 			<?php echo esc_html( rx_theme_get_mod( 'rx_rotation_heading' ) ); ?>
 		</h2>
 		<p class="rx-rotation__description" data-customize-partial="rx_rotation_description">

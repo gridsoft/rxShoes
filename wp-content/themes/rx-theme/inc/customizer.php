@@ -44,6 +44,11 @@ function rx_theme_customize_register( WP_Customize_Manager $wp_customize ): void
 	rx_theme_register_hero_section( $wp_customize );
 	rx_theme_register_category_cards_section( $wp_customize );
 	rx_theme_register_rotation_section( $wp_customize );
+	rx_theme_register_biomech_section( $wp_customize );
+	rx_theme_register_brands_section( $wp_customize );
+	rx_theme_register_trust_section( $wp_customize );
+	rx_theme_register_community_section( $wp_customize );
+	rx_theme_register_bestsellers_section( $wp_customize );
 }
 add_action( 'customize_register', 'rx_theme_customize_register' );
 
@@ -473,6 +478,261 @@ function rx_theme_register_category_cards_section( WP_Customize_Manager $wp_cust
 	);
 
 	rx_theme_register_fields( $wp_customize, 'rx_category_cards', rx_theme_category_cards_fields() );
+}
+
+/**
+ * Field definitions for the "Different session. Different shoe." section
+ * (Figma section 5): its eyebrow, heading and description. The three
+ * cards come from blog posts, not from fields — see inc/biomechanics.php.
+ *
+ * Defaults match the Figma "Home" frame's copy for this section.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_biomech_fields(): array {
+	return array(
+		'rx_biomech_eyebrow'     => array(
+			'default'   => __( 'Biomechanical principle', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_biomech_heading'     => array(
+			'default'   => __( 'Different session. Different shoe.', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_biomech_description' => array(
+			'default'   => __( 'Why elite cross-training athletes never run in their squat shoes or lift heavy in running shoes.', 'rx-theme' ),
+			'label'     => __( 'Description', 'rx-theme' ),
+			'type'      => 'textarea',
+			'sanitize'  => 'sanitize_textarea_field',
+			'transport' => 'postMessage',
+		),
+	);
+}
+
+/**
+ * Register the "Different session" section's controls.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_biomech_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_biomech',
+		array(
+			'title'       => __( 'Different Session (Biomechanics)', 'rx-theme' ),
+			'description' => __( 'The three cards are blog posts: the earliest three published posts in the "Biomechanics" category, oldest first (publish date decides Discipline 01 / 02 / 03). On each post: the title is the card title, the featured image is the photo, the excerpt is the card text, and the first bullet list in the post is the two points. The section is hidden until that category has a post.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_biomech', rx_theme_biomech_fields() );
+}
+
+/**
+ * Field definitions for the "Shop by Brand" section (Figma section 6):
+ * eyebrow and heading. The tiles are the store's product brands — see
+ * inc/brand-tiles.php.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_brands_fields(): array {
+	return array(
+		'rx_brands_eyebrow' => array(
+			'default'   => __( 'Official partners', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_brands_heading' => array(
+			'default'   => __( 'Shop by brand', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+	);
+}
+
+/**
+ * Register the "Shop by Brand" section's controls.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_brands_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_brands',
+		array(
+			'title'       => __( 'Shop by Brand', 'rx-theme' ),
+			'description' => __( 'The tiles are your product brands (Products > Brands): the seven with the most products, each showing its logo and product count. Set a brand\'s logo with the Thumbnail field on the brand\'s edit screen; without one the tile shows the brand name. The section is hidden until a brand has a product.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_brands', rx_theme_brands_fields() );
+}
+
+/**
+ * Field definitions for the four trust tiles (Figma section 7): a title
+ * and a line of text each. The icons are positional (truck, swap,
+ * shield, pin) and not editable.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_trust_fields(): array {
+	$defaults = array(
+		1 => array( __( 'Free Express Shipping', 'rx-theme' ), __( 'Complimentary Australia Post Express on all orders over $150 AUD.', 'rx-theme' ) ),
+		2 => array( __( '30-Day Hassle-Free Swaps', 'rx-theme' ), __( 'Instant size exchanges with pre-paid return labels included.', 'rx-theme' ) ),
+		3 => array( __( '100% Authentic Guarantee', 'rx-theme' ), __( 'Direct manufacturer verification and full athlete brand warranties.', 'rx-theme' ) ),
+		4 => array( __( 'Sydney Dispatch & Support', 'rx-theme' ), __( 'Australian-owned with real athlete customer care in NSW.', 'rx-theme' ) ),
+	);
+	$fields   = array();
+
+	foreach ( $defaults as $n => $copy ) {
+		$fields[ "rx_trust_{$n}_title" ] = array(
+			'default'   => $copy[0],
+			/* translators: %d: tile number. */
+			'label'     => sprintf( __( 'Tile %d — title', 'rx-theme' ), $n ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		);
+		$fields[ "rx_trust_{$n}_text" ]  = array(
+			'default'   => $copy[1],
+			/* translators: %d: tile number. */
+			'label'     => sprintf( __( 'Tile %d — text', 'rx-theme' ), $n ),
+			'type'      => 'textarea',
+			'sanitize'  => 'sanitize_textarea_field',
+			'transport' => 'postMessage',
+		);
+	}
+
+	return $fields;
+}
+
+/**
+ * Register the trust tiles' Customizer section.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_trust_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_trust',
+		array(
+			'title'       => __( 'Trust Tiles', 'rx-theme' ),
+			'description' => __( 'The four reassurance cards above "Community Rotations" (shipping, swaps, authenticity, dispatch). Each has a title and a line of text; the icons are fixed.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_trust', rx_theme_trust_fields() );
+}
+
+/**
+ * Field definitions for the "Community Rotations" section (Figma section
+ * 8): eyebrow, heading and the note at the right of the heading. The
+ * testimonial cards themselves are Community posts — see inc/community.php.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_community_fields(): array {
+	return array(
+		'rx_community_eyebrow' => array(
+			'default'   => __( 'Tested on the platform', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_community_heading' => array(
+			'default'   => __( 'Community rotations', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_community_note'    => array(
+			'default'   => __( 'Over 14,000 Rotations Built Across Australia', 'rx-theme' ),
+			'label'     => __( 'Note beside the heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+	);
+}
+
+/**
+ * Register the "Community Rotations" Customizer section.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_community_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_community',
+		array(
+			'title'       => __( 'Community Rotations', 'rx-theme' ),
+			'description' => __( 'The testimonial cards are entries under Community in the dashboard menu (rating, quote, name and surname, position, company, address; the "Order" box sets the sequence, and the first three published show). The section is hidden until there is one.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_community', rx_theme_community_fields() );
+}
+
+/**
+ * Field definitions for the "Best Sellers" section (Figma section 4):
+ * eyebrow, heading and the note at the right of the heading. The four
+ * cards are products — see inc/best-sellers.php.
+ *
+ * @return array<string,array{default:string,label:string,type:string,sanitize:string,transport:string}>
+ */
+function rx_theme_bestsellers_fields(): array {
+	return array(
+		'rx_bestsellers_eyebrow' => array(
+			'default'   => __( 'Performance best sellers', 'rx-theme' ),
+			'label'     => __( 'Eyebrow text', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_bestsellers_heading' => array(
+			'default'   => __( 'Verified for the rotation', 'rx-theme' ),
+			'label'     => __( 'Heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+		'rx_bestsellers_note'    => array(
+			'default'   => __( 'All footwear eligible for automated bundle discounts', 'rx-theme' ),
+			'label'     => __( 'Note beside the heading', 'rx-theme' ),
+			'type'      => 'text',
+			'sanitize'  => 'sanitize_text_field',
+			'transport' => 'postMessage',
+		),
+	);
+}
+
+/**
+ * Register the "Best Sellers" Customizer section.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function rx_theme_register_bestsellers_section( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rx_bestsellers',
+		array(
+			'title'       => __( 'Best Sellers', 'rx-theme' ),
+			'description' => __( 'The four cards are your best-selling products, shown with the same card as the shop pages. They rank by number sold; until there are sales, the store\'s own product order (Products > Sort products) decides, then oldest first. The section is hidden if there are no products.', 'rx-theme' ),
+			'panel'       => 'rx_homepage',
+		)
+	);
+
+	rx_theme_register_fields( $wp_customize, 'rx_bestsellers', rx_theme_bestsellers_fields() );
 }
 
 /**

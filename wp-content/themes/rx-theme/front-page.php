@@ -15,12 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+// Convention for every section below (and any added later): the section's
+// <h2> uses the shared .rx-section-heading class and its eyebrow the shared
+// .rx-eyebrow — no per-section heading styles (client requirement).
+
 get_template_part( 'template-parts/front-page/hero' );
 get_template_part( 'template-parts/front-page/category-cards' );
 get_template_part( 'template-parts/front-page/power-rotation' );
 
-// Remaining homepage sections (Best Sellers grid, Educational
-// comparison, Shop by Brand, Community Rotations) land here as their
-// own template-parts, in Figma order.
+get_template_part( 'template-parts/front-page/best-sellers' );
+get_template_part( 'template-parts/front-page/biomechanics' );
+get_template_part( 'template-parts/front-page/shop-by-brand' );
+get_template_part( 'template-parts/front-page/trust-bar' );
+get_template_part( 'template-parts/front-page/community' );
 
 get_footer();

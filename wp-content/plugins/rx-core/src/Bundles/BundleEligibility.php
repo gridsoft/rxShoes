@@ -2,12 +2,15 @@
 /**
  * Per-product "Eligible for bundle" flag.
  *
- * A checkbox in the product edit screen's "Shop card" tab (not General —
- * WooCommerce hides that tab for variable products, i.e. every shoe). It's a business
- * rule, so it lives here rather than in the theme: the theme only asks
- * "is this product bundle-eligible?" through the
- * rx_theme_product_is_bundle_eligible filter (see the theme's
- * inc/woocommerce.php) and this service answers it.
+ * A checkbox in the product edit screen's "Bundle" tab (not General —
+ * WooCommerce hides that tab for variable products, i.e. every shoe;
+ * not "Shop card" either — moved out to its own "Bundle" tab alongside
+ * BundleRotationPairs, since the rotation pair pickers only make sense
+ * once this is ticked). It's a business rule, so it lives here rather
+ * than in the theme: the theme only asks "is this product
+ * bundle-eligible?" through the rx_theme_product_is_bundle_eligible
+ * filter (see the theme's inc/woocommerce.php) and this service answers
+ * it.
  *
  * Eligible products get the bundle treatment on shop cards (badge,
  * "as low as" pricing, rotation row, and an "Add to bundle" button in
@@ -22,7 +25,6 @@ declare(strict_types=1);
 
 namespace RX\Core\Bundles;
 
-use RX\Core\Admin\ProductCardTab;
 use RX\Core\Service;
 use WC_Product;
 
@@ -46,9 +48,27 @@ final class BundleEligibility implements Service {
 	 * Add the field, its save handler, and the theme-facing filter.
 	 */
 	public function register(): void {
-		add_action( ProductCardTab::FIELDS_ACTION, array( $this, 'render_field' ) );
+		add_action( BundleTab::FIELDS_ACTION, array( $this, 'render_field' ) );
 		add_action( 'woocommerce_admin_process_product_object', array( $this, 'save_field' ) );
 		add_filter( 'rx_theme_product_is_bundle_eligible', array( $this, 'filter_is_eligible' ), 10, 2 );
+		add_filter( 'rx_theme_bundle_eligible_meta_query', array( $this, 'filter_meta_query' ) );
+	}
+
+	/**
+	 * Answer the theme's "which products are bundle-eligible?" question
+	 * for the shop's "Bundle eligible" filter, as a WP_Query meta-query
+	 * clause. Same rule as is_eligible(): only an explicit 'yes' counts.
+	 *
+	 * @param array<string,mixed> $clause Clause so far (the theme's default: none).
+	 * @return array<string,mixed>
+	 */
+	public function filter_meta_query( array $clause ): array {
+		unset( $clause );
+
+		return array(
+			'key'   => self::META_KEY,
+			'value' => 'yes',
+		);
 	}
 
 	/**
@@ -62,7 +82,7 @@ final class BundleEligibility implements Service {
 	}
 
 	/**
-	 * Render the checkbox in the General tab of the product data box.
+	 * Render the checkbox in the Bundle tab of the product data box.
 	 */
 	public function render_field(): void {
 		global $product_object;

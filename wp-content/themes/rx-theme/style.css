@@ -181,59 +181,269 @@ a {
 	line-height: 1.2em;
 }
 
-/* Footer */
+/* Footer (footer.php) — hardcoded test content, measured 2026-09-21 from
+   the cached home.png: white band with a hairline on top, four plain trust
+   items (the trust tiles' icon/title/text without the card), a brand block
+   plus three link columns (2.1fr 1fr 1fr 1fr, 24px gaps), and a
+   copyright + payment-chip row under a second hairline. */
 .rx-footer {
-	background: var( --rx-color-gray-900 );
-	color: var( --rx-color-white );
+	background: var( --rx-color-white );
+	border-top: 1px solid var( --rx-color-gray-100 );
+	color: #555;
 }
 .rx-footer__inner {
 	max-width: var( --rx-container-max );
 	margin-inline: auto;
-	padding-block: 2em;
+	padding-block: 2.5rem;
 	padding-inline: var( --rx-container-pad );
 }
-.rx-footer__trust {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5em;
-	font-size: var( --rx-text-sm );
-	margin-bottom: 1.5em;
+.rx-footer-trust {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+	margin: 0;
+	padding: 0 0 2.6rem;
+	list-style: none;
+	border-bottom: 1px solid var( --rx-color-gray-100 );
 }
-.rx-footer__columns {
-	display: flex;
-	flex-direction: column;
-	gap: 1.5em;
-	margin-bottom: 1.5em;
+.rx-footer-trust__title {
+	color: var( --rx-color-ink ); /* the footer's text is #555; these titles are not */
 }
-.rx-footer__nav h2 {
-	font-family: var( --rx-font-body );
-	font-size: var( --rx-text-sm );
+.rx-footer-trust__item {
+	display: grid;
+	grid-template-columns: 1.75rem 1fr;
+	align-content: start;
+	column-gap: 0.5625rem;
+}
+.rx-footer__main {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 2rem 1.5rem;
+	padding-block: 2.5rem 2.25rem;
+	border-bottom: 1px solid var( --rx-color-gray-100 );
+}
+.rx-footer__logo {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var( --rx-color-ink );
+}
+.rx-footer__logo-mark {
+	display: grid;
+	place-items: center;
+	width: 2rem;
+	height: 2rem;
+	background: var( --rx-color-ink );
+	border-radius: var( --rx-radius-sm );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-style: italic;
+	font-weight: 800;
+	color: var( --rx-color-white );
+}
+.rx-footer__logo-word {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	letter-spacing: 0.055em;
 	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	margin-bottom: 0.75em;
+}
+.rx-footer__about {
+	max-width: 25rem;
+	margin: 0.625rem 0 0;
+	font-size: 0.83rem; /* ~13.3px: Figma's 14px Inter runs ~5% narrower than ours */
+	line-height: 1.5; /* 20px */
+}
+.rx-footer__secure {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin: 0.8rem 0 0;
+	font-size: 0.6875rem; /* 11px */
+}
+.rx-footer__secure svg {
+	flex: none;
+	color: var( --rx-color-blue );
+}
+.rx-footer__nav-title {
+	margin: 0 0 0.9rem;
+	font-size: var( --rx-text-xl );
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	line-height: 1.1818;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
 }
 .rx-footer__nav-list {
-	list-style: none;
 	margin: 0;
 	padding: 0;
+	list-style: none;
+	font-size: 0.83rem;
+	line-height: 1.8; /* 24px */
+}
+.rx-footer__nav-list a:hover {
+	color: var( --rx-color-ink );
+	text-decoration: underline;
+}
+.rx-footer__nav-list .rx-footer__link--sale,
+.rx-footer__nav-list .rx-footer__link--bundle {
+	font-weight: 600;
+}
+.rx-footer__nav-list .rx-footer__link--sale {
+	color: var( --rx-color-red );
+}
+.rx-footer__nav-list .rx-footer__link--bundle {
+	color: var( --rx-color-blue );
+}
+.rx-footer__bottom {
 	display: flex;
-	flex-direction: column;
-	gap: 0.5em;
-	font-size: var( --rx-text-sm );
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-top: 1rem;
+}
+.rx-footer__copyright {
+	margin: 0;
+	font-size: 0.6875rem; /* 11px */
+	text-transform: uppercase;
 }
 .rx-footer__payments {
 	display: flex;
-	gap: 1em;
-	font-size: var( --rx-text-xs );
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	color: var( --rx-color-gray-300 );
-	margin-bottom: 1em;
-}
-.rx-footer__copyright {
-	font-size: var( --rx-text-xs );
-	color: var( --rx-color-gray-300 );
+	flex-wrap: wrap;
+	gap: 0.875rem;
 	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-footer__payments li {
+	padding-inline: 0.625rem;
+	background: var( --rx-color-section );
+	border-radius: var( --rx-radius-sm );
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	line-height: 1.3125rem; /* 21px chip */
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+
+/* "Your rotation" bar at the end of the footer (footer.php) — static markup,
+   JavaScript comes later. Measured from the cached home.png: 49px dark bar,
+   16px inset; 27px pair chips (grey / blue / dashed-dim = added / next /
+   locked) with a #2f3131 fill; 33px lime "Build now" button. */
+.rx-rotation-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem 1.25rem;
+	width: min( calc( 100% - 2 * var( --rx-container-pad ) ), var( --rx-container-max ) );
+	margin: 0 auto 1rem;
+	padding: 0.5rem 1rem;
+	background: var( --rx-color-ink );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 6px 20px rgba( 0, 0, 0, 0.25 );
+	color: var( --rx-color-white );
+}
+.rx-rotation-bar__lead {
+	display: flex;
+	align-items: center;
+	gap: 0.3125rem;
+}
+.rx-rotation-bar__dot {
+	flex: none;
+	width: 0.625rem;
+	height: 0.625rem;
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+}
+.rx-rotation-bar__title {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	line-height: 1;
+	text-transform: uppercase;
+}
+.rx-rotation-bar__badge {
+	margin-left: 0.9rem;
+	padding-inline: 0.3125rem;
+	background: var( --rx-color-lime );
+	border-radius: var( --rx-radius-sm );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	line-height: 1.0625rem; /* 17px badge */
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-rotation-bar__pairs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 0.875rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-rotation-bar__pair {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	height: 1.6875rem; /* 27px */
+	padding-inline: 0.5rem 0.75rem;
+	background: #2f3131;
+	border: 1px solid #474848;
+	border-radius: var( --rx-radius-sm );
+	font-size: 0.6875rem; /* 11px */
+	font-weight: 700;
+	letter-spacing: 0.055em;
+	line-height: 1;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-rotation-bar__pair svg {
+	flex: none;
+}
+.rx-rotation-bar__pair--added svg {
+	color: var( --rx-color-lime );
+}
+.rx-rotation-bar__pair--next {
+	border-color: var( --rx-color-blue );
+}
+.rx-rotation-bar__pair--next svg {
+	color: var( --rx-color-blue );
+}
+.rx-rotation-bar__pair--locked {
+	padding-right: 0.3125rem; /* Figma's dimmed chip is 225px against ~232 for the others */
+	border-style: dashed;
+	border-color: #51545c;
+	letter-spacing: 0.045em;
+	color: #555;
+}
+.rx-rotation-bar__pair--locked svg {
+	width: 0.6875rem;
+	height: 0.6875rem;
+}
+.rx-rotation-bar__cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%; /* phones: the bar wraps into title row, the pairs, then a full-width button */
+	height: 2.0625rem; /* 33px */
+	padding-inline: 1.7rem;
+	background: var( --rx-color-lime );
+	border-radius: var( --rx-radius-sm );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	line-height: 1;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-rotation-bar__cta:hover {
+	filter: brightness( 1.08 );
 }
 
 /* Hero (front-page.php > template-parts/front-page/hero.php).
@@ -250,7 +460,7 @@ a {
 	margin-inline: auto;
 	padding-block: 2em 2.5em;
 	padding-inline: var( --rx-container-pad );
-	background-color: #f3f3f3; /* exact Figma section fill */
+	background-color: var( --rx-color-section ); /* exact Figma section fill */
 	background-image:
 		linear-gradient( to right, #fff 0%, rgba( 255, 255, 255, 0.8 ) 50%, rgba( 255, 255, 255, 0 ) 100% ),
 		var( --rx-hero-image, none );
@@ -394,13 +604,30 @@ a {
    tokens.css — same design system as Hero, nothing new needed.
    Cards are full-bleed photo with a badge (top-left) and a bottom
    gradient text overlay — not a separate photo-then-body layout. */
+/* Section eyebrow: one style for every homepage section (measured from
+   Figma: 13px condensed, cap height 9px, ~121px wide for "Official
+   partners"); the colour is the only thing that varies. */
 .rx-eyebrow {
-	margin: 0 0 0.5em;
-	font-size: var( --rx-text-xs );
+	/* The heading's own .3em top margin already sits under this; Figma's
+	   eyebrow-to-heading gap is ~7px tighter than that, hence the pull-up. */
+	margin: 0 0 -0.4rem;
+	font-family: var( --rx-font-display );
+	font-size: 0.8125rem; /* 13px */
 	font-weight: 700;
-	letter-spacing: 0.06em;
+	letter-spacing: 0.14em;
 	text-transform: uppercase;
 	color: var( --rx-color-blue );
+}
+.rx-eyebrow--red {
+	color: var( --rx-color-red );
+}
+/* One heading style for every homepage section title (Category Cards,
+   Power Rotation, Biomechanics, Shop by Brand) — the Power Rotation
+   heading's, per the client. */
+.rx-section-heading {
+	font-size: var( --rx-text-3xl );
+	text-transform: uppercase;
+	margin: 0.3em 0;
 }
 .rx-category-cards {
 	max-width: var( --rx-container-max );
@@ -410,11 +637,6 @@ a {
 }
 .rx-category-cards__header {
 	margin: 0 0 2em;
-}
-.rx-category-cards__heading {
-	font-size: var( --rx-text-3xl ); /* 48px, confirmed against Figma */
-	margin-bottom: 0.4em;
-	text-transform: uppercase;
 }
 .rx-category-cards__description {
 	font-family: var( --rx-font-body );
@@ -506,17 +728,12 @@ a {
 	margin-inline: auto;
 	padding-block: 3em;
 	padding-inline: var( --rx-container-pad );
-	background: #f3f3f3;
+	background: var( --rx-color-section );
 	text-align: center;
 }
 .rx-rotation__header {
 	max-width: 55em;
 	margin: 0 auto 2em;
-}
-.rx-rotation__heading {
-	font-size: var( --rx-text-3xl );
-	text-transform: uppercase;
-	margin: 0.3em 0;
 }
 .rx-rotation__description {
 	font-family: var( --rx-font-body );
@@ -737,6 +954,400 @@ a {
 	color: var( --rx-color-red );
 }
 
+/* Homepage "Different session. Different shoe." section
+   (template-parts/front-page/biomechanics.php). Measured 2026-09-21 from
+   the cached home.png (band fill deliberately the shared section grey,
+   not the screenshot's #EEE, per the client): ~51px heading, three white cards with a
+   336x176 photo, blue "Discipline 0N" label, 22px title, 14/20 text and
+   two 12px points with lime dots. */
+.rx-biomech {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3.25em 2.85em;
+	padding-inline: var( --rx-container-pad );
+	background: var( --rx-color-section );
+	text-align: center;
+}
+.rx-biomech__header {
+	max-width: 55em;
+	margin: 0 auto 2.3em;
+}
+.rx-biomech__description {
+	margin: 0;
+	font-size: 0.9375rem; /* 15px */
+	color: #555;
+}
+.rx-biomech__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	text-align: left;
+}
+.rx-biomech-card {
+	display: flex;
+	flex-direction: column;
+	padding: 1.5rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-biomech-card__image {
+	display: block;
+	aspect-ratio: 336 / 176;
+	overflow: hidden;
+	border-radius: var( --rx-radius-sm );
+}
+.rx-biomech-card__photo {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.rx-biomech-card__label {
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+	margin: 0.875rem 0 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-base );
+	font-weight: 700;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+}
+.rx-biomech-card__title {
+	margin: 0.25rem 0 0;
+	font-size: var( --rx-text-xl );
+	font-weight: 600;
+	letter-spacing: 0.045em;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+.rx-biomech-card__title a:hover {
+	text-decoration: underline;
+}
+.rx-biomech-card__text {
+	flex: 1; /* keeps the two points level across cards of unequal text length */
+	margin: 0.25rem 0 0;
+	font-size: 0.83rem; /* ~13.3px, measured (14px runs 5% wider than the Figma lines) */
+	line-height: 1.5; /* 20px */
+	color: #555;
+}
+.rx-biomech-card__points {
+	margin: 0.375rem 0 -0.3125rem;
+	padding: 0;
+	list-style: none;
+	font-size: 0.7rem; /* ~11.2px, measured */
+	font-weight: 500;
+	line-height: 1.6964; /* 19px */
+	color: var( --rx-color-black );
+}
+.rx-biomech-card__points li {
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+}
+.rx-biomech-card__points li::before {
+	content: '';
+	flex: none;
+	width: 0.375rem;
+	height: 0.375rem;
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+}
+
+/* Homepage "Best Sellers" (template-parts/front-page/best-sellers.php).
+   Transparent (white) band; header like Shop by Brand plus a small note at
+   the right; the cards are the shop's own .rx-product-card in the same
+   4-up grid (the grid rules are shared with .rx-shop ul.products). */
+.rx-best-sellers {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3.2em 2.9em;
+	padding-inline: var( --rx-container-pad );
+}
+.rx-best-sellers__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 0.5rem 1.5rem;
+	margin-bottom: 1.75rem;
+}
+.rx-best-sellers__note {
+	margin: 0 0 0.82rem;
+	font-size: 0.6875rem; /* 11px, default tracking: measured 348px wide in Figma */
+	text-transform: uppercase;
+	color: #555;
+}
+
+/* Homepage "Shop by Brand" (template-parts/front-page/shop-by-brand.php).
+   Measured 2026-09-21 from the cached home.png: transparent (white) band,
+   eyebrow + heading left, "View all N brands" right, then a row of 121px
+   tiles with 8px gaps — tile fill is the shared section grey. */
+.rx-brands {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3.2em 2.9em;
+	padding-inline: var( --rx-container-pad );
+}
+.rx-brands__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.5rem 1.5rem;
+	margin-bottom: 0.65rem;
+}
+.rx-brands__all {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-top: 0.25rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-base );
+	font-weight: 600;
+	letter-spacing: 0.065em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.rx-brands__all:hover {
+	color: var( --rx-color-ink );
+}
+.rx-brands__grid {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-brand-tile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.375rem;
+	min-height: 7.5625rem; /* 121px */
+	padding: 1rem 0.75rem;
+	background: var( --rx-color-section );
+	border-radius: var( --rx-radius-sm );
+	text-align: center;
+}
+.rx-brand-tile:hover {
+	background: var( --rx-color-gray-200 );
+}
+.rx-brand-tile__logo {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	height: 3.25rem; /* 52px: every logo sits in the same-height box, as in the design */
+	object-fit: contain;
+}
+.rx-brand-tile__name {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 900;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.rx-brand-tile__count {
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: #555;
+}
+
+/* Homepage trust tiles + "Community Rotations" (template-parts/front-page/
+   trust-bar.php, community.php). Measured 2026-09-21 from the cached
+   home.png: four 282px tiles (icon + title on one row, text under the
+   title), three 384px testimonial cards with a divider above the person.
+   The band fill is the shared section grey. */
+.rx-trust,
+.rx-community {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-inline: var( --rx-container-pad );
+	background: var( --rx-color-section );
+}
+.rx-trust {
+	padding-block: 2.5rem 0;
+}
+.rx-trust__grid,
+.rx-community__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-trust-tile {
+	display: grid;
+	grid-template-columns: 1.75rem 1fr;
+	align-content: start;
+	column-gap: 0.5625rem;
+	padding: 1rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-trust-tile__icon,
+.rx-footer-trust__icon {
+	display: flex;
+	align-items: flex-start;
+	height: 1.75rem;
+	margin-top: -0.28rem; /* the icon's ink starts ~5px inside its box; this puts it level with the title as in the design */
+	color: var( --rx-color-blue );
+}
+.rx-trust-tile__title,
+.rx-footer-trust__title {
+	grid-column: 2;
+	margin: 0;
+	font-size: var( --rx-text-xl );
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	line-height: 1.1818; /* 26px */
+	text-transform: uppercase;
+}
+.rx-trust-tile__text,
+.rx-footer-trust__text {
+	grid-column: 2;
+	margin: 0.125rem 0 0;
+	font-size: 0.8125rem; /* 13px */
+	line-height: 1.5; /* 19.5px, as measured */
+	color: #555;
+}
+.rx-community {
+	padding-block: 4.375rem 2.5rem;
+}
+.rx-community__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 0.5rem 1.5rem;
+	margin-bottom: 0.625rem;
+}
+.rx-community__note {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0 0 0.825rem;
+	font-size: var( --rx-text-sm );
+	color: #555;
+}
+.rx-community__note svg {
+	flex: none;
+	color: var( --rx-color-lime );
+}
+.rx-community__grid > li {
+	display: flex;
+}
+.rx-community-card {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 1.5rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-stars {
+	display: inline-flex;
+	color: var( --rx-color-orange );
+}
+.rx-stars__star {
+	display: block;
+	width: 0.7rem;
+	height: 0.7rem;
+}
+.rx-stars__star.is-empty {
+	color: var( --rx-color-gray-300 );
+}
+.rx-community-card__quote {
+	flex: 1; /* keeps the person row level across cards of unequal quote length */
+	margin: 0.25rem 0 0.95rem;
+	font-size: 0.9375rem; /* 15px, per the client */
+	line-height: 1.6; /* 24px */
+}
+.rx-community-card__quote p {
+	margin: 0;
+	font-style: italic;
+	color: var( --rx-color-ink );
+}
+.rx-community-card__person {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding-top: 0.6875rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-community-card__avatar {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	background: var( --rx-color-section );
+	border-radius: var( --rx-radius-md );
+	font-size: 0.6875rem;
+	font-weight: 600;
+	color: #555;
+}
+.rx-community-card__who {
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+	min-width: 0;
+}
+.rx-community-card__name {
+	font-family: var( --rx-font-display );
+	font-size: 1.25rem;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.rx-community-card__role {
+	font-size: 0.6875rem;
+	line-height: 1.3;
+	color: #555;
+}
+
+/* Single blog post (single.php) — minimal, until the blog is designed. */
+.rx-post {
+	max-width: 50rem;
+	margin-inline: auto;
+	padding: 3rem var( --rx-container-pad );
+}
+.rx-post__header {
+	margin-bottom: 1.5rem;
+}
+.rx-post__image {
+	margin-bottom: 1.5rem;
+}
+.rx-post__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: var( --rx-radius-md );
+}
+.rx-post__content {
+	font-size: var( --rx-text-md );
+	line-height: 1.7;
+	color: #333;
+}
+.rx-post__content h2,
+.rx-post__content h3 {
+	margin: 1.5em 0 0.5em;
+	color: var( --rx-color-ink );
+	text-transform: uppercase;
+}
+.rx-post__content ul {
+	padding-left: 1.25rem;
+}
+
 /* Shop loop + product card (woocommerce/content-product.php).
    Measured 2026-09-21 from the reference card image supplied by the
    client: image area #F5F5F5 (~288x220), badges stacked and stretched
@@ -750,7 +1361,8 @@ a {
 	padding-block: 2em;
 	padding-inline: var( --rx-container-pad );
 }
-.rx-shop ul.products {
+.rx-shop ul.products,
+.rx-best-sellers ul.products {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 1em;
@@ -952,9 +1564,1328 @@ a {
 	text-decoration: underline;
 }
 
+/* Archive header (template-parts/shop/archive-header.php): breadcrumb +
+   title, with the stats card on the shop page and taxonomy pages and the
+   term description on taxonomy pages (Figma "Men's Performance Shoes"). */
+.rx-archive-header {
+	margin-bottom: 1.5rem;
+}
+.rx-archive-header__top {
+	margin-bottom: 0.75rem;
+}
+.woocommerce-breadcrumb {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-breadcrumb a:hover {
+	text-decoration: underline;
+}
+.rx-breadcrumb__item:last-child {
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-archive-header__main {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.rx-archive-header__title {
+	font-size: var( --rx-text-2xl );
+	text-transform: uppercase;
+}
+.rx-archive-header .term-description {
+	max-width: 46rem;
+	margin-top: 0.75rem;
+	font-size: var( --rx-text-md );
+	line-height: 1.5;
+	color: var( --rx-color-gray-600 );
+}
+.rx-archive-header .term-description > :first-child {
+	margin-top: 0;
+}
+.rx-archive-header .term-description > :last-child {
+	margin-bottom: 0;
+}
+.rx-archive-stats {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 1rem;
+	width: fit-content;
+	padding: 0.75rem 1rem;
+	background: var( --rx-color-surface );
+	border-radius: var( --rx-radius-md );
+}
+.rx-archive-stats__item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+	margin: 0;
+}
+.rx-archive-stats__value {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.rx-archive-stats__value--save {
+	color: var( --rx-color-red );
+}
+.rx-archive-stats__label {
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+/* Slim grey pill with a blue segment, separating the two stats. */
+.rx-archive-stats__divider {
+	flex: none;
+	align-self: center;
+	width: 0.5rem;
+	height: 2.25rem;
+	background: linear-gradient( to top, var( --rx-color-blue ) 45%, var( --rx-color-gray-200 ) 45% );
+	border-radius: 999px;
+}
+
+/* Dynamic Rotation System strip (template-parts/shop/rotation-strip.php)
+   above the filter bar: grey panel, heading + note, then three tiles —
+   white, white, black "best value". Number badges: grey / lime / red. */
+.rx-rotation-strip {
+	margin-bottom: 0.75rem;
+	padding: 0.75rem;
+	background: var( --rx-color-surface );
+	border-radius: var( --rx-radius-md );
+}
+.rx-rotation-strip__header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-bottom: 0.75rem;
+}
+.rx-rotation-strip__heading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0;
+	font-size: var( --rx-text-xl );
+	line-height: 1;
+	text-transform: uppercase;
+}
+.rx-rotation-strip__chevron {
+	color: var( --rx-color-blue );
+}
+.rx-rotation-strip__note {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-strip__tiers {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-rotation-strip__tier {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	min-height: 3.5rem;
+	padding: 0.5rem 0.75rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-sm );
+	color: var( --rx-color-ink );
+}
+.rx-rotation-strip__number {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 50%;
+	background: var( --rx-color-gray-200 );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+}
+.rx-rotation-strip__text {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.125rem;
+	min-width: 0;
+}
+.rx-rotation-strip__title {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-base );
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+.rx-rotation-strip__detail {
+	font-size: var( --rx-text-sm );
+	line-height: 1.2;
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-strip__value {
+	flex: none;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 700;
+	line-height: 1;
+	text-transform: uppercase;
+}
+.rx-rotation-strip__tier--2 .rx-rotation-strip__number {
+	background: var( --rx-color-lime );
+}
+.rx-rotation-strip__tier--2 .rx-rotation-strip__detail {
+	color: var( --rx-color-red );
+}
+.rx-rotation-strip__tier--2 .rx-rotation-strip__value {
+	color: var( --rx-color-blue );
+}
+.rx-rotation-strip__tier--3 {
+	background: var( --rx-color-black );
+	color: var( --rx-color-white );
+}
+.rx-rotation-strip__tier--3 .rx-rotation-strip__number {
+	background: var( --rx-color-red );
+	color: var( --rx-color-white );
+}
+.rx-rotation-strip__tier--3 .rx-rotation-strip__title,
+.rx-rotation-strip__tier--3 .rx-rotation-strip__value {
+	color: var( --rx-color-lime );
+}
+.rx-rotation-strip__tier--3 .rx-rotation-strip__detail {
+	color: var( --rx-color-white );
+}
+
+/* Shop filter bar (template-parts/shop/filter-bar.php), from the Figma
+   filter strip: size chips left, toggles + sort right, on a white bar.
+   Everything is a link except the sort <select>. Tap targets are 40px. */
+.rx-filters {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: 1.5rem;
+	padding: 0.75rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-filters__sizes,
+.rx-filters__options {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+.rx-filters__label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-right: 0.25rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-filters__chips {
+	display: contents; /* chips wrap together with the label and Clear */
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-filters__chips li {
+	display: contents;
+}
+.rx-chip,
+.rx-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.5rem;
+	min-height: 2.5rem;
+	padding-inline: 0.75rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-base );
+	font-weight: 600;
+	line-height: 1;
+	color: var( --rx-color-ink );
+}
+.rx-chip:hover,
+.rx-toggle:hover {
+	background: var( --rx-color-gray-200 );
+}
+.rx-chip.is-active,
+.rx-chip.is-active:hover {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-chip--clear {
+	background: var( --rx-color-gray-200 );
+	font-size: var( --rx-text-sm );
+	font-weight: 500;
+	color: var( --rx-color-gray-600 );
+	text-transform: uppercase;
+}
+.rx-toggle {
+	gap: 0.5rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	/* --rx-toggle-color drives the square, and the ring when switched on. */
+	--rx-toggle-color: var( --rx-color-blue );
+}
+.rx-toggle--bundle {
+	--rx-toggle-color: var( --rx-color-red );
+	color: var( --rx-color-red );
+}
+.rx-toggle__box {
+	display: grid;
+	place-items: center;
+	width: 0.875rem;
+	height: 0.875rem;
+	border-radius: 2px;
+	background: var( --rx-toggle-color );
+}
+.rx-toggle.is-active {
+	box-shadow: inset 0 0 0 2px var( --rx-toggle-color );
+	background: var( --rx-color-white );
+}
+/* Tick inside the square when on, so the state isn't colour-only. */
+.rx-toggle.is-active .rx-toggle__box::after {
+	content: '';
+	width: 0.25rem;
+	height: 0.5rem;
+	margin-top: -0.0625rem;
+	border: solid var( --rx-color-white );
+	border-width: 0 2px 2px 0;
+	transform: rotate( 45deg );
+}
+.rx-filters__sort {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	min-height: 2.5rem;
+	padding-left: 0.75rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	font-size: var( --rx-text-base );
+}
+.rx-filters__sort-label {
+	color: var( --rx-color-ink );
+}
+.rx-filters__sort .woocommerce-ordering {
+	margin: 0;
+}
+.rx-filters__sort select {
+	min-height: 2.375rem;
+	padding: 0 2rem 0 0.25rem;
+	border: 0;
+	background: transparent url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='14' viewBox='0 0 10 14'%3E%3Cpath d='M1 5l4-4 4 4M1 9l4 4 4-4' fill='none' stroke='%23111' stroke-width='1.5'/%3E%3C/svg%3E" ) no-repeat right 0.75rem center;
+	font: inherit;
+	color: var( --rx-color-ink );
+	appearance: none;
+	cursor: pointer;
+}
+.rx-filters a:focus-visible,
+.rx-filters select:focus-visible {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-no-results a {
+	font-weight: 600;
+	text-decoration: underline;
+}
+
+/* Shop pagination footer: "Showing X of Y items" summary paired with the
+   page-number pills below the grid (template-parts/shop/pagination.php,
+   inc/shop-pagination.php). The pill styling reuses the .rx-chip look
+   (same radius/min-size/active-state as the filter bar) on top of
+   WooCommerce's own pagination markup — nothing here changes WC's HTML,
+   only how it renders. White card on its own, same as .rx-filters above
+   the grid — the layout it sits in has a grey panel background
+   (.rx-shop-layout--sidebar), so without its own white background and
+   padding this would just pick up that grey rather than reading as its
+   own bar. */
+.rx-shop-pagination {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: 1rem;
+	padding: 0.75rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-shop-pagination__summary {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.rx-shop-pagination__dot {
+	margin-inline: 0.4em;
+}
+.rx-shop-pagination__sync {
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-shop-pagination .woocommerce-pagination {
+	margin: 0;
+}
+.rx-shop-pagination ul.page-numbers {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-shop-pagination .page-numbers li {
+	display: contents;
+}
+/* Every page link/span (numbers, current, prev, next) carries the shared
+   "page-numbers" class alongside its own — one rule covers them all. */
+.rx-shop-pagination .page-numbers .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35rem;
+	min-width: 2.5rem;
+	min-height: 2.5rem;
+	padding-inline: 0.75rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-base );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-shop-pagination a.page-numbers:hover {
+	background: var( --rx-color-gray-200 );
+}
+.rx-shop-pagination .page-numbers .current {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-shop-pagination .page-numbers .next,
+.rx-shop-pagination .page-numbers .prev {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	font-size: var( --rx-text-sm );
+}
+.rx-shop-pagination a.page-numbers:focus-visible {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+
+/* Single product variation swatches (colour) and pills (size). The real
+   <select> WooCommerce needs for its own stock/price/add-to-cart logic
+   stays in the DOM but visually hidden — see woocommerce/single-product/
+   add-to-cart/variable.php and assets/js/variation-swatches.js, which
+   drives it from these buttons rather than reimplementing its logic. */
+.rx-variations {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	margin-bottom: 1.25rem;
+}
+.rx-variations__row-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 0.6rem;
+}
+.rx-variations__label {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-variations__label-value {
+	color: var( --rx-color-blue );
+}
+.rx-variations__count {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-variations .reset_variations {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+	text-decoration: underline;
+}
+.rx-variation-select-wrap {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect( 0 0 0 0 );
+	white-space: nowrap;
+}
+.rx-variation-swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+.rx-swatch {
+	appearance: none;
+	border: 0;
+	background: none;
+	cursor: pointer;
+	font: inherit;
+	color: inherit;
+}
+.rx-swatch-card {
+	appearance: none;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.4rem;
+	width: 5.5rem;
+	padding: 0.35rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	cursor: pointer;
+	font: inherit;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.rx-swatch-card:hover {
+	border-color: var( --rx-color-gray-600 );
+}
+.rx-swatch-card.is-active {
+	border-color: var( --rx-color-ink );
+	box-shadow: 0 0 0 1px var( --rx-color-ink );
+}
+.rx-swatch-card.is-disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+.rx-swatch-card__box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 3.5rem;
+	padding: 0.25rem;
+	border-radius: var( --rx-radius-sm );
+	overflow: hidden;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	text-align: center;
+	line-height: 1.2;
+	/* Long names ("BLACK/MIDNIGHT PLUM/DIGITAL CORAL") shrink to fit
+	   rather than overflow the box — there's no short-code field to
+	   show instead (see rx_theme_colour_swatch_hexes()). */
+	overflow-wrap: anywhere;
+}
+.rx-swatch-card__name {
+	font-size: var( --rx-text-xs );
+	font-weight: 600;
+	line-height: 1.3;
+	text-align: center;
+	color: var( --rx-color-gray-600 );
+}
+.rx-swatch-card.is-active .rx-swatch-card__name {
+	color: var( --rx-color-ink );
+}
+.rx-swatch-card:focus-visible {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-swatch--text {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 4.5rem;
+	min-height: 3rem;
+	padding: 0.4rem 0.6rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	line-height: 1.3;
+	text-align: center;
+}
+.rx-swatch__line--secondary {
+	color: var( --rx-color-gray-600 );
+	font-weight: 500;
+}
+.rx-swatch--text:hover {
+	background: var( --rx-color-gray-200 );
+}
+.rx-swatch--text.is-active {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-swatch--text.is-active .rx-swatch__line--secondary {
+	color: var( --rx-color-lime );
+}
+.rx-swatch__line--sold-out {
+	display: none;
+}
+.rx-swatch--text.is-disabled {
+	background: var( --rx-color-gray-100 );
+	color: var( --rx-color-gray-300 );
+	cursor: not-allowed;
+}
+.rx-swatch--text.is-disabled .rx-swatch__line:not( .rx-swatch__line--sold-out ) {
+	text-decoration: line-through;
+}
+/* .rx-swatch__line--secondary is real per-option data (the paired size,
+   or nothing for a plain size); .rx-swatch__line--sold-out is a fixed
+   label swapped in from WooCommerce's own computed unavailability (see
+   assets/js/variation-swatches.js) — not a real-time stock count, since
+   this store doesn't track quantities (see the import command). */
+.rx-swatch--text.is-disabled .rx-swatch__line--secondary {
+	display: none;
+}
+.rx-swatch--text.is-disabled .rx-swatch__line--sold-out {
+	display: block;
+	color: var( --rx-color-red );
+	text-decoration: none;
+}
+.rx-swatch:focus-visible {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-fit-advice {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	margin: 0.75rem 0 0;
+	font-size: var( --rx-text-sm );
+	line-height: 1.4;
+	color: var( --rx-color-ink );
+}
+.rx-fit-advice__icon {
+	flex-shrink: 0;
+	margin-top: 0.1em;
+	color: var( --rx-color-lime );
+}
+
+/* "Build Your Rotation & Save" — bundle-eligible products only (see
+   rx_theme_product_is_bundle_eligible()). The two tiles are real maths
+   (price × the Customizer's 2-pack/3-pack discount %, see
+   rx_theme_bundle_tier_data()); "Add to rotation bundle" is inert on
+   purpose (no bundle-basket engine exists yet — client's explicit call,
+   2026-09-22); "Buy this pair only" is WooCommerce's own real
+   add-to-cart submit, just relabelled — see variable.php. */
+.rx-rotation-box {
+	position: relative;
+	margin-top: 1.25rem;
+	padding: 1.25rem;
+	border: 2px solid var( --rx-color-blue );
+	border-radius: var( --rx-radius-lg );
+	overflow: hidden;
+}
+.rx-rotation-box__ribbon {
+	position: absolute;
+	top: 0.9rem;
+	right: -2.25rem;
+	width: 9rem;
+	padding: 0.2rem 0;
+	background: var( --rx-color-lime );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	transform: rotate( 45deg );
+}
+.rx-rotation-box__heading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.35rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-rotation-box__heading-dot {
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+}
+.rx-rotation-box__description {
+	margin: 0 0 1rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-box__tiers {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+.rx-rotation-tier {
+	position: relative;
+	display: block;
+	padding: 0.85rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	cursor: pointer;
+}
+.rx-rotation-tier:has( input:checked ) {
+	border-color: var( --rx-color-blue );
+	box-shadow: 0 0 0 1px var( --rx-color-blue );
+}
+.rx-rotation-tier--best {
+	border-color: var( --rx-color-red );
+}
+.rx-rotation-tier__badge {
+	position: absolute;
+	top: -0.6rem;
+	left: 0.75rem;
+	padding: 0.15rem 0.5rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-red );
+	font-size: 0.625rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-rotation-tier input {
+	position: absolute;
+	top: 0.85rem;
+	left: 0.85rem;
+	margin: 0;
+	accent-color: var( --rx-color-blue );
+}
+.rx-rotation-tier__save {
+	position: absolute;
+	top: 0.85rem;
+	right: 0.85rem;
+	padding: 0.15rem 0.4rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-ink );
+	font-size: 0.625rem;
+	font-weight: 700;
+	color: var( --rx-color-white );
+}
+.rx-rotation-tier__save--lime {
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-rotation-tier__title {
+	display: block;
+	margin: 1.5rem 0 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-rotation-tier__price {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	color: var( --rx-color-blue );
+}
+.rx-rotation-tier__price small {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-xs );
+	font-weight: 500;
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-tier__note {
+	display: block;
+	font-size: 0.6875rem;
+	line-height: 1.3;
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-tier__note--highlight {
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+.rx-rotation-box__info {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	margin: 0 0 1rem;
+	padding: 0.65rem 0.75rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-xs );
+	line-height: 1.4;
+	color: var( --rx-color-gray-600 );
+}
+.rx-rotation-box__info-icon {
+	flex-shrink: 0;
+	margin-top: 0.1em;
+	color: var( --rx-color-blue );
+}
+.rx-rotation-box__bundle-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 3rem;
+	margin-bottom: 0.6rem;
+	border: 0;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-blue );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+	cursor: pointer;
+}
+/* Same "Buy this pair only" button look on every single_variation_wrap —
+   bundle-eligible (inside .rx-rotation-box) and plain products alike,
+   not just the bundle box. Was scoped to .rx-rotation-box only, which
+   left non-bundle products with an unstyled default button. */
+.rx-single-product .single_variation_wrap .woocommerce-variation-add-to-cart {
+	display: flex;
+	flex-direction: column;
+}
+.rx-single-product .single_variation_wrap .single_add_to_cart_button {
+	width: 100%;
+	min-height: 3rem;
+	border: 1px solid var( --rx-color-ink );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-ink );
+}
+/* Non-bundle products (and this one's own single_variation_wrap outside
+   the box) still get a normal-looking button, just with quantity hidden
+   — a shopper here always buys exactly one pair, so there's nothing for
+   the stepper to do (see PROJECT.md and the client's own note,
+   2026-09-22). !important because WooCommerce's own JS sets an inline
+   style="display: block" on this element once a variation is matched
+   (add-to-cart-variation.js), which otherwise beats any plain
+   stylesheet rule regardless of selector specificity. */
+.rx-single-product .single_variation_wrap .quantity {
+	display: none !important;
+}
+
+/* Single product page (woocommerce/content-single-product.php) — first
+   pass, gallery + summary only per the client's own scoping; the bundle
+   box, cross-sell and specs accordion are a later pass. */
+.rx-single-product {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding: 1.5rem var( --rx-container-pad ) 3rem;
+}
+.rx-single-product__layout {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+.rx-single-product__gallery {
+	position: relative;
+}
+.rx-single-product__gallery-badges {
+	position: absolute;
+	top: 0.75rem;
+	left: 0.75rem;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.4rem;
+}
+.rx-single-product__gallery .woocommerce-product-gallery__image img {
+	border-radius: var( --rx-radius-md );
+}
+.rx-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.3rem 0.6rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-badge--dark {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-badge--lime {
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-badge--blue {
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+}
+.rx-badge--outline-red {
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-red );
+	color: var( --rx-color-red );
+}
+.rx-single-product__brand {
+	margin: 0 0 0.25rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.rx-single-product__title {
+	margin: 0 0 0.75rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 700;
+	line-height: 1.1;
+	color: var( --rx-color-ink );
+}
+.rx-single-product__title-tail {
+	font-weight: 500;
+	color: var( --rx-color-gray-600 );
+}
+.rx-single-product__model-line {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.75rem;
+}
+.rx-single-product__meta-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin: 0 0 0.75rem;
+}
+.rx-single-product__rating {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin: 0;
+	color: var( --rx-color-orange );
+	font-size: var( --rx-text-sm );
+}
+.rx-single-product__rating strong {
+	color: var( --rx-color-ink );
+}
+.rx-single-product__rating-count {
+	color: var( --rx-color-gray-600 );
+	text-decoration: underline;
+}
+.rx-single-product__stock {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0;
+	padding: 0.3rem 0.6rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-ink );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-white );
+}
+.rx-single-product__stock::before {
+	content: '';
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background: currentColor;
+}
+.rx-single-product__stock.is-in-stock {
+	color: var( --rx-color-lime );
+}
+.rx-single-product__stock.is-out-of-stock {
+	color: var( --rx-color-red );
+}
+.rx-single-product__price {
+	display: flex;
+	align-items: baseline;
+	gap: 0.4rem;
+	margin: 0 0 1rem;
+}
+.rx-single-product__price-amount {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-single-product__price-currency {
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	color: var( --rx-color-gray-600 );
+}
+.rx-single-product__best-for {
+	display: flex;
+	gap: 0.5rem;
+	margin: 0 0 0.75rem;
+	padding-left: 0.75rem;
+	border-left: 3px solid var( --rx-color-blue );
+	font-size: var( --rx-text-sm );
+}
+.rx-single-product__best-for-label {
+	flex-shrink: 0;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-ink );
+}
+.rx-single-product__variation-count {
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+
+/* Shop layout: filter sidebar beside the product list
+   (template-parts/shop/sidebar.php, inc/shop-sidebar.php). Phones: the
+   sidebar is a "Filters" disclosure above the grid. Desktop: it sits
+   open on the left and the grid gets 3 columns (a 4th would squeeze the
+   cards well under Figma's ~288px). */
+.rx-shop-layout {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+/* Grey panel behind the sidebar and the grid; the padding keeps the white
+   widget and product cards off its edges. */
+.rx-shop-layout--sidebar {
+	padding: 0.75rem;
+	background: var( --rx-color-surface );
+	border-radius: var( --rx-radius-md );
+}
+.rx-shop-layout__main {
+	min-width: 0;
+}
+.rx-shop-sidebar__toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 2.75rem;
+	padding: 0 1rem;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 800;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	list-style: none;
+	cursor: pointer;
+}
+.rx-shop-sidebar__toggle::-webkit-details-marker {
+	display: none;
+}
+.rx-shop-sidebar__toggle::after {
+	content: '';
+	width: 0.5rem;
+	height: 0.5rem;
+	border: solid currentColor;
+	border-width: 0 2px 2px 0;
+	transform: rotate( 45deg );
+}
+.rx-shop-sidebar[ open ] > .rx-shop-sidebar__toggle::after {
+	transform: rotate( -135deg );
+}
+.rx-shop-sidebar__badge {
+	display: inline-grid;
+	place-items: center;
+	min-width: 1.25rem;
+	height: 1.25rem;
+	margin-left: 0.5rem;
+	padding-inline: 0.25rem;
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-white );
+}
+.rx-widget {
+	margin-top: 0.75rem;
+	padding: 1.125rem; /* 18px, measured from the client's reference */
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
+}
+.rx-widget__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+.rx-widget__title {
+	font-size: var( --rx-text-xl );
+	line-height: 1.15;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+.rx-widget__aside {
+	font-size: 0.6875rem; /* 11px */
+	color: #555;
+}
+.rx-widget__aside--link {
+	position: relative;
+	top: -1px; /* optical: matches the reference's placement against the title */
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+}
+.rx-widget__hint {
+	margin: 0.6875rem 0 0;
+	font-size: var( --rx-text-sm );
+	letter-spacing: -0.03em; /* measured: the reference line is ~15px narrower than plain 12px Inter */
+	color: #555;
+}
+.rx-widget__options {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem; /* 20px rows + 8px = the reference's 28px pitch */
+	margin: 0.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+/* More than five options: show exactly five rows (5 x 20px + 4 x 8px gaps)
+   and scroll the rest inside the widget. */
+.rx-widget__options--scroll {
+	max-height: 8.25rem; /* 132px */
+	overflow-y: auto;
+	padding-right: 0.5rem;
+	scrollbar-width: thin;
+	scrollbar-color: var( --rx-color-gray-300 ) transparent;
+}
+.rx-option {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.8125rem; /* 13px, per the client — label and count alike */
+	line-height: 1.25rem; /* 20px */
+	letter-spacing: 0;
+	color: var( --rx-color-ink );
+}
+/* The rows are only 28px apart, so widen the tap target 4px up and down
+   (the 8px gaps between rows split evenly, so targets touch, not overlap). */
+.rx-option::before {
+	content: '';
+	position: absolute;
+	inset: -4px 0;
+}
+.rx-option:hover .rx-option__label {
+	text-decoration: underline;
+}
+.rx-option__box {
+	flex: none;
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #767676;
+	border-radius: 2px;
+}
+.rx-option.is-active .rx-option__box {
+	border-color: var( --rx-color-ink );
+	background: var( --rx-color-ink );
+}
+.rx-widget--brands .rx-option.is-active .rx-option__box {
+	border-color: var( --rx-color-blue );
+	background: var( --rx-color-blue );
+}
+.rx-option__label {
+	flex: 1;
+}
+.rx-option__count {
+	min-width: 1.625rem; /* 26px, so every count pill is the same width */
+	padding-inline: 0.375rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: 0.6875rem; /* 11px */
+	line-height: 1.125rem; /* 18px pill */
+	text-align: center;
+	color: #555;
+}
+
+/* "Why build a rotation?" note at the foot of the sidebar. Static copy.
+   Grey like the reference, with a hairline so it still reads as a card on
+   the grey layout panel. */
+.rx-shop-note {
+	margin-top: 0.75rem;
+	padding: 1rem;
+	background: var( --rx-color-gray-100 );
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+}
+.rx-shop-note__title {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: var( --rx-text-md );
+	letter-spacing: 0.05em;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.rx-shop-note__icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-shop-note__text {
+	margin: 0.5rem 0 0;
+	font-size: var( --rx-text-base );
+	line-height: 1.45;
+	color: #555;
+}
+
+/* Price range: two range inputs stacked on one track. The inputs ignore
+   the pointer so only their thumbs are draggable; --rx-lo / --rx-hi
+   (set inline, then by the script) fill the track between the thumbs. */
+.rx-price {
+	--rx-lo: 0%;
+	--rx-hi: 100%;
+	margin-top: 0.75rem;
+}
+.rx-price__values {
+	display: flex;
+	justify-content: space-between;
+	font-size: var( --rx-text-base );
+	font-weight: 600;
+}
+.rx-price__max {
+	color: var( --rx-color-blue );
+}
+.rx-price__slider {
+	position: relative;
+	height: 1.75rem;
+	margin-top: 0.5rem;
+}
+.rx-price__slider::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 0;
+	left: 0;
+	height: 4px;
+	border-radius: 999px;
+	background: linear-gradient( to right, var( --rx-color-gray-200 ) var( --rx-lo ), var( --rx-color-blue ) var( --rx-lo ), var( --rx-color-blue ) var( --rx-hi ), var( --rx-color-gray-200 ) var( --rx-hi ) );
+	transform: translateY( -50% );
+}
+.rx-price__slider input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	background: none;
+	pointer-events: none;
+	appearance: none;
+}
+.rx-price__slider input::-webkit-slider-runnable-track {
+	background: none;
+}
+.rx-price__slider input::-moz-range-track {
+	background: none;
+}
+.rx-price__slider input::-webkit-slider-thumb {
+	width: 1.125rem;
+	height: 1.125rem;
+	border: 2px solid var( --rx-color-blue );
+	border-radius: 50%;
+	background: var( --rx-color-white );
+	pointer-events: auto;
+	cursor: grab;
+	appearance: none;
+}
+.rx-price__slider input::-moz-range-thumb {
+	width: 0.875rem;
+	height: 0.875rem;
+	border: 2px solid var( --rx-color-blue );
+	border-radius: 50%;
+	background: var( --rx-color-white );
+	pointer-events: auto;
+	cursor: grab;
+}
+.rx-price__slider input:focus-visible::-webkit-slider-thumb {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-price__slider input:focus-visible::-moz-range-thumb {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-price__captions {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-price__apply {
+	display: inline-flex;
+	margin-top: 0.75rem;
+	padding: 0.5rem 0.875rem;
+	border: 0;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-ink );
+	font: inherit;
+	font-weight: 600;
+	color: var( --rx-color-white );
+	cursor: pointer;
+}
+.rx-price__apply[ hidden ] {
+	display: none;
+}
+.rx-shop-sidebar a:focus-visible {
+	outline: 2px solid var( --rx-color-blue );
+	outline-offset: 2px;
+}
+.rx-shop-sidebar .rx-option:focus-visible {
+	outline-offset: -2px; /* inside the box: an outer ring would be clipped by the scrolling list */
+}
+
 /* Two-up on larger phones/tablets; four-up is in the desktop block. */
 @media ( min-width: 40em ) {
-	.rx-shop ul.products {
+	.rx-trust__grid,
+	.rx-footer-trust {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+	.rx-shop ul.products,
+	.rx-best-sellers ul.products {
 		grid-template-columns: repeat( 2, 1fr );
 	}
 }
@@ -969,12 +2900,86 @@ a {
 	.rx-category-cards,
 	.rx-footer__inner,
 	.rx-hero,
+	.rx-best-sellers,
+	.rx-biomech,
+	.rx-brands,
+	.rx-trust,
+	.rx-community,
 	.rx-shop {
 		padding-inline: var( --rx-container-pad-desktop );
 	}
-	.rx-shop ul.products {
+	.rx-shop ul.products,
+	.rx-best-sellers ul.products {
 		grid-template-columns: repeat( 4, 1fr );
 		gap: 1.5em;
+	}
+	.rx-archive-header__main {
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+	.rx-archive-header__title {
+		font-size: var( --rx-text-3xl );
+	}
+	.rx-rotation-strip__header {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.rx-rotation-strip__tiers {
+		grid-template-columns: repeat( 3, 1fr );
+	}
+	.rx-shop-layout--sidebar {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 1.5rem;
+	}
+	.rx-shop-layout--sidebar > .rx-shop-layout__main {
+		flex: 1;
+	}
+	.rx-shop-layout--sidebar ul.products {
+		grid-template-columns: repeat( 3, 1fr );
+	}
+	.rx-shop-sidebar {
+		position: sticky;
+		top: 1rem;
+		flex: 0 0 17.875rem; /* 286px, the reference card width */
+		width: 17.875rem;
+	}
+	/* Open beside the grid, no "Filters" bar. Browsers without
+	   ::details-content keep the bar, so the widgets stay reachable. */
+	@supports selector( ::details-content ) {
+		.rx-shop-sidebar::details-content {
+			display: block;
+			content-visibility: visible;
+		}
+		.rx-shop-sidebar > .rx-shop-sidebar__toggle {
+			display: none;
+		}
+		.rx-shop-sidebar > .rx-widget:first-of-type {
+			margin-top: 0;
+		}
+	}
+	.rx-filters {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.rx-filters__options {
+		flex-wrap: nowrap;
+		flex-shrink: 0;
+	}
+	.rx-single-product__layout {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 3rem;
+	}
+	.rx-single-product__gallery,
+	.rx-single-product__summary {
+		flex: 1;
+		min-width: 0;
 	}
 	.rx-nav {
 		display: block;
@@ -1026,6 +3031,32 @@ a {
 		grid-template-columns: repeat( 3, 1fr );
 		gap: 1.5em;
 	}
+	.rx-biomech__grid {
+		grid-template-columns: repeat( 3, 1fr );
+		gap: 1.5em;
+	}
+	.rx-brands__grid {
+		grid-template-columns: repeat( var( --rx-brand-cols, 7 ), 1fr );
+	}
+	.rx-brands__all {
+		margin-top: 1.8rem; /* level with the heading, beside the eyebrow-and-heading block */
+	}
+	.rx-trust__grid,
+	.rx-footer-trust {
+		grid-template-columns: repeat( 4, 1fr );
+		gap: 1.5rem;
+	}
+	.rx-footer__main {
+		grid-template-columns: 2.1fr 1fr 1fr 1fr;
+	}
+	.rx-rotation-bar__cta {
+		width: auto;
+		margin-left: auto;
+	}
+	.rx-community__grid {
+		grid-template-columns: repeat( 3, 1fr );
+		gap: 1.5rem;
+	}
 	.rx-rotation-calc__example {
 		flex: 1;
 	}
@@ -1051,8 +3082,1834 @@ a {
 	.rx-hero__actions {
 		flex-direction: row;
 	}
-	.rx-footer__columns {
+}
+
+/* "Complete Your Rotation" cross-sell (template-parts/shop/
+   rotation-cross-sell.php) — real related products + real bundle-tier
+   maths, see inc/single-product.php. Bundle-eligible products only. */
+.rx-cross-sell {
+	max-width: var( --rx-container-max );
+	margin: 3rem auto 0;
+	padding: 1.5rem var( --rx-container-pad ) 3rem;
+	background: var( --rx-color-section );
+}
+.rx-cross-sell__header {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+.rx-cross-sell__eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var( --rx-color-blue );
+}
+.rx-cross-sell__heading {
+	margin: 0 0 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 800;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-cross-sell__description {
+	margin: 0;
+	max-width: 40em;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-cross-sell__slots {
+	padding: 0.85rem 1rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+}
+.rx-cross-sell__slots-label {
+	margin: 0 0 0.25rem;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-gray-600 );
+}
+.rx-cross-sell__slots-count {
+	margin: 0 0 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-cross-sell__slots-bar {
+	display: block;
+	height: 0.4rem;
+	border-radius: 999px;
+	background: var( --rx-color-gray-200 );
+	overflow: hidden;
+}
+.rx-cross-sell__slots-bar span {
+	display: block;
+	height: 100%;
+	background: var( --rx-color-lime );
+}
+.rx-cross-sell__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.25rem;
+}
+.rx-cross-sell-card {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-lg );
+	overflow: hidden;
+	background-color: #fff;
+}
+.rx-cross-sell-card__top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.6rem 0.75rem;
+}
+.rx-cross-sell-card__body {
+	display: flex;
+	gap: 1rem;
+	padding: 0 0.75rem 0.85rem;
+}
+.rx-cross-sell-card__image {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 13rem;
+	height: 11rem;
+	padding: 0.5rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	overflow: hidden;
+}
+.rx-cross-sell-card__image img {
+	width: 100%;
+	height: 100%;
+	/* contain, not cover — the actual product photos are close to
+	   square/landscape already; cover was cropping their edges to force
+	   the old narrower box into a near-square shape. */
+	object-fit: contain;
+}
+.rx-cross-sell-card__info {
+	min-width: 0;
+}
+.rx-cross-sell-card__type {
+	margin: 0 0 0.2rem;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.rx-cross-sell-card__title {
+	margin: 0 0 0.35rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.rx-cross-sell-card__title a {
+	color: var( --rx-color-ink );
+}
+.rx-cross-sell-card__excerpt {
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-xs );
+	line-height: 1.4;
+	color: var( --rx-color-gray-600 );
+}
+.rx-cross-sell-card__price {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin: 0;
+}
+.rx-cross-sell-card__price-now {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+.rx-cross-sell-card__price-was {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+	text-decoration: line-through;
+}
+.rx-cross-sell-card__price-save {
+	padding: 0.15rem 0.4rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-xs );
+	font-weight: 600;
+	color: var( --rx-color-ink );
+}
+.rx-cross-sell-card__footer {
+	margin: 0px 20px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-cross-sell-card__combined {
+	margin: 0;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-cross-sell-card__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	min-height: 2.75rem;
+	padding-inline: 1rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-ink );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+	white-space: nowrap;
+}
+.rx-cross-sell-card__button--best {
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-cross-sell-card--best {
+	border-color: var( --rx-color-blue );
+}
+
+@media ( min-width: 48em ) {
+	.rx-cross-sell__header {
 		flex-direction: row;
+		align-items: flex-end;
 		justify-content: space-between;
+	}
+	.rx-cross-sell__slots {
+		flex-shrink: 0;
+		min-width: 16rem;
+	}
+	.rx-cross-sell__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* Fallback page container (index.php — plain WP Pages: Cart, Checkout,
+   My Account, blog). Was completely unstyled; every other template has
+   its own container, this one had none. */
+.rx-content {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding: 1.5rem var( --rx-container-pad ) 3rem;
+}
+
+/* Cart page (classic [woocommerce_cart] shortcode — switched from the
+   default Blocks cart to match PROJECT.md's existing "classic shortcode
+   checkout with hooks" decision; see the WP-CLI page-content swap).
+   Deliberately no template override: the shop_table markup already has
+   stable class names, so this is pure CSS on top of WooCommerce's own
+   real cart logic (coupons, shipping calc, tax display, quantity
+   updates) — nothing here reimplements any of that. */
+body.woocommerce-cart .woocommerce {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+body.woocommerce-cart .woocommerce-notices-wrapper:empty {
+	display: none;
+}
+body.woocommerce-cart .woocommerce-message,
+body.woocommerce-cart .woocommerce-error,
+body.woocommerce-cart .woocommerce-info {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0;
+	padding: 0.85rem 1rem;
+	list-style: none;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+}
+body.woocommerce-cart .woocommerce-error {
+	background: rgba( 229, 57, 53, 0.08 );
+	color: var( --rx-color-red );
+}
+body.woocommerce-cart .woocommerce-message .button,
+body.woocommerce-cart .woocommerce-error .button,
+body.woocommerce-cart .woocommerce-info .button {
+	margin-left: auto;
+}
+
+/* Item table -> flex rows. Table semantics are kept (still a <table>,
+   still readable/exportable), only the visual layout changes. */
+.woocommerce-cart-form__contents {
+	width: 100%;
+	border-collapse: collapse;
+}
+.woocommerce-cart-form__contents thead {
+	display: none;
+}
+.woocommerce-cart-form__contents tbody {
+	display: block;
+}
+.woocommerce-cart-form__cart-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.woocommerce-cart-form__cart-item td {
+	display: block;
+	padding: 0;
+	border: 0;
+}
+/* Scoped to .woocommerce-cart-form__cart-item (the cart row), not bare
+   .product-name/.product-price/etc. — those generic WooCommerce class
+   names are reused by the checkout order-review table too, and an
+   earlier unscoped .product-name{order:3} here was silently reordering
+   that table's columns as a result (Subtotal rendering before Product).
+   See .woocommerce-checkout-review-order-table below for that table's
+   own, separately-scoped rules. */
+.woocommerce-cart-form__cart-item .product-remove {
+	order: 1;
+}
+.woocommerce-cart-form__cart-item .product-remove a.remove {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 50%;
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-lg );
+	line-height: 1;
+	color: var( --rx-color-gray-600 );
+	text-decoration: none;
+}
+.woocommerce-cart-form__cart-item .product-remove a.remove:hover {
+	background: var( --rx-color-gray-200 );
+	color: var( --rx-color-red );
+}
+.woocommerce-cart-form__cart-item .product-thumbnail {
+	order: 2;
+}
+.woocommerce-cart-form__cart-item .product-thumbnail img {
+	display: block;
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	object-fit: contain;
+}
+.woocommerce-cart-form__cart-item .product-name {
+	order: 3;
+	flex: 1 1 12rem;
+	min-width: 10rem;
+	font-size: var( --rx-text-base );
+	font-weight: 600;
+	color: var( --rx-color-ink );
+}
+.woocommerce-cart-form__cart-item .product-name a {
+	color: inherit;
+}
+.woocommerce-cart-form__cart-item .variation,
+.woocommerce-cart-form__cart-item dl.variation {
+	margin: 0.25rem 0 0;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-cart-form__cart-item .product-price {
+	order: 4;
+	flex: 0 0 5.5rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-cart-form__cart-item .product-quantity {
+	order: 5;
+	flex: 0 0 auto;
+}
+.woocommerce-cart-form__cart-item .product-quantity .quantity {
+	display: inline-flex;
+}
+.woocommerce-cart-form__cart-item .product-quantity .qty {
+	width: 3.5rem;
+	padding: 0.4rem 0.5rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	font: inherit;
+	text-align: center;
+}
+.woocommerce-cart-form__cart-item .product-subtotal {
+	order: 6;
+	flex: 0 0 5.5rem;
+	margin-left: auto;
+	font-weight: 700;
+	color: var( --rx-color-ink );
+	text-align: right;
+}
+
+/* Actions row: coupon field + Update cart button. */
+.woocommerce-cart-form__contents tr:has( .actions ) {
+	display: block;
+}
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-top: 1.25rem;
+}
+.actions .coupon {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.actions .coupon .input-text {
+	min-height: 2.75rem;
+	padding: 0 0.85rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	font: inherit;
+}
+.actions .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: 0 1.25rem;
+	border: 1px solid var( --rx-color-ink );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-ink );
+	cursor: pointer;
+}
+.actions .button:hover {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.actions .button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+/* Totals sidebar. */
+.cart-collaterals {
+	max-width: 26rem;
+}
+.cart_totals {
+	padding: 1.25rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-section );
+}
+.cart_totals h2 {
+	margin: 0 0 1rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.cart_totals table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.cart_totals tr {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.6rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.cart_totals tr:last-of-type {
+	border-bottom: 0;
+}
+.cart_totals th {
+	font-weight: 500;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+	text-align: left;
+}
+.cart_totals td {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+	text-align: right;
+}
+.cart_totals tr.order-total th,
+.cart_totals tr.order-total td {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.cart_totals .woocommerce-shipping-calculator .input-text,
+.cart_totals .woocommerce-shipping-calculator select {
+	min-height: 2.5rem;
+	padding: 0 0.6rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	font: inherit;
+}
+.cart_totals .shipping-calculator-button {
+	color: var( --rx-color-blue );
+	text-decoration: underline;
+}
+.wc-proceed-to-checkout {
+	margin-top: 1rem;
+}
+.wc-proceed-to-checkout .checkout-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 3rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-blue );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+}
+
+/* Empty cart state. */
+.cart-empty {
+	margin: 0 0 1rem;
+	font-size: var( --rx-text-md );
+	color: var( --rx-color-gray-600 );
+	text-align: center;
+}
+.return-to-shop {
+	text-align: center;
+}
+.return-to-shop .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: 0 1.5rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-ink );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+}
+
+@media ( min-width: 56em ) {
+	body.woocommerce-cart .woocommerce {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+	.woocommerce-cart-form {
+		flex: 1;
+		min-width: 0;
+	}
+	.cart-collaterals {
+		flex: 0 0 22rem;
+	}
+	.woocommerce-cart-form__contents thead {
+		display: table-header-group;
+	}
+	.woocommerce-cart-form__contents thead tr {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 2px solid var( --rx-color-ink );
+	}
+	.woocommerce-cart-form__contents thead th {
+		font-size: var( --rx-text-xs );
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var( --rx-color-gray-600 );
+	}
+	.woocommerce-cart-form__contents thead .product-remove {
+		flex: 0 0 1.75rem;
+	}
+	.woocommerce-cart-form__contents thead .product-thumbnail {
+		flex: 0 0 4.5rem;
+	}
+	.woocommerce-cart-form__contents thead .product-name {
+		flex: 1 1 12rem;
+	}
+	.woocommerce-cart-form__contents thead .product-price,
+	.woocommerce-cart-form__contents thead .product-subtotal {
+		flex: 0 0 5.5rem;
+	}
+	.woocommerce-cart-form__contents thead .product-subtotal {
+		margin-left: auto;
+		text-align: right;
+	}
+}
+
+/* Checkout page (classic [woocommerce_checkout] shortcode — same swap
+   and same reasoning as the cart page above). Pure CSS over
+   WooCommerce's real checkout form: field validation, the AJAX order-
+   review refresh, payment gateway list and the place-order submit are
+   all untouched, only laid out and styled. Page background + white
+   order-review sidebar match /build-a-bundle/'s own gray-page/white-card
+   treatment (client request, 2026-09-23). */
+body.woocommerce-checkout {
+	background: var( --rx-color-section );
+}
+body.woocommerce-checkout .woocommerce-notices-wrapper:empty {
+	display: none;
+}
+body.woocommerce-checkout .woocommerce-message,
+body.woocommerce-checkout .woocommerce-error,
+body.woocommerce-checkout .woocommerce-info {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0 0 1.5rem;
+	padding: 0.85rem 1rem;
+	list-style: none;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+}
+body.woocommerce-checkout .woocommerce-error {
+	background: rgba( 229, 57, 53, 0.08 );
+	color: var( --rx-color-red );
+}
+body.woocommerce-checkout .woocommerce-error li {
+	list-style: none;
+}
+
+/* Coupon toggle + form (checkout/form-coupon.php). */
+.woocommerce-form-coupon-toggle {
+	margin: 0 0 1.5rem;
+}
+.showcoupon {
+	color: var( --rx-color-blue );
+	text-decoration: underline;
+}
+.checkout_coupon {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0 0 1.5rem;
+	padding: 1rem;
+	border: 1px dashed var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+}
+.checkout_coupon .input-text {
+	flex: 1 1 12rem;
+}
+
+/* Section headings inside the form (Billing details, Additional
+   information, Your order — printed by WooCommerce core as plain h3). */
+.woocommerce-checkout h3,
+.woocommerce-billing-fields h3,
+.woocommerce-additional-fields h3 {
+	margin: 0 0 1rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+
+/* Form fields. */
+.form-row {
+	margin: 0 0 1rem;
+}
+.form-row label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	color: var( --rx-color-ink );
+}
+.form-row .required {
+	color: var( --rx-color-red );
+	text-decoration: none;
+}
+.form-row .input-text,
+.form-row select,
+.form-row textarea {
+	width: 100%;
+	min-height: 2.75rem;
+	padding: 0 0.85rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	font: inherit;
+	color: var( --rx-color-ink );
+}
+.form-row textarea {
+	padding: 0.6rem 0.85rem;
+	min-height: 5rem;
+}
+.form-row .select2-container .select2-selection--single {
+	min-height: 2.75rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+}
+.form-row .select2-container .select2-selection__rendered {
+	line-height: 2.75rem;
+	padding-left: 0.85rem;
+}
+.form-row .select2-container .select2-selection__arrow {
+	height: 2.75rem;
+}
+
+@media ( min-width: 40em ) {
+	.form-row-first,
+	.form-row-last {
+		width: calc( 50% - 0.5rem );
+	}
+	.form-row-first {
+		float: left;
+		clear: left;
+	}
+	.form-row-last {
+		float: right;
+		clear: right;
+	}
+}
+
+/* Order review sidebar (table -> flex rows, same treatment as the cart
+   totals table). */
+.woocommerce-checkout-review-order-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.woocommerce-checkout-review-order-table thead tr {
+	display: flex;
+	justify-content: space-between;
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid var( --rx-color-ink );
+}
+.woocommerce-checkout-review-order-table thead th {
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-checkout-review-order-table tbody,
+.woocommerce-checkout-review-order-table tfoot {
+	display: block;
+}
+.woocommerce-checkout-review-order-table tr {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.6rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.woocommerce-checkout-review-order-table tbody tr {
+	align-items: flex-start;
+}
+.woocommerce-checkout-review-order-table tfoot tr:last-child {
+	border-bottom: 0;
+}
+.woocommerce-checkout-review-order-table th {
+	font-weight: 500;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+	text-align: left;
+}
+.woocommerce-checkout-review-order-table td,
+.woocommerce-checkout-review-order-table .product-name {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+}
+.woocommerce-checkout-review-order-table .product-name {
+	flex: 1;
+}
+.woocommerce-checkout-review-order-table .product-total {
+	flex: 0 0 auto;
+	font-weight: 600;
+	text-align: right;
+}
+.woocommerce-checkout-review-order-table .product-quantity {
+	color: var( --rx-color-gray-600 );
+	font-weight: 500;
+}
+.woocommerce-checkout-review-order-table tfoot tr.order-total th,
+.woocommerce-checkout-review-order-table tfoot tr.order-total td {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+
+/* Payment methods list + place order button. */
+.woocommerce-checkout-payment {
+	margin-top: 1.25rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+}
+.wc_payment_methods {
+	margin: 0 0 1rem;
+	padding: 0;
+	list-style: none;
+}
+.wc_payment_methods .wc_payment_method {
+	padding: 0.75rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+	font-size: var( --rx-text-sm );
+}
+.wc_payment_methods .payment_box {
+	margin-top: 0.5rem;
+	padding: 0.75rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-checkout-payment .woocommerce-notice,
+.woocommerce-checkout-payment .woocommerce-NoticeGroup {
+	padding: 0.85rem 1rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	font-size: var( --rx-text-sm );
+	list-style: none;
+}
+.woocommerce-terms-and-conditions-wrapper {
+	margin-bottom: 1rem;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+#place_order {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 3rem;
+	border: 0;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-blue );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+	cursor: pointer;
+}
+#place_order:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+@media ( min-width: 56em ) {
+	.woocommerce-checkout form.checkout {
+		display: grid;
+		grid-template-columns: 1fr 22rem;
+		grid-template-rows: auto 1fr;
+		grid-template-areas: "billing heading" "billing review";
+		align-items: start;
+		gap: 0 2rem;
+	}
+	#customer_details {
+		grid-area: billing;
+	}
+	#order_review_heading {
+		grid-area: heading;
+		align-self: start;
+		margin: 0 0 1rem;
+	}
+	#order_review {
+		grid-area: review;
+		align-self: start;
+		padding: 1.25rem;
+		border-radius: var( --rx-radius-lg );
+		background: var( --rx-color-white );
+	}
+}
+
+/* Extra .rx-btn variants used on the bundle builder page (--bundle already
+   exists, from the header CTA). */
+.rx-btn--outline {
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-300 );
+	color: var( --rx-color-ink );
+}
+.rx-btn--outline-blue {
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-blue );
+	color: var( --rx-color-blue );
+}
+.rx-btn--lime {
+	background: var( --rx-color-lime );
+	color: var( --rx-color-ink );
+}
+.rx-btn--dark {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+
+/* Bundle builder page (page-build-a-bundle.php, /build-a-bundle/) —
+   layout pass per the client's Figma reference (node 1-3744); see that
+   file's own top comment for what was deliberately left out (fabricated
+   stats/features) and why every price here is real cart/Customizer data,
+   not the mockup's own numbers. */
+body.rx-bundle-builder-page {
+	background: var( --rx-color-section );
+}
+.rx-bundle-builder {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding: 2rem var( --rx-container-pad ) 4rem;
+}
+/* Intro (heading/description) and the tier strip sit side by side as one
+   row — the tier strip is reference material for what the intro copy is
+   promising, not a separate section. */
+.rx-bundle-builder__hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1.5rem 2.5rem;
+	margin-bottom: 1.5rem;
+}
+.rx-bundle-builder__intro {
+	flex: 1 1 26rem;
+	max-width: 34rem;
+}
+.rx-bundle-builder__heading {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0.25rem 0 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-3xl );
+	font-weight: 800;
+	line-height: 1.05;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-builder__heading-dot {
+	flex: none;
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+}
+.rx-bundle-builder__description {
+	margin: 0;
+	color: var( --rx-color-gray-600 );
+}
+
+/* Tier strip: same visual language as the single product page's rotation
+   tiers (.rx-rotation-tier), but read-only here — three real Customizer
+   tiers, highlighted by the shopper's real current pair-count. */
+.rx-bundle-builder__tiers {
+	display: grid;
+	grid-template-columns: repeat( 3, 1fr );
+	flex: 1 1 24rem;
+	gap: 0.6rem;
+}
+.rx-bundle-tier {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.3rem;
+	padding: 0.65rem 0.75rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+	text-align: center;
+}
+.rx-bundle-tier--active {
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 2px var( --rx-color-blue );
+}
+/* The 2-pack tier's saving is called out in red, and the 3-pack (best
+   value) tier is always styled as the highlighted choice — blue
+   background, white title, lime saving — regardless of which tier the
+   shopper's real progress currently has active. */
+.rx-bundle-tier:nth-child( 2 ) .rx-bundle-tier__note {
+	color: var( --rx-color-red );
+}
+.rx-bundle-tier--best,
+.rx-bundle-tier--best.rx-bundle-tier--active {
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+	box-shadow: none;
+}
+.rx-bundle-tier--best .rx-bundle-tier__title {
+	color: var( --rx-color-white );
+}
+.rx-bundle-tier--best .rx-bundle-tier__note {
+	color: var( --rx-color-lime );
+}
+.rx-bundle-tier__badge {
+	position: absolute;
+	top: -0.6rem;
+	right: 0.75rem;
+	padding: 0.15rem 0.5rem;
+	border-radius: 999px;
+	background: var( --rx-color-lime );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-tier__title {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-tier__note {
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+
+/* Progress bar: real pair-count / slot-count, not illustrative. */
+.rx-bundle-builder__progress {
+	margin-bottom: 2rem;
+}
+.rx-bundle-builder__progress-top {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.4rem 1rem;
+	margin-bottom: 0.5rem;
+}
+.rx-bundle-builder__progress-label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-builder__progress-note {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-sm );
+	font-weight: 400;
+	text-transform: none;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-builder__progress-next {
+	flex: none;
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-red );
+	white-space: nowrap;
+}
+.rx-bundle-builder__progress-bar {
+	display: block;
+	height: 0.5rem;
+	border-radius: 999px;
+	background: var( --rx-color-gray-200 );
+	overflow: hidden;
+}
+.rx-bundle-builder__progress-bar span {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: linear-gradient( 90deg, var( --rx-color-blue ), var( --rx-color-lime ) );
+}
+
+/* Main two-column layout: pair cards + sticky order summary. */
+.rx-bundle-builder__layout {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+.rx-bundle-builder__pairs {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	min-width: 0;
+}
+
+/* One rotation slot, filled or empty. */
+.rx-bundle-pair {
+	padding: 1.25rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+}
+.rx-bundle-pair--empty {
+	padding: 0;
+	overflow: hidden;
+	background: var( --rx-color-surface );
+}
+.rx-bundle-pair--empty:has( .rx-bundle-pair__add-toggle:checked ) {
+	background: var( --rx-color-white );
+}
+.rx-bundle-pair__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+.rx-bundle-pair__head-badges {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+.rx-bundle-pair__complete-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+}
+.rx-bundle-pair__head-price {
+	display: flex;
+	align-items: baseline;
+	gap: 0.4rem;
+	text-align: right;
+}
+.rx-bundle-pair__price {
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-pair__eligible {
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	color: var( --rx-color-red );
+	white-space: nowrap;
+}
+.rx-bundle-pair__divider {
+	margin: 0 0 1rem;
+	border: 0;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-bundle-pair__body {
+	display: flex;
+	gap: 1.25rem;
+}
+.rx-bundle-pair__media {
+	flex: none;
+	width: 9rem;
+}
+.rx-bundle-pair__type-badge {
+	position: relative;
+	z-index: 1;
+	display: inline-block;
+	margin-bottom: -1.75rem;
+	padding: 0.25rem 0.5rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.rx-bundle-pair__image {
+	display: block;
+	width: 9rem;
+	height: 7rem;
+	border-radius: var( --rx-radius-md );
+	overflow: hidden;
+	background: var( --rx-color-surface );
+}
+.rx-bundle-pair__image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.rx-bundle-pair__colour {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0.5rem 0 0;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__colour-dot {
+	flex: none;
+	width: 0.7rem;
+	height: 0.7rem;
+	border-radius: 999px;
+	box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.15 );
+}
+.rx-bundle-pair__info {
+	min-width: 0;
+	flex: 1;
+}
+.rx-bundle-pair__title {
+	margin: 0 0 0.15rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+}
+.rx-bundle-pair__title a {
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-bundle-pair__bestfor {
+	margin: 0 0 0.85rem;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-blue );
+}
+.rx-bundle-pair__specs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.5rem;
+	margin-bottom: 0.85rem;
+	padding: 0.65rem 0.85rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+}
+.rx-bundle-pair__spec {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	font-size: var( --rx-text-sm );
+}
+.rx-bundle-pair__spec-label {
+	font-size: var( --rx-text-xs );
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__stock {
+	color: var( --rx-color-blue );
+}
+.rx-bundle-pair__stock--low {
+	color: var( --rx-color-red );
+}
+.rx-bundle-pair__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+}
+.rx-bundle-pair__action {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-bundle-pair__action--button {
+	padding: 0.5rem 0.75rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+}
+.rx-bundle-pair__action--divided {
+	padding-left: 1.25rem;
+	border-left: 1px solid var( --rx-color-gray-200 );
+}
+
+/* Inline "Edit size / colour" (filled pairs) and "+ Add ... " (a
+   recommended pairing in an open slot) — both a pure-CSS checkbox toggle
+   that swaps the tile's static content for a real variation-picker form
+   (pair-edit-panel.php), instead of navigating away. */
+.rx-bundle-pair__edit-toggle,
+.rx-bundle-pair__add-toggle {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect( 0, 0, 0, 0 );
+	white-space: nowrap;
+	border: 0;
+}
+.rx-bundle-pair__edit-panel {
+	display: none;
+}
+.rx-bundle-pair__edit-toggle:checked ~ .rx-bundle-pair__body {
+	display: none;
+}
+.rx-bundle-pair__edit-toggle:checked ~ .rx-bundle-pair__edit-panel {
+	display: block;
+}
+.rx-bundle-pair__add-toggle:checked ~ .rx-bundle-pair__empty-grid {
+	display: none;
+}
+.rx-bundle-pair__add-toggle:checked ~ .rx-bundle-pair__edit-panel {
+	display: block;
+	padding: 1.25rem;
+}
+.rx-bundle-pair:has( .rx-bundle-pair__edit-toggle:checked ),
+.rx-bundle-pair:has( .rx-bundle-pair__add-toggle:checked ) {
+	box-shadow: inset 0 0 0 2px var( --rx-color-blue );
+}
+.rx-bundle-pair__edit-panel-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-bottom: 0.85rem;
+}
+.rx-bundle-pair__edit-panel-title {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-pair__edit-panel-cancel {
+	font-size: var( --rx-text-sm );
+	font-weight: 600;
+	color: var( --rx-color-gray-600 );
+	cursor: pointer;
+}
+.rx-bundle-pair__edit-layout {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+.rx-bundle-pair__edit-media {
+	flex: none;
+	width: 9rem;
+}
+.rx-bundle-pair__edit-media .rx-bundle-pair__image {
+	width: 9rem;
+	height: 7rem;
+}
+.rx-bundle-pair__edit-media .rx-bundle-pair__title {
+	margin: 0.5rem 0 0;
+	font-size: var( --rx-text-md );
+}
+.rx-bundle-pair__edit-fields {
+	flex: 1;
+	min-width: 0;
+}
+.rx-bundle-pair__edit-variations {
+	margin-bottom: 1rem;
+}
+/* This panel is compact and already shows the selected colour's name in
+   the "Colourway: <name>" row header above it, so its colour swatches
+   are small dots (a checkmark on the active one) rather than the single
+   product page's bigger name-labelled cards — same real swatch markup
+   and JS (.rx-swatch-card, is-active/is-disabled), restyled only. */
+.rx-bundle-pair__edit-variations .rx-variations__count {
+	display: none;
+}
+.rx-bundle-pair__edit-variations .rx-variation-swatches--colour {
+	gap: 0.6rem;
+}
+.rx-bundle-pair__edit-variations .rx-swatch-card {
+	width: 2.25rem;
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+}
+.rx-bundle-pair__edit-variations .rx-swatch-card.is-active {
+	box-shadow: 0 0 0 2px var( --rx-color-white ), 0 0 0 4px var( --rx-color-blue );
+}
+.rx-bundle-pair__edit-variations .rx-swatch-card__box {
+	position: relative;
+	height: 2.25rem;
+	border-radius: 999px;
+	font-size: 0; /* hides the colour name baked into the box's own text content — the header above already shows it */
+	box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.15 );
+}
+.rx-bundle-pair__edit-variations .rx-swatch-card.is-active .rx-swatch-card__box::after {
+	content: '✓';
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	color: inherit; /* the box's own inline style already sets a readable colour for its background */
+}
+.rx-bundle-pair__edit-variations .rx-swatch-card__name {
+	display: none;
+}
+.rx-bundle-pair__edit-confirm .quantity {
+	display: none !important; /* WooCommerce's own JS sets an inline style once a variation matches, beating a plain rule — see the same fix on the single product page. */
+}
+.rx-bundle-pair__edit-confirm .woocommerce-variation-add-to-cart {
+	display: flex;
+}
+.rx-bundle-pair__edit-confirm .single_add_to_cart_button {
+	width: 100%;
+	padding: 0.9em 1em;
+	border: 0;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-blue );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-white );
+	cursor: pointer;
+}
+.rx-bundle-pair__edit-confirm .single_add_to_cart_button.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Empty slot: a full-width status bar, then an "empty slot" card side by
+   side with a curated recommendation (when one exists). */
+.rx-bundle-pair__status-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+}
+.rx-bundle-pair__status-title {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.6rem 1.25rem;
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.rx-bundle-pair__status-bar--urgent .rx-bundle-pair__status-title {
+	background: var( --rx-color-red );
+}
+.rx-bundle-pair__status-note {
+	padding-right: 1.25rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__empty-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1.25rem;
+	background: var( --rx-color-surface );
+}
+.rx-bundle-pair__vault {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 2rem 1.5rem;
+	text-align: center;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+}
+.rx-bundle-pair__vault .rx-btn {
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+.rx-bundle-pair__vault-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin-bottom: 0.35rem;
+	border-radius: var( --rx-radius-md );
+	background: #e4ebff;
+	color: var( --rx-color-blue );
+	transition: background-color 0.15s ease;
+}
+.rx-bundle-pair__vault-icon:hover {
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+}
+.rx-bundle-pair__vault-heading {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-pair__vault-text {
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__recommendation {
+	min-width: 0; /* flex item: without this, a long real product name/price forces the box wider than its share of the row instead of wrapping inside it. */
+	padding: 1.25rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+}
+.rx-bundle-pair__recommendation-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.2rem 0.4rem;
+	margin-bottom: 0.75rem;
+}
+.rx-bundle-pair__recommendation-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var( --rx-color-blue );
+}
+.rx-bundle-pair__recommendation-dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 999px;
+	background: var( --rx-color-lime );
+}
+.rx-bundle-pair__recommendation-matches {
+	margin: 0;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__recommendation-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.85rem;
+	margin-bottom: 0.75rem;
+}
+.rx-bundle-pair__recommendation-row .rx-bundle-pair__image {
+	flex: none;
+	width: 5.5rem;
+	height: 5.5rem;
+}
+.rx-bundle-pair__recommendation-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	min-width: 0;
+	flex: 1;
+}
+.rx-bundle-pair__recommendation-title-row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+.rx-bundle-pair__recommendation-row .rx-bundle-pair__title {
+	min-width: 0;
+	flex: 1;
+	margin: 0;
+	font-size: var( --rx-text-md );
+	overflow-wrap: break-word;
+}
+.rx-bundle-pair__recommendation-price {
+	flex: none;
+	font-weight: 700;
+	color: var( --rx-color-ink );
+	white-space: nowrap;
+}
+.rx-bundle-pair__recommendation-excerpt {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-pair__recommendation-deal {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+.rx-bundle-pair__recommendation-cta {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 0.4rem;
+	width: 100%;
+	white-space: normal; /* overrides .rx-btn's nowrap — this button's label includes the real product name, which can be long */
+	text-align: center;
+	line-height: 1.3;
+}
+.rx-bundle-pair__recommendation-cta svg {
+	flex: none;
+	margin-top: 0.15em;
+}
+
+.rx-bundle-builder__info {
+	padding: 1.5rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-bundle-builder__info h2 {
+	margin: 0 0 0.5rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	text-transform: uppercase;
+}
+.rx-bundle-builder__info p {
+	margin: 0;
+	color: var( --rx-color-gray-300 );
+}
+
+/* Order summary sidebar. */
+.rx-bundle-builder__summary {
+	padding: 1.5rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+	align-self: start;
+}
+.rx-bundle-builder__summary-eyebrow {
+	margin: 0 0 0.15rem;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-builder__summary-heading {
+	margin: 0 0 1rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-builder__summary-subheading {
+	margin: 1.25rem 0 0.25rem;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary-note {
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary-empty {
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-bundle-summary-list--muted {
+	opacity: 0.7;
+}
+.rx-bundle-summary-list__item {
+	padding: 0.5rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+	font-size: var( --rx-text-sm );
+}
+.rx-bundle-summary-list__row {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+.rx-bundle-summary-list__name {
+	color: var( --rx-color-ink );
+	font-weight: 600;
+}
+.rx-bundle-summary-list__price {
+	flex: none;
+	font-weight: 600;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary-list__variant {
+	margin: 0.15rem 0 0;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary-list__item--projected {
+	border-bottom-style: dashed;
+}
+.rx-bundle-summary-list__item--projected .rx-bundle-summary-list__name,
+.rx-bundle-summary-list__item--projected .rx-bundle-summary-list__variant {
+	color: var( --rx-color-blue );
+}
+.rx-bundle-summary-list__projected-dot {
+	display: inline-block;
+	width: 0.45rem;
+	height: 0.45rem;
+	margin-right: 0.3rem;
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+}
+.rx-bundle-summary-totals__row {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin: 1rem 0 0;
+	padding-top: 1rem;
+	border-top: 1px solid var( --rx-color-gray-300 );
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+}
+
+/* Order-breakdown box — real "if the next slot is filled" preview when a
+   recommendation exists (see $rx_theme_show_projected in
+   page-build-a-bundle.php), otherwise real committed-only totals. Never
+   a real applied checkout discount — see that file's own top comment. */
+.rx-bundle-summary-box {
+	margin-top: 1rem;
+	padding: 1rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-surface );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+}
+.rx-bundle-summary-box__row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary-box__tier {
+	display: inline-block;
+	margin-left: 0.35rem;
+	padding: 0.1rem 0.4rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-blue );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	color: var( --rx-color-white );
+}
+.rx-bundle-summary-box__savings {
+	flex: none;
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+.rx-bundle-summary-box__total {
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-bundle-summary-box__total-label {
+	display: block;
+	font-size: var( --rx-text-xs );
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary-box__total-amount {
+	display: block;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-2xl );
+	font-weight: 800;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary-box__total-savings {
+	display: block;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	color: var( --rx-color-red );
+}
+
+.rx-bundle-builder__cta {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 1.25rem;
+	padding: 0.9em 1em;
+	text-align: center;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+.rx-bundle-builder__cta-badge {
+	padding: 0.2rem 0.6rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-lime );
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.02em;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary-trust {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: var( --rx-text-xs );
+	color: var( --rx-color-gray-600 );
+	text-align: center;
+}
+
+@media ( min-width: 34em ) {
+	.rx-bundle-pair__empty-grid {
+		flex-direction: row;
+	}
+	.rx-bundle-pair__vault {
+		flex: 1;
+	}
+	.rx-bundle-pair__vault-text {
+		max-width: 22rem;
+	}
+	.rx-bundle-pair__recommendation {
+		flex: 1.6;
+	}
+	.rx-bundle-pair__edit-layout {
+		flex-direction: row;
+	}
+}
+
+@media ( min-width: 64em ) {
+	.rx-bundle-builder__layout {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+	.rx-bundle-builder__pairs {
+		flex: 1;
+	}
+	.rx-bundle-builder__summary {
+		flex: none;
+		width: 22rem;
+		position: sticky;
+		top: 1.5rem;
 	}
 }

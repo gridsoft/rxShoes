@@ -72,6 +72,7 @@
 	/* Neutrals */
 	--rx-color-gray-50: #f7f7f7;
 	--rx-color-surface: #f5f5f5;   /* pixel-sampled on the product card image area + rotation row */
+	--rx-color-section: #f3f3f3;   /* fill of the homepage sections that have a background (Hero, Power Rotation, Biomechanics); sections without one stay transparent */
 	--rx-color-gray-100: #f2f2f2;
 	--rx-color-gray-200: #e8e8e8;
 	--rx-color-gray-300: #d9d9d9;
@@ -116,5 +117,5 @@
 	   value (16px) is a standard default, not yet verified against a
 	   Figma mobile frame. */
 	--rx-container-pad: 1em;        /* 16px, mobile */
-	--rx-container-pad-desktop: 2.5em; /* 40px, verified against Figma */
+	--rx-container-pad-desktop: 2.5rem; /* 40px, verified against Figma. rem, not em: the body font is 14px, so 2.5em silently rendered as 35px */
 }

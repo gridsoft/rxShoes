@@ -80,9 +80,15 @@ final class Plugin {
 	private function default_services(): array {
 		return array(
 			new Catalog\BestForTaxonomy(),
+			new Catalog\SizeFilterAttributes(),
+			new Catalog\ColourSwatches(),
+			new Catalog\Import\ProductImportCommand(),
 			new Admin\ProductCardTab(),
 			new Admin\ProductCardCopyFields(),
+			new Bundles\BundleTab(),
 			new Bundles\BundleEligibility(),
+			new Bundles\BundleRotationPairs(),
+			new Community\CommunityPostType(),
 		);
 	}
 

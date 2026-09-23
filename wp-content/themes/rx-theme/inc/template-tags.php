@@ -30,6 +30,11 @@ function rx_theme_all_mod_fields(): array {
 			'rx_theme_hero_fields',
 			'rx_theme_category_cards_fields',
 			'rx_theme_rotation_fields',
+			'rx_theme_biomech_fields',
+			'rx_theme_brands_fields',
+			'rx_theme_trust_fields',
+			'rx_theme_community_fields',
+			'rx_theme_bestsellers_fields',
 		);
 		foreach ( $section_field_sources as $source ) {
 			if ( function_exists( $source ) ) {

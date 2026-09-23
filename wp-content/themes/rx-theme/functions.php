@@ -20,7 +20,17 @@ require RX_THEME_DIR . '/inc/template-tags.php';
 require RX_THEME_DIR . '/inc/customizer.php';
 require RX_THEME_DIR . '/inc/taxonomy-fields.php';
 require RX_THEME_DIR . '/inc/woocommerce.php';
+require RX_THEME_DIR . '/inc/archive-header.php';
+require RX_THEME_DIR . '/inc/shop-filters.php';
+require RX_THEME_DIR . '/inc/shop-sidebar.php';
+require RX_THEME_DIR . '/inc/shop-pagination.php';
+require RX_THEME_DIR . '/inc/single-product.php';
 require RX_THEME_DIR . '/inc/customizer-bundle.php';
+require RX_THEME_DIR . '/inc/biomechanics.php';
+require RX_THEME_DIR . '/inc/brand-tiles.php';
+require RX_THEME_DIR . '/inc/community.php';
+require RX_THEME_DIR . '/inc/best-sellers.php';
+require RX_THEME_DIR . '/inc/bundle-builder.php';
 
 /**
  * Theme setup: supports, menus, image sizes.
@@ -53,10 +63,22 @@ add_action( 'after_setup_theme', 'rx_theme_setup' );
 
 /**
  * Enqueue theme assets, conditionally.
+ *
+ * Both stylesheets version off their own filemtime(), not the static
+ * RX_THEME_VERSION constant — this theme is under active development
+ * with style.css changing every session, and a fixed version string
+ * means browsers (and any caching layer) keep serving a stale copy
+ * after every single edit until it happens to expire on its own. The
+ * theme's enqueued scripts already do this (see e.g.
+ * rx_theme_enqueue_variation_swatches_script()); the stylesheets hadn't
+ * been brought in line with that.
  */
 function rx_theme_enqueue_assets(): void {
-	wp_enqueue_style( 'rx-theme-tokens', RX_THEME_URI . '/assets/css/tokens.css', array(), RX_THEME_VERSION );
-	wp_enqueue_style( 'rx-theme-style', get_stylesheet_uri(), array( 'rx-theme-tokens' ), RX_THEME_VERSION );
+	$tokens_file = RX_THEME_DIR . '/assets/css/tokens.css';
+	$style_file  = RX_THEME_DIR . '/style.css';
+
+	wp_enqueue_style( 'rx-theme-tokens', RX_THEME_URI . '/assets/css/tokens.css', array(), file_exists( $tokens_file ) ? (string) filemtime( $tokens_file ) : RX_THEME_VERSION );
+	wp_enqueue_style( 'rx-theme-style', get_stylesheet_uri(), array( 'rx-theme-tokens' ), file_exists( $style_file ) ? (string) filemtime( $style_file ) : RX_THEME_VERSION );
 }
 add_action( 'wp_enqueue_scripts', 'rx_theme_enqueue_assets' );
 

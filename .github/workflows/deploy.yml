@@ -1,0 +1,82 @@
+name: Deploy to hosting (FTP)
+
+# Manual only, for now — the first deploy to a real host should be
+# something you trigger and watch, not something that fires unattended
+# on every push. Switch the trigger to `push: { branches: [main] }`
+# later once this has been run and verified a few times.
+on:
+  workflow_dispatch: {}
+
+# Only WordPress core, other plugins, and uploads live directly on the
+# server and are never tracked in this repo (see .gitignore's own
+# comment on that) — so this workflow deploys ONLY the two directories
+# this repo actually owns (rx-core, rx-theme), each to its own exact
+# remote folder. It never syncs the repository root or the site's
+# document root as a whole: doing that with an FTP action that can
+# delete remote files not present locally would wipe out WordPress core
+# itself. If you ever add a `server-dir` here, make sure it still points
+# at one specific wp-content/plugins/* or wp-content/themes/* folder,
+# not anything higher up the tree.
+concurrency:
+  group: deploy-ftp
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+          coverage: none
+
+      - name: Install rx-core's Composer dependencies (production only)
+        # vendor/ is gitignored (see rx-core/composer.json) — rx-core.php
+        # requires vendor/autoload.php for its PSR-4 class autoloading,
+        # so this has to run before every deploy, not just once.
+        # --no-dev skips the linting/testing tools (PHPCS, PHPStan,
+        # PHPUnit) — dev tooling has no reason to ship to production.
+        working-directory: wp-content/plugins/rx-core
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+      - name: Deploy rx-core plugin
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./wp-content/plugins/rx-core/
+          server-dir: /public_html/rx/wp-content/plugins/rx-core/
+          exclude: |
+            **/tests/**
+            **/phpcs.xml.dist
+            **/phpstan.neon.dist
+            **/.git*
+          # Left off deliberately for this first run: turning it on
+          # makes the action delete any remote file that isn't present
+          # locally, keeping the two sides in exact sync — genuinely
+          # useful once you trust the pipeline, but the wrong thing to
+          # enable before you've watched it run successfully at least
+          # once against a real host.
+          # dangerous-clean-slate: true
+
+      - name: Deploy rx-theme
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./wp-content/themes/rx-theme/
+          server-dir: /public_html/rx/wp-content/themes/rx-theme/
+          exclude: |
+            **/import/**
+            **/.git*
+          # Same note as above — enable once the pipeline is proven:
+          # dangerous-clean-slate: true

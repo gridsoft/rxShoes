@@ -77,3 +77,33 @@ function rx_theme_multiline_html( string $theme_mod_id ): string {
 	$lines = array_map( 'esc_html', $lines );
 	return implode( '<br>', $lines );
 }
+
+/**
+ * Point a stored media URL at THIS site's uploads folder.
+ *
+ * Customizer image controls (WP_Customize_Image_Control, e.g. the hero
+ * background) save the full URL, host included — so a database copied
+ * from local to staging (or staging to production) keeps pointing at the
+ * old host. On staging that meant the hero loaded from
+ * http://localhost/rx/…, which Firefox flags with its "wants to access
+ * other apps and services on this device" (local network access) prompt.
+ * Any URL under another site's /wp-content/uploads/ is rewritten to the
+ * same file under this site's uploads URL; anything else (an external
+ * image on a CDN, a relative path) is returned unchanged.
+ *
+ * @param string $url Stored URL.
+ */
+function rx_theme_local_upload_url( string $url ): string {
+	$uploads = wp_get_upload_dir();
+	$base    = (string) ( $uploads['baseurl'] ?? '' );
+
+	if ( '' === $url || '' === $base || str_starts_with( $url, $base ) ) {
+		return $url;
+	}
+
+	if ( ! preg_match( '#^https?://[^/]+/(?:.*/)?wp-content/uploads/(.+)$#i', $url, $matches ) ) {
+		return $url;
+	}
+
+	return trailingslashit( $base ) . $matches[1];
+}

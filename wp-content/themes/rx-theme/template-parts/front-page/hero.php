@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$rx_theme_hero_image = get_theme_mod( 'rx_hero_image', '' );
+$rx_theme_hero_image = rx_theme_local_upload_url( (string) get_theme_mod( 'rx_hero_image', '' ) );
 
 /**
  * A Customizer URL field may hold a relative path ("/shop/") or a full

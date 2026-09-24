@@ -82,6 +82,7 @@ final class Plugin {
 			new Catalog\BestForTaxonomy(),
 			new Catalog\SizeFilterAttributes(),
 			new Catalog\ColourSwatches(),
+			new Catalog\KeyFeatures(),
 			new Catalog\Import\ProductImportCommand(),
 			new Admin\ProductCardTab(),
 			new Admin\ProductCardCopyFields(),

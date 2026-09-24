@@ -2,7 +2,7 @@
 
 A running list of things we need a decision, information, or access from you on. Each item explains *why* it matters, not just what to do — feel free to forward this as-is.
 
-Updated: 2026-09-21
+Updated: 2026-09-24
 
 ---
 
@@ -34,17 +34,20 @@ Figma's file is a fixed-width mockup (1280px), which doesn't by itself tell us w
 ### 8. Star ratings on product cards — real reviews, or drop them?
 The product card design has a star rating line ("★ 4.8 (142)"). You told us reviews are out of scope, so there's no real rating data behind it — for now we're showing made-up numbers (stable per product, so they don't jump around) purely so the card can be built and judged. **These can't go live**: displaying invented ratings on a real store is misleading to customers and carries consumer-law risk in Australia. Two options: drop the star line from the cards, or bring reviews into scope so the numbers are real (a real feature, with moderation and so on). Either is fine; we just need to know which before launch.
 
+### 9. Imported product descriptions contain another store's text and images
+While building the product-page feature tiles we noticed some imported product descriptions were copied from **The WOD Life (TWL)**'s website, and still carry their store-specific text — for example "This item is sent by a marketplace partner", "This item is excluded from free gift and **TWL App** offers", "will arrive separately from the rest of your order", "1-3 business days to despatch from the warehouse", "cannot be sent to customers outside of Australia". The size-guide images in some descriptions also carry the **TWL logo**. None of that is true for your store (your shipping, offers and dispatch are your own), and showing another retailer's branding on your product pages isn't something to launch with. Two ways to fix it: send your own descriptions and size guides with the product catalog (item 11), or we strip those lines and the TWL images from the current descriptions and you supply replacement size guides. Either way, we need to know which before launch.
+
 ---
 
 ## Access / info we need from you
 
-### 9. AzuPay account setup
+### 10. AzuPay account setup
 For PayID this is straightforward, but **PayTo specifically requires "Checkout App V3" to be enabled** on your AzuPay account (per their own documentation) — it won't work otherwise. When you're setting up the AzuPay account, please make sure that's turned on, and send us the API sandbox credentials once you have them so we can start building and testing the payment integration.
 
-### 10. Product catalog (Excel file)
+### 11. Product catalog (Excel file)
 Still waiting on this — product names, descriptions, sizes, colours, and 3-5 images per product. Reminder on the image side: if you can put all the images in one shared folder (Google Drive/Dropbox) with predictable filenames (e.g. `SKU-1.jpg`, `SKU-2.jpg`), we can bulk-import everything in one pass rather than uploading each photo by hand — much faster and repeatable if we ever need to rebuild the catalog on staging.
 
-### 11. Figma file access keeps running out — needs whoever owns the file's team
+### 12. Figma file access keeps running out — needs whoever owns the file's team
 To build each page accurately we pull exact colours/spacing/text straight from your Figma file via its API, rather than guessing off a screenshot (guessing caused a real rework earlier — see the hero section history). That access runs out fast and takes 4-5 days to reset each time — we've hit it twice already. We checked: this **isn't fixed by buying yourself a cheaper Figma seat** (we looked into the $12-15/mo Dev seat option specifically — it has the same limit as a full seat). What actually controls it is the *plan* of whichever Figma team the file itself lives in, and you mentioned you don't know who owns that. So the actual next step is finding out who does — likely whoever built the mockup — and either asking them to upgrade that team's plan, or having the file duplicated/moved into a Figma team you control and pay for. Until that's sorted, we can keep working around it using cached screenshots (slower and slightly less precise, but workable), which is what we did for the section built most recently.
 
 ---
@@ -54,3 +57,4 @@ To build each page accurately we pull exact colours/spacing/text straight from y
 - **Production hosting & domain** — you said to use your own staging for now with DNS/production set up later if needed. No action needed until you're ready for that.
 - **Post-launch support terms** — you said this isn't something to plan yet. Just flagging it's still an open item for whenever it's useful to revisit.
 - **Duplicate Figma frames** — a few frames in the Figma file appear twice with the same name (two "Premium VSL Checkout Experience," two "PayID Exclusive Checkout," two "Mobile VSL Checkout"). Minor, but if one is a leftover/duplicate rather than an intentional A/B variant, it'd be worth tidying up on your end at some point.
+- **New "Key features" tab on each product** — the three icon tiles under the product photos (e.g. "Olympic stable — Solid TPU heel wedge") are filled in per product in the admin: Products → edit a product → Product data → **Key features**. Up to three tiles, each a short title, one line and an icon. The tab lists suggestions pulled from that product's description with a "Use" button, but they need a human edit (the descriptions weren't written in that shape). Products without any tiles simply don't show the row. One product (TYR RD-1X Runner) is filled in as an example — change or clear it as you like.

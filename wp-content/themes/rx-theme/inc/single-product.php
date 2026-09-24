@@ -492,3 +492,20 @@ function rx_theme_rotation_pair_data( WC_Product $current_product, array $pair_p
 		'combined_regular_total' => $regular_total,
 	);
 }
+
+/**
+ * The product's "Key features" tiles (up to 3 of {title, text, icon}),
+ * entered on the product's "Key features" tab — owned by rx-core
+ * (RX\Core\Catalog\KeyFeatures). Empty when rx-core is inactive or the
+ * product has none, so the PDP simply leaves the row out.
+ *
+ * @param WC_Product $product Product being rendered.
+ * @return array<int,array{title:string,text:string,icon:string}>
+ */
+function rx_theme_product_key_features( WC_Product $product ): array {
+	if ( ! class_exists( '\RX\Core\Catalog\KeyFeatures' ) ) {
+		return array();
+	}
+
+	return \RX\Core\Catalog\KeyFeatures::get_rows( $product );
+}

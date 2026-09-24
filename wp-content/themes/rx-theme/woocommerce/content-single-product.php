@@ -98,6 +98,20 @@ $rx_theme_size_equiv = rx_theme_product_size_equivalent_line( $product );
 			?>
 		</div>
 
+		<?php
+		/*
+		 * Key features tiles, under the gallery as in the client's
+		 * reference design (a compact single row, so on phones it sits
+		 * right after the photos). Hidden when the product has none.
+		 */
+		$rx_theme_key_features = rx_theme_product_key_features( $product );
+		?>
+		<?php if ( $rx_theme_key_features ) : ?>
+			<div class="rx-single-product__features">
+				<?php get_template_part( 'template-parts/product/key-features', null, array( 'rows' => $rx_theme_key_features ) ); ?>
+			</div>
+		<?php endif; ?>
+
 		<div class="rx-single-product__summary summary entry-summary">
 			<?php if ( $rx_theme_brand ) : ?>
 				<p class="rx-single-product__brand"><?php echo esc_html( $rx_theme_brand[0] ); ?></p>

@@ -2498,6 +2498,50 @@ a {
 .rx-single-product__gallery .woocommerce-product-gallery__image img {
 	border-radius: var( --rx-radius-md );
 }
+/* Key feature tiles (template-parts/product/key-features.php) under the
+   PDP gallery, per the client's reference: one white box, up to three
+   centred columns split by hairlines — blue icon, condensed uppercase
+   title, one gray line. */
+.rx-key-features {
+	display: grid;
+	grid-auto-columns: minmax( 0, 1fr );
+	grid-auto-flow: column;
+	margin: 0;
+	padding: 1rem 0;
+	list-style: none;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+}
+.rx-key-features__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.2rem;
+	padding: 0 0.75rem;
+	text-align: center;
+}
+.rx-key-features__item + .rx-key-features__item {
+	border-left: 1px solid var( --rx-color-gray-200 );
+}
+.rx-key-features__icon {
+	margin-bottom: 0.25rem;
+	color: var( --rx-color-blue );
+}
+.rx-key-features__title {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	line-height: 1.15;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-key-features__text {
+	font-size: var( --rx-text-sm );
+	line-height: 1.35;
+	color: var( --rx-color-gray-600 );
+}
 /* Product description (woocommerce/content-single-product.php): under the
    gallery on desktop, after the summary on phones. Imported descriptions
    are plain paragraphs, bold "Technology" / "Features" lines and bullet
@@ -3109,26 +3153,23 @@ a {
 		flex-wrap: nowrap;
 		flex-shrink: 0;
 	}
-	/* Two columns: gallery with the product description under it on the
-	   left, the summary on the right spanning both rows. */
+	/* Two columns: gallery, key-feature tiles and the product description
+	   stacked on the left (auto-placed, so a missing block just closes
+	   up), the summary on the right spanning those rows. */
 	.rx-single-product__layout {
 		display: grid;
 		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
-		grid-template-rows: auto 1fr;
 		align-items: start;
 		gap: 2rem 3rem;
 	}
-	.rx-single-product__gallery {
+	.rx-single-product__gallery,
+	.rx-single-product__features,
+	.rx-single-product__description {
 		grid-column: 1;
-		grid-row: 1;
 	}
 	.rx-single-product__summary {
 		grid-column: 2;
-		grid-row: 1 / span 2;
-	}
-	.rx-single-product__description {
-		grid-column: 1;
-		grid-row: 2;
+		grid-row: 1 / span 3;
 	}
 	.rx-nav {
 		display: block;

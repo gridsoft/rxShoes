@@ -100,4 +100,20 @@
 			initForm( $( this ) );
 		} );
 	} );
+
+	/*
+	 * Cart page: applying/removing a coupon makes WooCommerce's cart.js
+	 * replace the whole cart form (updated_wc_div), including the inline
+	 * "Edit size / colour" pickers — start the new ones the same way.
+	 */
+	$( document.body ).on( 'updated_wc_div', function () {
+		$( '.woocommerce-cart-form .variations_form' ).each( function () {
+			var $form = $( this );
+
+			if ( typeof $form.wc_variation_form === 'function' ) {
+				$form.wc_variation_form();
+			}
+			initForm( $form );
+		} );
+	} );
 } )( jQuery );

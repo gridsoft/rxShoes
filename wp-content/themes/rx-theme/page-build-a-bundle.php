@@ -77,7 +77,7 @@ $rx_theme_max_pack = rx_theme_bundle_max_discount_percent();
 $rx_theme_target_slots = max( 3, count( $rx_theme_eligible ) );
 $rx_theme_slots        = min( $rx_theme_target_slots, count( $rx_theme_eligible ) + 1 );
 $rx_theme_anchor       = $rx_theme_eligible ? end( $rx_theme_eligible )['parent'] : null;
-$rx_theme_in_cart      = wp_list_pluck( wp_list_pluck( $rx_theme_eligible, 'parent' ), 'id' );
+$rx_theme_in_cart      = array_map( static fn( WC_Product $p ): int => $p->get_id(), wp_list_pluck( $rx_theme_eligible, 'parent' ) );
 $rx_theme_recommend    = rx_theme_bundle_builder_recommendation( $rx_theme_anchor, $rx_theme_in_cart );
 
 switch ( $rx_theme_totals['pairs_count'] ) {

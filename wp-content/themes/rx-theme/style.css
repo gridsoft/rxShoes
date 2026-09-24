@@ -2489,8 +2489,78 @@ a {
 	align-items: flex-start;
 	gap: 0.4rem;
 }
+/* Images (incl. WooCommerce's 600px placeholder for products with no
+   photo yet) never wider than the gallery column. */
+.rx-single-product__gallery img {
+	max-width: 100%;
+	height: auto;
+}
 .rx-single-product__gallery .woocommerce-product-gallery__image img {
 	border-radius: var( --rx-radius-md );
+}
+/* Product description (woocommerce/content-single-product.php): under the
+   gallery on desktop, after the summary on phones. Imported descriptions
+   are plain paragraphs, bold "Technology" / "Features" lines and bullet
+   lists. */
+.rx-single-product__description {
+	padding-top: 1.5rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-single-product__description-title {
+	margin: 0 0 0.75rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-single-product__description-body {
+	font-size: var( --rx-text-base );
+	line-height: 1.65;
+	color: var( --rx-color-gray-600 );
+}
+.rx-single-product__description-body > :first-child {
+	margin-top: 0;
+}
+.rx-single-product__description-body p {
+	margin: 0 0 0.85rem;
+}
+.rx-single-product__description-body strong {
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+/* A paragraph that's only a bold label reads as a small subheading. */
+.rx-single-product__description-body p:has( > strong:only-child ) {
+	margin: 1.25rem 0 0.4rem;
+	font-size: var( --rx-text-sm );
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.rx-single-product__description-body ul,
+.rx-single-product__description-body ol {
+	margin: 0 0 0.85rem;
+	padding-left: 1.25rem;
+}
+.rx-single-product__description-body ul {
+	list-style: disc;
+}
+.rx-single-product__description-body ol {
+	list-style: decimal;
+}
+.rx-single-product__description-body li {
+	margin-bottom: 0.3rem;
+}
+.rx-single-product__description-body li::marker {
+	color: var( --rx-color-blue );
+}
+.rx-single-product__description-body a {
+	color: var( --rx-color-blue );
+	text-decoration: underline;
+}
+.rx-single-product__description-body img {
+	max-width: 100%;
+	height: auto;
 }
 .rx-badge {
 	display: inline-flex;
@@ -3039,15 +3109,26 @@ a {
 		flex-wrap: nowrap;
 		flex-shrink: 0;
 	}
+	/* Two columns: gallery with the product description under it on the
+	   left, the summary on the right spanning both rows. */
 	.rx-single-product__layout {
-		flex-direction: row;
-		align-items: flex-start;
-		gap: 3rem;
+		display: grid;
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		grid-template-rows: auto 1fr;
+		align-items: start;
+		gap: 2rem 3rem;
 	}
-	.rx-single-product__gallery,
+	.rx-single-product__gallery {
+		grid-column: 1;
+		grid-row: 1;
+	}
 	.rx-single-product__summary {
-		flex: 1;
-		min-width: 0;
+		grid-column: 2;
+		grid-row: 1 / span 2;
+	}
+	.rx-single-product__description {
+		grid-column: 1;
+		grid-row: 2;
 	}
 	.rx-nav {
 		display: block;
@@ -3592,7 +3673,7 @@ body.woocommerce-cart .woocommerce-info .button {
 .cart_totals {
 	padding: 1.25rem;
 	border-radius: var( --rx-radius-lg );
-	background: var( --rx-color-section );
+	background: var( --rx-color-white );
 }
 .cart_totals h2 {
 	margin: 0 0 1rem;
@@ -3667,6 +3748,182 @@ body.woocommerce-cart .woocommerce-info .button {
 	color: var( --rx-color-white );
 }
 
+/* Cart page as cards on a gray page, same look as the checkout and the
+   mini cart (client request, 2026-09-24): the item form and the totals
+   box are white cards; notices go white so they don't vanish into the
+   gray. Rows use the shared grouping from woocommerce/cart/cart.php. */
+body.woocommerce-cart {
+	background: var( --rx-color-section );
+}
+.woocommerce-cart-form {
+	padding: 1rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+}
+body.woocommerce-cart .woocommerce-message,
+body.woocommerce-cart .woocommerce-info {
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+}
+.woocommerce-cart-form__contents tr.rx-review-group {
+	display: block;
+	margin-top: 0.75rem;
+	padding: 0.5rem 0.75rem;
+}
+.woocommerce-cart-form__contents tbody tr.rx-review-group:first-child {
+	margin-top: 0;
+}
+.woocommerce-cart-form__contents tr.rx-review-group th {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.25rem 0.75rem;
+	text-align: left;
+}
+.woocommerce-cart-form__contents tr.rx-review-group--other {
+	margin-bottom: 0.75rem;
+	padding-inline: 0;
+	border-bottom: 0;
+}
+
+/* Cart line as the bundle builder's pair card (client request,
+   2026-09-24): woocommerce/cart/cart.php reuses the pair card's
+   rx-bundle-pair__* classes inside the real cart cells, laid out here as
+   a grid — badges + subtotal, divider, photo | name/best-for/specs, then
+   quantity and remove under the details. The card replaces the old
+   flat flex row, so the column header row is hidden. */
+.woocommerce-cart-form .woocommerce-cart-form__contents thead {
+	display: none;
+}
+.woocommerce-cart-form__cart-item.rx-cart-card {
+	display: grid;
+	grid-template-columns: 5.5rem auto 1fr;
+	grid-template-areas:
+		"head head total"
+		"hr hr hr"
+		"media info info"
+		"actions actions actions";
+	gap: 0 1rem;
+	margin-bottom: 0.75rem;
+	padding: 1rem;
+	border: 0;
+	border-radius: 0;
+	background: var( --rx-color-white );
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
+}
+.rx-cart-card::after {
+	content: "";
+	grid-area: hr;
+	margin: 1rem 0;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-cart-card .rx-cart-card__head {
+	grid-area: head;
+	align-self: center;
+}
+.rx-cart-card .product-subtotal {
+	grid-area: total;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: flex-end;
+	gap: 0 0.4rem;
+	margin: 0;
+	font-weight: 400;
+	text-align: right;
+}
+.rx-cart-card .product-thumbnail {
+	grid-area: media;
+	min-width: 0;
+}
+.rx-cart-card .rx-bundle-pair__image {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 9 / 7;
+}
+.rx-cart-card .product-thumbnail .rx-bundle-pair__image img {
+	width: 100%;
+	height: 100%;
+	border-radius: 0;
+	background: none;
+	object-fit: cover;
+}
+.rx-cart-card .rx-bundle-pair__type-badge {
+	max-width: 100%;
+}
+.rx-cart-card .product-name {
+	grid-area: info;
+	min-width: 0;
+	font-size: inherit;
+	font-weight: 400;
+}
+.rx-cart-card .rx-bundle-pair__title a:hover {
+	color: var( --rx-color-blue );
+}
+.rx-cart-card .product-name .rx-bundle-pair__specs {
+	margin-bottom: 0;
+}
+.rx-cart-card .rx-cart-card__actions {
+	grid-area: actions;
+	margin-top: 1rem;
+}
+.rx-cart-card .rx-bundle-pair__action:hover,
+.rx-cart-card .rx-bundle-pair__action:focus-visible {
+	color: var( --rx-color-blue );
+}
+/* No quantity fields left for "Update cart" to submit (coupons have
+   their own button), so it's hidden; it stays in the DOM because
+   WooCommerce's cart.js toggles it. */
+.woocommerce-cart-form .actions button[name="update_cart"] {
+	display: none;
+}
+
+/* Inline "Edit size / colour" (woocommerce/cart/cart.php): the bundle
+   builder's picker panel in its own cell, hidden until the card's
+   checkbox toggle is checked — then it takes the card body's place
+   (photo / details / actions), exactly like the pair card. */
+.rx-cart-card .rx-cart-card__edit {
+	display: none;
+	grid-row: 3;
+	grid-column: 1 / -1;
+	min-width: 0;
+}
+.rx-cart-card:has( .rx-cart-card__edit-toggle:checked ) .product-thumbnail,
+.rx-cart-card:has( .rx-cart-card__edit-toggle:checked ) .product-name,
+.rx-cart-card:has( .rx-cart-card__edit-toggle:checked ) .rx-cart-card__actions {
+	display: none;
+}
+.rx-cart-card:has( .rx-cart-card__edit-toggle:checked ) .rx-cart-card__edit,
+.rx-cart-card:has( .rx-cart-card__edit-toggle:checked ) .rx-bundle-pair__edit-panel {
+	display: block;
+}
+@media ( min-width: 40em ) {
+	.woocommerce-cart-form__cart-item.rx-cart-card {
+		grid-template-columns: 9rem auto auto 1fr;
+		grid-template-areas:
+			"head head head total"
+			"hr hr hr hr"
+			"media info info info"
+			"media actions actions actions";
+		gap: 0 1.25rem;
+		padding: 1.25rem;
+	}
+	.rx-cart-card .rx-bundle-pair__image {
+		width: 9rem;
+		height: 7rem;
+		aspect-ratio: auto;
+	}
+	.rx-cart-card .rx-cart-card__actions {
+		align-self: end;
+	}
+}
+@media ( min-width: 56em ) {
+	.woocommerce-cart-form {
+		padding: 1.25rem;
+	}
+}
+
 /* Empty cart state. */
 .cart-empty {
 	margin: 0 0 1rem;
@@ -3693,18 +3950,33 @@ body.woocommerce-cart .woocommerce-info .button {
 	color: var( --rx-color-white );
 }
 
-@media ( min-width: 56em ) {
+/* Totals beside the items only from 72em: below that the item column
+   (viewport - 22rem totals) is too narrow for a product row and the
+   subtotals wrap, so the totals stack under the items instead. */
+@media ( min-width: 72em ) {
+	/* Grid, not a flex row: WooCommerce drops notices ("… removed. Undo?",
+	   "… added to your cart") in as extra children of .woocommerce after
+	   an add/remove, and in a flex row each one became a third column
+	   that squeezed the item list until its subtotals wrapped. Here
+	   anything that isn't the form or the totals spans the full width
+	   above them. */
 	body.woocommerce-cart .woocommerce {
-		flex-direction: row;
-		align-items: flex-start;
+		display: grid;
+		grid-template-columns: minmax( 0, 1fr ) 22rem;
+		align-items: start;
 	}
-	.woocommerce-cart-form {
-		flex: 1;
+	body.woocommerce-cart .woocommerce > * {
+		grid-column: 1 / -1;
+	}
+	body.woocommerce-cart .woocommerce > .woocommerce-cart-form {
+		grid-column: 1;
 		min-width: 0;
 	}
-	.cart-collaterals {
-		flex: 0 0 22rem;
+	body.woocommerce-cart .woocommerce > .cart-collaterals {
+		grid-column: 2;
 	}
+}
+@media ( min-width: 56em ) {
 	.woocommerce-cart-form__contents thead {
 		display: table-header-group;
 	}
@@ -3870,6 +4142,59 @@ body.woocommerce-checkout .woocommerce-error li {
 	}
 }
 
+/* Billing / shipping / order-notes field groups as white cards, the same
+   treatment as the "Your order" box (#order_review): heading above on the
+   gray page, fields inside the card (client request, 2026-09-24).
+   flow-root contains the floated half-width rows; the bottom padding is
+   reduced by the last row's own 1rem margin. #order_review gets the card
+   on phones too (it was desktop-only), so both sides match everywhere. */
+.woocommerce-billing-fields__field-wrapper,
+.woocommerce-shipping-fields__field-wrapper,
+.woocommerce-additional-fields__field-wrapper,
+.woocommerce-checkout #order_review {
+	padding: 1rem 1rem 0;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+}
+.woocommerce-billing-fields__field-wrapper,
+.woocommerce-shipping-fields__field-wrapper,
+.woocommerce-additional-fields__field-wrapper {
+	display: flow-root;
+	margin-bottom: 1.5rem;
+}
+.woocommerce-checkout #order_review {
+	padding-bottom: 1rem;
+}
+/* Coupon toggle ("Have a coupon?") and the coupon form it opens: same
+   white card instead of the gray notice / dashed outline. */
+body.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info {
+	margin: 0;
+	padding: 1rem;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+}
+.woocommerce-checkout .checkout_coupon {
+	border: 0;
+	border-radius: var( --rx-radius-lg );
+	background: var( --rx-color-white );
+}
+.woocommerce-checkout .checkout_coupon .form-row {
+	margin: 0;
+}
+@media ( min-width: 56em ) {
+	body.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info,
+	.woocommerce-checkout .checkout_coupon {
+		padding: 1rem 1.25rem;
+	}
+}
+@media ( min-width: 56em ) {
+	.woocommerce-billing-fields__field-wrapper,
+	.woocommerce-shipping-fields__field-wrapper,
+	.woocommerce-additional-fields__field-wrapper {
+		padding: 1.25rem 1.25rem 0.25rem;
+	}
+}
+
 /* Order review sidebar (table -> flex rows, same treatment as the cart
    totals table). */
 .woocommerce-checkout-review-order-table {
@@ -3929,6 +4254,124 @@ body.woocommerce-checkout .woocommerce-error li {
 .woocommerce-checkout-review-order-table .product-quantity {
 	color: var( --rx-color-gray-600 );
 	font-weight: 500;
+}
+/* Order review line (woocommerce/checkout/review-order.php): thumbnail +
+   the same label / name / size • colour stack as the mini cart. */
+.rx-review-item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+.rx-review-item__thumb {
+	flex: none;
+	width: 3.5rem;
+	height: 3.5rem;
+	background: var( --rx-color-surface );
+	overflow: hidden;
+}
+.rx-review-item__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+.rx-review-item__text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	min-width: 0;
+}
+.rx-review-item__label {
+	font-size: var( --rx-text-xs );
+	font-weight: 600;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+}
+.rx-review-item__name {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	line-height: 1.15;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-review-item__name .product-quantity {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-xs );
+	white-space: nowrap;
+}
+.rx-review-item__meta {
+	font-size: var( --rx-text-xs );
+	color: #808080;
+}
+/* Grouping: the rotation pairs sit in one tinted panel under a dark
+   header (same look as the mini cart's head); other items follow under a
+   plain "Other items" header. */
+.woocommerce-checkout-review-order-table tr.rx-review-group {
+	display: block;
+	margin-top: 0.75rem;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 0;
+}
+.woocommerce-checkout-review-order-table tbody tr.rx-review-group:first-child {
+	margin-top: 0.5rem;
+}
+.woocommerce-checkout-review-order-table tr.rx-review-group th {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.25rem 0.75rem;
+}
+.rx-review-group__title {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+}
+.rx-review-group__dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+}
+.rx-review-group__note {
+	font-size: var( --rx-text-xs );
+	font-weight: 600;
+}
+.rx-review-group--rotation {
+	background: var( --rx-color-ink );
+}
+.rx-review-group--rotation .rx-review-group__title {
+	color: var( --rx-color-white );
+}
+.rx-review-group--rotation .rx-review-group__note {
+	color: var( --rx-color-lime );
+}
+.woocommerce-checkout-review-order-table tr.rx-review-group--other {
+	padding-inline: 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.rx-review-group--other .rx-review-group__title {
+	color: var( --rx-color-ink );
+}
+.rx-review-group--other .rx-review-group__note {
+	font-weight: 500;
+	color: var( --rx-color-gray-600 );
+}
+.woocommerce-checkout-review-order-table tr.rx-review-row--rotation {
+	padding-inline: 0.75rem;
+	border-bottom-color: #dbe7ff;
+	border-left: 3px solid var( --rx-color-blue );
+	background: #f3f7ff;
+}
+.rx-review-item .variation {
+	margin: 0.15rem 0 0;
+	font-size: var( --rx-text-xs );
+	color: #808080;
 }
 .woocommerce-checkout-review-order-table tfoot tr.order-total th,
 .woocommerce-checkout-review-order-table tfoot tr.order-total td {
@@ -4979,5 +5422,493 @@ body.rx-bundle-builder-page {
 		width: 22rem;
 		position: sticky;
 		top: 1.5rem;
+	}
+}
+
+/* Mini cart "Rotation drawer" (inc/mini-cart.php, template-parts/mini-cart/,
+   assets/js/mini-cart.js). Sizes measured from the Figma frame (node
+   1-1773, 1:1 export saved as design-reference/mini-cart-page.png): a
+   448px panel in the page's top-right corner, height fitting its content
+   (~800px for two pairs), 16px side padding, 92px pair cards with a 64px
+   thumbnail and a single-line name. Phones get the same content as a
+   full-screen sheet.
+
+   Every size below is multiplied by --rx-mc-scale, so the whole drawer
+   (panel, text, spacing, icons) scales as one while keeping the Figma
+   proportions. Client asked (2026-09-24) for a smaller desktop drawer; tried 0.6 and
+   0.7, settled on 0.8 of the Figma frame from 40em up (448px -> ~358px).
+   Phones stay at 1 — the full-screen sheet would be unreadable scaled.
+
+   Closed state is visibility:hidden so nothing inside is focusable until
+   it opens. */
+.rx-mini-cart-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 998;
+	background: rgba( 0, 0, 0, 0.35 );
+}
+.rx-mini-cart {
+	--rx-mc-scale: 1;
+}
+.rx-mini-cart {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 999;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100vh;
+	height: 100dvh;
+	background: #f9f9f9;
+	box-shadow: 0 calc( 8px * var( --rx-mc-scale ) ) calc( 32px * var( --rx-mc-scale ) ) rgba( 0, 0, 0, 0.18 );
+	visibility: hidden;
+	opacity: 0;
+	transform: translate( calc( 1rem * var( --rx-mc-scale ) ), calc( -1rem * var( --rx-mc-scale ) ) ) scale( 0.98 );
+	transform-origin: top right;
+	transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+.rx-mini-cart.is-open {
+	visibility: visible;
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+}
+.rx-mini-cart.is-loading .rx-mini-cart__body {
+	opacity: 0.5;
+	pointer-events: none;
+}
+@media ( prefers-reduced-motion: reduce ) {
+	.rx-mini-cart,
+	.rx-mini-cart.is-open {
+		transform: none;
+		transition: none;
+	}
+}
+@media ( min-width: 40em ) {
+	.rx-mini-cart {
+		--rx-mc-scale: 0.8;
+		width: calc( 28rem * var( --rx-mc-scale ) );
+		height: auto;
+		max-height: 100vh;
+		max-height: 100dvh;
+	}
+}
+
+/* Head + progress: one dark block. */
+.rx-mini-cart__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) ) calc( 0.375rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-mini-cart__title {
+	display: flex;
+	align-items: center;
+	gap: calc( 0.375rem * var( --rx-mc-scale ) );
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+}
+.rx-mini-cart__title-dot {
+	width: calc( 0.75rem * var( --rx-mc-scale ) );
+	height: calc( 0.75rem * var( --rx-mc-scale ) );
+	border-radius: 50%;
+	background: var( --rx-color-lime );
+}
+.rx-mini-cart__close {
+	display: inline-flex;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #a3a3a3;
+	cursor: pointer;
+}
+.rx-mini-cart__close svg {
+	width: calc( 1.125rem * var( --rx-mc-scale ) );
+	height: calc( 1.125rem * var( --rx-mc-scale ) );
+}
+.rx-mini-cart__close:hover,
+.rx-mini-cart__close:focus-visible {
+	color: var( --rx-color-white );
+}
+.rx-mini-cart__content {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	min-height: 0;
+}
+.rx-mini-cart__progress {
+	padding: 0 calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-ink );
+}
+.rx-mini-cart__progress > * {
+	margin: 0;
+	background: #2f3131;
+}
+.rx-mini-cart__progress-top {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: calc( 0.75rem * var( --rx-mc-scale ) );
+	padding: calc( 0.625rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) ) calc( 0.125rem * var( --rx-mc-scale ) );
+	border-radius: calc( 2px * var( --rx-mc-scale ) ) calc( 2px * var( --rx-mc-scale ) ) 0 0;
+}
+.rx-mini-cart__progress-title,
+.rx-mini-cart__progress-count {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: calc( 0.875rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.rx-mini-cart__progress-title {
+	color: var( --rx-color-lime );
+}
+.rx-mini-cart__progress-count {
+	flex: none;
+	color: var( --rx-color-white );
+}
+.rx-mini-cart__segments {
+	display: grid;
+	grid-template-columns: repeat( 3, 1fr );
+	gap: calc( 3px * var( --rx-mc-scale ) );
+	padding: 0 calc( 0.5rem * var( --rx-mc-scale ) );
+}
+.rx-mini-cart__segment {
+	height: calc( 0.5rem * var( --rx-mc-scale ) );
+	background: #4a4d53;
+}
+.rx-mini-cart__segment.is-filled {
+	background: var( --rx-color-lime );
+}
+.rx-mini-cart__progress-note {
+	padding: calc( 0.5rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) );
+	border-radius: 0 0 calc( 2px * var( --rx-mc-scale ) ) calc( 2px * var( --rx-mc-scale ) );
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	line-height: 1.4;
+	color: #d0d0d0;
+}
+.rx-mini-cart__progress-note strong {
+	font-weight: 500;
+	color: var( --rx-color-lime );
+}
+
+/* Scrolling middle. */
+.rx-mini-cart__body {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) ) 0;
+}
+.rx-mini-cart__items {
+	display: grid;
+	gap: calc( 1.25rem * var( --rx-mc-scale ) );
+	margin: 0 0 calc( 1.25rem * var( --rx-mc-scale ) );
+	padding: 0;
+	list-style: none;
+}
+.rx-mini-cart__item {
+	display: grid;
+	grid-template-columns: calc( 4rem * var( --rx-mc-scale ) ) minmax( 0, 1fr ) auto;
+	align-items: center;
+	gap: 0 calc( 0.25rem * var( --rx-mc-scale ) );
+	min-height: calc( 5.75rem * var( --rx-mc-scale ) );
+	padding: calc( 0.375rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-white );
+	box-shadow: 0 1px calc( 3px * var( --rx-mc-scale ) ) rgba( 0, 0, 0, 0.06 );
+}
+.rx-mini-cart__thumb {
+	display: block;
+	width: calc( 4rem * var( --rx-mc-scale ) );
+	height: calc( 4rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-surface );
+	overflow: hidden;
+}
+.rx-mini-cart__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+.rx-mini-cart__item-text {
+	align-self: start;
+	min-width: 0;
+}
+.rx-mini-cart__item-text > p {
+	margin: 0;
+}
+.rx-mini-cart__item-label {
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	font-weight: 600;
+	line-height: 1.3;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+}
+.rx-mini-cart__item-name {
+	overflow: hidden;
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.02em;
+	text-overflow: ellipsis;
+	text-transform: uppercase;
+	white-space: nowrap;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__item-text > .rx-mini-cart__item-meta {
+	overflow: hidden;
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	line-height: 1.4;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #808080;
+}
+.rx-mini-cart__item-text > .rx-mini-cart__item-price {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: calc( 0.5rem * var( --rx-mc-scale ) );
+	margin-top: calc( 0.125rem * var( --rx-mc-scale ) );
+	font-size: calc( 0.8125rem * var( --rx-mc-scale ) );
+	line-height: 1.4;
+}
+.rx-mini-cart__item-price strong {
+	font-weight: 700;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__item-price del {
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	color: #808080;
+}
+.rx-mini-cart__remove {
+	align-self: start;
+	display: inline-flex;
+	padding: calc( 0.125rem * var( --rx-mc-scale ) );
+	color: #6b6b6b;
+}
+.rx-mini-cart__remove svg {
+	width: calc( 0.875rem * var( --rx-mc-scale ) );
+	height: calc( 0.875rem * var( --rx-mc-scale ) );
+}
+.rx-mini-cart__remove:hover,
+.rx-mini-cart__remove:focus-visible {
+	color: var( --rx-color-red );
+}
+
+/* Next open slot. */
+.rx-mini-cart__slot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: calc( 0.5rem * var( --rx-mc-scale ) );
+	padding: calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) );
+	border: calc( 2px * var( --rx-mc-scale ) ) dashed #99c2ff;
+	background: var( --rx-color-white );
+	text-align: center;
+}
+.rx-mini-cart__slot > p {
+	margin: 0;
+}
+.rx-mini-cart__slot-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: calc( 2.5rem * var( --rx-mc-scale ) );
+	height: calc( 2.5rem * var( --rx-mc-scale ) );
+	margin-bottom: calc( 0.4375rem * var( --rx-mc-scale ) );
+	border-radius: var( --rx-radius-lg );
+	background: #e6f0ff;
+	color: var( --rx-color-blue );
+}
+.rx-mini-cart__slot-title {
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__slot > .rx-mini-cart__slot-text {
+	margin-top: calc( 0.3125rem * var( --rx-mc-scale ) );
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	line-height: 1.4;
+	color: #555;
+}
+.rx-mini-cart__slot-btn {
+	margin-top: calc( 0.8125rem * var( --rx-mc-scale ) );
+	padding: calc( 0.25rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) );
+	background: #f5f5f5;
+	font-family: var( --rx-font-display );
+	font-size: calc( 0.875rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__slot-btn:hover,
+.rx-mini-cart__slot-btn:focus-visible {
+	background: var( --rx-color-gray-200 );
+}
+
+/* Other items. */
+.rx-mini-cart__subheading {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: calc( 1rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__subnote {
+	margin: 0 0 calc( 0.5rem * var( --rx-mc-scale ) );
+	font-size: calc( 0.6875rem * var( --rx-mc-scale ) );
+	color: #808080;
+}
+
+/* Totals. */
+.rx-mini-cart__totals {
+	display: grid;
+	gap: calc( 0.375rem * var( --rx-mc-scale ) );
+	margin-bottom: calc( 1rem * var( --rx-mc-scale ) );
+	padding: calc( 0.5rem * var( --rx-mc-scale ) ) calc( 0.5rem * var( --rx-mc-scale ) );
+	background: #f5f5f5;
+	font-size: calc( 0.8125rem * var( --rx-mc-scale ) );
+	line-height: 1.4;
+	color: #555;
+}
+.rx-mini-cart__totals-row {
+	display: flex;
+	justify-content: space-between;
+	gap: calc( 1rem * var( --rx-mc-scale ) );
+	margin: 0;
+}
+.rx-mini-cart__strike {
+	text-decoration: line-through;
+}
+.rx-mini-cart__totals-row--discount {
+	font-weight: 500;
+	color: var( --rx-color-red );
+}
+.rx-mini-cart__totals-row--total {
+	margin-top: calc( 0.25rem * var( --rx-mc-scale ) );
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 700;
+	line-height: 1.1;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+
+/* Empty cart. */
+.rx-mini-cart__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: calc( 0.75rem * var( --rx-mc-scale ) );
+	padding: calc( 1.5rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) ) calc( 2rem * var( --rx-mc-scale ) );
+	text-align: center;
+}
+.rx-mini-cart__empty > p {
+	margin: 0;
+}
+.rx-mini-cart__empty-title {
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 600;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-mini-cart__empty-text {
+	font-size: calc( 0.75rem * var( --rx-mc-scale ) );
+	color: #555;
+}
+
+/* Pinned actions. */
+.rx-mini-cart__foot {
+	display: grid;
+	gap: calc( 0.5rem * var( --rx-mc-scale ) );
+	padding: calc( 1rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) ) calc( 0.875rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-white );
+	box-shadow: 0 calc( -4px * var( --rx-mc-scale ) ) calc( 12px * var( --rx-mc-scale ) ) rgba( 0, 0, 0, 0.06 );
+}
+.rx-mini-cart__cta {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: calc( 0.5rem * var( --rx-mc-scale ) );
+	min-height: calc( 2.625rem * var( --rx-mc-scale ) );
+	padding: calc( 0.25rem * var( --rx-mc-scale ) ) calc( 1rem * var( --rx-mc-scale ) );
+	font-family: var( --rx-font-display );
+	font-size: calc( 1.375rem * var( --rx-mc-scale ) );
+	font-weight: 500;
+	line-height: 1.1;
+	letter-spacing: 0.05em;
+	text-align: center;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-mini-cart__cta--dark {
+	background: var( --rx-color-ink );
+}
+.rx-mini-cart__cta--blue {
+	min-height: calc( 3.125rem * var( --rx-mc-scale ) );
+	background: var( --rx-color-blue );
+}
+.rx-mini-cart__cta:hover,
+.rx-mini-cart__cta:focus-visible {
+	filter: brightness( 1.15 );
+}
+.rx-mini-cart__trust {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: calc( 0.25rem * var( --rx-mc-scale ) );
+	margin: 0;
+	font-size: calc( 0.65625rem * var( --rx-mc-scale ) );
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: #555;
+}
+.rx-mini-cart__slot-icon svg {
+	width: calc( 1.25rem * var( --rx-mc-scale ) );
+	height: calc( 1.25rem * var( --rx-mc-scale ) );
+}
+.rx-mini-cart__trust svg {
+	width: calc( 0.75rem * var( --rx-mc-scale ) );
+	height: calc( 0.75rem * var( --rx-mc-scale ) );
+	color: var( --rx-color-blue );
+}
+
+/* Logged-in: start below the WordPress admin bar (32px, 46px under 783px;
+   under 600px the bar scrolls away, so the sheet keeps the full screen). */
+@media ( min-width: 600px ) {
+	.admin-bar .rx-mini-cart {
+		top: 46px;
+		height: calc( 100dvh - 46px );
+	}
+}
+@media ( min-width: 40em ) {
+	.admin-bar .rx-mini-cart {
+		height: auto;
+		max-height: calc( 100dvh - 46px );
+	}
+}
+@media ( min-width: 783px ) {
+	.admin-bar .rx-mini-cart {
+		top: 32px;
+		max-height: calc( 100dvh - 32px );
 	}
 }

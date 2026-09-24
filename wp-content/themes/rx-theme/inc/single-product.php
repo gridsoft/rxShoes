@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * template-parts/product/variation-swatch-rows.php).
  */
 function rx_theme_enqueue_variation_swatches_script(): void {
-	if ( ! is_product() && ! is_page( 'build-a-bundle' ) ) {
+	if ( ! is_product() && ! is_page( 'build-a-bundle' ) && ! is_cart() ) {
 		return;
 	}
 

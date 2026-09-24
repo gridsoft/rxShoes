@@ -31,6 +31,8 @@ require RX_THEME_DIR . '/inc/brand-tiles.php';
 require RX_THEME_DIR . '/inc/community.php';
 require RX_THEME_DIR . '/inc/best-sellers.php';
 require RX_THEME_DIR . '/inc/bundle-builder.php';
+require RX_THEME_DIR . '/inc/mini-cart.php';
+require RX_THEME_DIR . '/inc/cart-page.php';
 
 /**
  * Theme setup: supports, menus, image sizes.

@@ -101,9 +101,9 @@ $rx_theme_header_max_pack = rx_theme_format_percent( rx_theme_bundle_max_discoun
 				<a class="rx-icon-link rx-icon-link--account" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php esc_attr_e( 'My account', 'rx-theme' ); ?>">
 					<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
 				</a>
-				<a class="rx-icon-link rx-icon-link--cart" href="<?php echo esc_url( wc_get_cart_url() ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'rx-theme' ); ?>">
+				<a class="rx-icon-link rx-icon-link--cart" href="<?php echo esc_url( wc_get_cart_url() ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'rx-theme' ); ?>"<?php echo rx_theme_mini_cart_enabled() ? ' aria-controls="rx-mini-cart" aria-expanded="false"' : ''; ?>>
 					<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8V6a6 6 0 0 1 12 0v2"/><rect width="18" height="13" x="3" y="8" rx="2"/></svg>
-					<span class="rx-icon-link__count"><?php echo esc_html( WC()->cart ? WC()->cart->get_cart_contents_count() : 0 ); ?></span>
+					<?php echo rx_theme_mini_cart_count_badge(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>
 				</a>
 			<?php endif; ?>
 		</div>

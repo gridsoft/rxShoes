@@ -160,6 +160,26 @@ $rx_theme_size_equiv = rx_theme_product_size_equivalent_line( $product );
 			}
 			?>
 		</div>
+
+		<?php
+		/*
+		 * The product's own description (client request, 2026-09-24):
+		 * under the gallery on desktop (grid, see style.css), after the
+		 * summary on phones so it never pushes size/add-to-cart down.
+		 * Formatted the way WooCommerce's description tab does
+		 * (wc_format_content), minus the stray leading &nbsp; some
+		 * imported descriptions start with.
+		 */
+		$rx_theme_description = preg_replace( '/^(\s|&nbsp;|\xc2\xa0)+/u', '', (string) $product->get_description() );
+		?>
+		<?php if ( '' !== trim( $rx_theme_description ) ) : ?>
+			<section class="rx-single-product__description" aria-labelledby="rx-product-details-title">
+				<h2 id="rx-product-details-title" class="rx-single-product__description-title"><?php esc_html_e( 'Product details', 'rx-theme' ); ?></h2>
+				<div class="rx-single-product__description-body">
+					<?php echo wc_format_content( wp_kses_post( $rx_theme_description ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses'd above; wc_format_content() only adds paragraphs/shortcodes, as in WooCommerce's description tab. ?>
+				</div>
+			</section>
+		<?php endif; ?>
 	</div>
 
 	<?php if ( $rx_theme_is_bundle ) : ?>

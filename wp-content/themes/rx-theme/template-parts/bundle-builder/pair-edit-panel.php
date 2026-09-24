@@ -40,6 +40,15 @@
  * rx_theme_bundle_builder_cart_buckets()['eligible'], for case 1) OR
  * $args['product'] (a WC_Product_Variable, for case 2).
  *
+ * Optional, for reuse outside the bundle builder (the cart page's
+ * "Edit size / colour" dialog, inc/cart-page.php): $args['form_action']
+ * (where the form posts — default: the product page with
+ * rx_add_to_rotation=1, which redirects back to /build-a-bundle/),
+ * $args['button_text'] (confirm label — default "Confirm Pair N in
+ * rotation") and $args['id_prefix'] (swatch input IDs, must be unique
+ * on the page), $args['form_id'] (render inside another form: see the
+ * form_id branch at the form below).
+ *
  * @package RX_Theme
  */
 
@@ -61,7 +70,14 @@ $rx_theme_attributes           = rx_theme_order_variation_attributes( $rx_theme_
 $rx_theme_available_variations = $rx_theme_parent->get_available_variations();
 $rx_theme_variations_json      = wp_json_encode( $rx_theme_available_variations );
 $rx_theme_variations_attr      = function_exists( 'wc_esc_json' ) ? wc_esc_json( $rx_theme_variations_json ) : _wp_specialchars( $rx_theme_variations_json, ENT_QUOTES, 'UTF-8', true );
-$rx_theme_id_prefix            = ( $rx_theme_is_editing ? 'rx-pair-edit-' : 'rx-pair-add-' ) . $rx_theme_pair . '-';
+$rx_theme_id_prefix            = $args['id_prefix'] ?? ( ( $rx_theme_is_editing ? 'rx-pair-edit-' : 'rx-pair-add-' ) . $rx_theme_pair . '-' );
+$rx_theme_form_action          = $args['form_action'] ?? add_query_arg( 'rx_add_to_rotation', '1', $rx_theme_parent->get_permalink() );
+$rx_theme_form_id              = (string) ( $args['form_id'] ?? '' );
+$rx_theme_button_text          = $args['button_text'] ?? sprintf(
+	/* translators: %d: pair number. */
+	__( 'Confirm Pair %d in rotation', 'rx-theme' ),
+	$rx_theme_pair
+);
 
 /**
  * Editing: what's actually in the cart right now for this line —
@@ -87,16 +103,12 @@ if ( $rx_theme_is_editing ) {
  */
 add_filter(
 	'woocommerce_product_single_add_to_cart_text',
-	static function ( string $text, $filtered_product ) use ( $rx_theme_parent, $rx_theme_pair ): string {
+	static function ( string $text, $filtered_product ) use ( $rx_theme_parent, $rx_theme_button_text ): string {
 		if ( $filtered_product->get_id() !== $rx_theme_parent->get_id() ) {
 			return $text;
 		}
 
-		return sprintf(
-			/* translators: %d: pair number. */
-			__( 'Confirm Pair %d in rotation', 'rx-theme' ),
-			$rx_theme_pair
-		);
+		return $rx_theme_button_text;
 	},
 	20,
 	2
@@ -131,7 +143,21 @@ $product                          = $rx_theme_parent; // phpcs:ignore WordPress.
 		<?php endif; ?>
 	</div>
 
-	<form class="variations_form cart" action="<?php echo esc_url( add_query_arg( 'rx_add_to_rotation', '1', $rx_theme_parent->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data" data-product_id="<?php echo absint( $rx_theme_parent->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
+	<?php if ( $rx_theme_form_id ) : ?>
+		<?php
+		/*
+		 * Inside another form (the cart page): a <div> with the same
+		 * variations_form class/data WooCommerce's variation script binds
+		 * to, and every field is tied to the external <form id="…"> via the
+		 * form attribute (added below), so nothing here is ever submitted
+		 * with the cart form — and the confirm button submits only this.
+		 */
+		ob_start();
+		?>
+		<div class="variations_form cart" data-product_id="<?php echo absint( $rx_theme_parent->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
+	<?php else : ?>
+	<form class="variations_form cart" action="<?php echo esc_url( $rx_theme_form_action ); ?>" method="post" enctype="multipart/form-data" data-product_id="<?php echo absint( $rx_theme_parent->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
+	<?php endif; ?>
 		<?php if ( $rx_theme_is_editing ) : ?>
 			<input type="hidden" name="rx_bundle_replace_key" value="<?php echo esc_attr( $rx_theme_entry['key'] ); ?>">
 			<?php wp_nonce_field( 'rx_bundle_replace_' . $rx_theme_entry['key'], 'rx_bundle_replace_nonce' ); ?>
@@ -176,7 +202,15 @@ $product                          = $rx_theme_parent; // phpcs:ignore WordPress.
 				</div>
 			</div>
 		</div>
+	<?php if ( $rx_theme_form_id ) : ?>
+		</div>
+		<?php
+		// Tie every field (swatches, hidden add-to-cart inputs, quantity, confirm button) to the external form.
+		echo preg_replace( '/<(input|select|button|textarea)\b(?![^>]*\sform=)/i', '<$1 form="' . esc_attr( $rx_theme_form_id ) . '"', (string) ob_get_clean() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped above; only a form attribute is added.
+		?>
+	<?php else : ?>
 	</form>
+	<?php endif; ?>
 </div>
 <?php
 $product = $rx_theme_previous_global_product; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- restoring WooCommerce's global.

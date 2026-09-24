@@ -220,6 +220,131 @@ function rx_theme_bundle_builder_configured_colour( array $cart_item ): ?WP_Term
 }
 
 /**
+ * The short detail parts shown under a cart line's name in the mini cart
+ * and the checkout order review: "Size: US M5 / W6.5", the colour name,
+ * and "Qty N" when more than one. Falls back to the raw variation summary
+ * for attributes other than size/colour.
+ *
+ * @param array $cart_item   One WC()->cart->get_cart() entry.
+ * @param bool  $include_qty Add "Qty N" when the quantity is above 1.
+ * @return string[]
+ */
+function rx_theme_cart_item_details( array $cart_item, bool $include_qty = true ): array {
+	$rx_theme_details = array();
+	$rx_theme_size    = rx_theme_bundle_builder_configured_size( $cart_item );
+	$rx_theme_colour  = rx_theme_bundle_builder_configured_colour( $cart_item );
+
+	if ( $rx_theme_size ) {
+		/* translators: %s: chosen size. */
+		$rx_theme_details[] = sprintf( __( 'Size: %s', 'rx-theme' ), $rx_theme_size );
+	}
+	if ( $rx_theme_colour ) {
+		$rx_theme_details[] = $rx_theme_colour->name;
+	}
+	if ( ! $rx_theme_details ) {
+		$rx_theme_summary = rx_theme_bundle_builder_variation_summary( $cart_item );
+		if ( $rx_theme_summary ) {
+			$rx_theme_details[] = $rx_theme_summary;
+		}
+	}
+	if ( $include_qty && (int) $cart_item['quantity'] > 1 ) {
+		/* translators: %d: quantity. */
+		$rx_theme_details[] = sprintf( __( 'Qty %d', 'rx-theme' ), (int) $cart_item['quantity'] );
+	}
+
+	return $rx_theme_details;
+}
+
+/**
+ * "Pair 1: Agility • Barefoot Training" — a rotation pair's label, from
+ * the product's "Best for" terms (falling back to its type label, then to
+ * just "Pair N").
+ *
+ * @param WC_Product $product     The pair's parent product.
+ * @param int        $pair_number 1-based position in the rotation.
+ */
+function rx_theme_bundle_pair_label( WC_Product $product, int $pair_number ): string {
+	$rx_theme_label = rx_theme_product_best_for( $product );
+	$rx_theme_label = $rx_theme_label ? $rx_theme_label : rx_theme_product_type_label( $product );
+	/* translators: %d: pair number. */
+	$rx_theme_pair = sprintf( __( 'Pair %d', 'rx-theme' ), $pair_number );
+
+	if ( ! $rx_theme_label ) {
+		return $rx_theme_pair;
+	}
+
+	/* translators: 1: "Pair N", 2: what the shoe is best for. */
+	return sprintf( __( '%1$s: %2$s', 'rx-theme' ), $rx_theme_pair, $rx_theme_label );
+}
+
+/**
+ * Grouping data for the cart page and checkout order-review tables:
+ * rotation pairs first (in rotation order), then everything else, plus
+ * the rotation header's note ("2 pairs • 35% off applied").
+ *
+ * @return array{items: array<string,array>, pair_numbers: array<string,int>, rotation_note: string, tier_percent: float}
+ */
+function rx_theme_cart_grouping(): array {
+	$rx_theme_eligible     = rx_theme_bundle_builder_cart_buckets()['eligible'];
+	$rx_theme_totals       = rx_theme_bundle_builder_totals( $rx_theme_eligible );
+	$rx_theme_pair_numbers = array();
+
+	foreach ( $rx_theme_eligible as $rx_theme_index => $rx_theme_entry ) {
+		$rx_theme_pair_numbers[ $rx_theme_entry['key'] ] = $rx_theme_index + 1;
+	}
+
+	$rx_theme_items = WC()->cart ? WC()->cart->get_cart() : array();
+	if ( $rx_theme_pair_numbers ) {
+		// "+" (not array_merge) keeps the cart keys exactly as they are.
+		$rx_theme_items = array_intersect_key( $rx_theme_items, $rx_theme_pair_numbers ) + array_diff_key( $rx_theme_items, $rx_theme_pair_numbers );
+	}
+
+	if ( $rx_theme_totals['tier']['percent'] > 0 ) {
+		$rx_theme_note = sprintf(
+			/* translators: 1: pairs in the rotation, 2: discount percentage. */
+			_n( '%1$d pair • %2$s%% off applied', '%1$d pairs • %2$s%% off applied', $rx_theme_totals['pairs_count'], 'rx-theme' ),
+			$rx_theme_totals['pairs_count'],
+			rx_theme_format_percent( $rx_theme_totals['tier']['percent'] )
+		);
+	} else {
+		$rx_theme_note = sprintf(
+			/* translators: %s: 2-pack discount percentage. */
+			__( '1 pair • add 1 more for %s%% off', 'rx-theme' ),
+			rx_theme_format_percent( rx_theme_bundle_two_pack_discount_percent() )
+		);
+	}
+
+	return array(
+		'items'         => $rx_theme_items,
+		'pair_numbers'  => $rx_theme_pair_numbers,
+		'rotation_note' => $rx_theme_note,
+		'tier_percent'  => (float) $rx_theme_totals['tier']['percent'],
+	);
+}
+
+/**
+ * Non-attribute item data other plugins add to a cart line
+ * (woocommerce_get_item_data), normalised the same way
+ * wc_get_formatted_cart_item_data() does. The variation attributes
+ * themselves are left out — the "Size • Colour" line already shows them.
+ *
+ * @param array $cart_item One WC()->cart->get_cart() entry.
+ * @return array<int,array{key:string,display:string}>
+ */
+function rx_theme_cart_item_extra_data( array $cart_item ): array {
+	$rx_theme_extra = array();
+
+	foreach ( (array) apply_filters( 'woocommerce_get_item_data', array(), $cart_item ) as $rx_theme_data ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core filter.
+		$rx_theme_extra[] = array(
+			'key'     => $rx_theme_data['key'] ?? ( $rx_theme_data['name'] ?? '' ),
+			'display' => $rx_theme_data['display'] ?? ( $rx_theme_data['value'] ?? '' ),
+		);
+	}
+
+	return $rx_theme_extra;
+}
+
+/**
  * "Men's Series" / "Women's Series" / "Unisex Series" — the same real
  * product_cat gender term rx_theme_product_gender_label() already reads,
  * just grammatically formatted for this page's card header.
@@ -479,9 +604,67 @@ function rx_theme_bundle_builder_swap_variation( string $cart_item_key ): void {
 		return;
 	}
 
+	/*
+	 * Keep the pair's place in the rotation: WooCommerce appends the new
+	 * line at the end, so an edited Pair 1 would otherwise come back as
+	 * the last pair. Move it to right after the line it replaces, then
+	 * remove that line.
+	 */
+	$rx_theme_contents = WC()->cart->get_cart_contents();
+	$rx_theme_new_item = $rx_theme_contents[ $cart_item_key ] ?? null;
+
+	if ( $rx_theme_new_item ) {
+		unset( $rx_theme_contents[ $cart_item_key ] );
+		$rx_theme_ordered = array();
+
+		foreach ( $rx_theme_contents as $rx_theme_key => $rx_theme_item ) {
+			$rx_theme_ordered[ $rx_theme_key ] = $rx_theme_item;
+
+			if ( $rx_theme_key === $rx_theme_replace_key ) {
+				$rx_theme_ordered[ $cart_item_key ] = $rx_theme_new_item;
+			}
+		}
+
+		WC()->cart->set_cart_contents( $rx_theme_ordered );
+	}
+
 	WC()->cart->remove_cart_item( $rx_theme_replace_key );
 }
 add_action( 'woocommerce_add_to_cart', 'rx_theme_bundle_builder_swap_variation' );
+
+/**
+ * "Size / colour updated for “Puma Fuse 3.0”." instead of WooCommerce's
+ * "… has been added to your cart" when the add was really an edit-panel
+ * swap (same nonce check as rx_theme_bundle_builder_swap_variation()) —
+ * the shopper changed a pair, they didn't add one.
+ *
+ * @param string    $message  Default notice HTML.
+ * @param int|array $products Product ID(s) added, keyed by ID => quantity.
+ */
+function rx_theme_bundle_builder_swap_message( $message, $products ) {
+	$rx_theme_replace_key = isset( $_REQUEST['rx_bundle_replace_key'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['rx_bundle_replace_key'] ) ) : '';
+	$rx_theme_nonce       = isset( $_REQUEST['rx_bundle_replace_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['rx_bundle_replace_nonce'] ) ) : '';
+
+	if ( '' === $rx_theme_replace_key || ! wp_verify_nonce( $rx_theme_nonce, 'rx_bundle_replace_' . $rx_theme_replace_key ) ) {
+		return $message;
+	}
+
+	$rx_theme_ids     = is_array( $products ) ? array_keys( $products ) : array( $products );
+	$rx_theme_product = wc_get_product( (int) reset( $rx_theme_ids ) );
+
+	if ( ! $rx_theme_product ) {
+		return $message;
+	}
+
+	return esc_html(
+		sprintf(
+			/* translators: %s: product name. */
+			__( 'Size / colour updated for “%s”.', 'rx-theme' ),
+			$rx_theme_product->get_name()
+		)
+	);
+}
+add_filter( 'wc_add_to_cart_message_html', 'rx_theme_bundle_builder_swap_message', 10, 2 );
 
 /**
  * The real bundle discount — a negative WC_Cart fee applied whenever the

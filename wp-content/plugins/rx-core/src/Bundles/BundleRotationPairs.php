@@ -187,8 +187,8 @@ final class BundleRotationPairs implements Service {
 		);
 		$new_ids = array_filter( array( $pair_2_id, $pair_3_id ) );
 
-		$product->update_meta_data( self::PAIR_2_KEY, $pair_2_id );
-		$product->update_meta_data( self::PAIR_3_KEY, $pair_3_id );
+		$product->update_meta_data( self::PAIR_2_KEY, (string) $pair_2_id );
+		$product->update_meta_data( self::PAIR_3_KEY, (string) $pair_3_id );
 
 		$this->sync_reciprocal_links( $product->get_id(), $old_ids, $new_ids );
 	}
@@ -225,9 +225,9 @@ final class BundleRotationPairs implements Service {
 			}
 
 			if ( ! $partner_pair_2 ) {
-				$partner->update_meta_data( self::PAIR_2_KEY, $product_id );
+				$partner->update_meta_data( self::PAIR_2_KEY, (string) $product_id );
 			} elseif ( ! $partner_pair_3 ) {
-				$partner->update_meta_data( self::PAIR_3_KEY, $product_id );
+				$partner->update_meta_data( self::PAIR_3_KEY, (string) $product_id );
 			} else {
 				continue; // Both of the partner's slots are already someone else's choice.
 			}
@@ -245,11 +245,11 @@ final class BundleRotationPairs implements Service {
 			$changed = false;
 
 			if ( $product_id === (int) $partner->get_meta( self::PAIR_2_KEY ) ) {
-				$partner->update_meta_data( self::PAIR_2_KEY, 0 );
+				$partner->update_meta_data( self::PAIR_2_KEY, '0' );
 				$changed = true;
 			}
 			if ( $product_id === (int) $partner->get_meta( self::PAIR_3_KEY ) ) {
-				$partner->update_meta_data( self::PAIR_3_KEY, 0 );
+				$partner->update_meta_data( self::PAIR_3_KEY, '0' );
 				$changed = true;
 			}
 

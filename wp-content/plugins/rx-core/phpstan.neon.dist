@@ -7,11 +7,13 @@ parameters:
         - tests
     bootstrapFiles:
         - vendor/autoload.php
-    # WooCommerce isn't a Composer dependency of this plugin (it's a
-    # runtime requirement), so its symbols come from the stubs package.
+        - tests/phpstan-bootstrap.php
+    # WooCommerce and WP-CLI aren't Composer dependencies of this plugin
+    # (they're runtime environment), so their symbols come from stubs.
     scanFiles:
         - vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
         - vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
 
 includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon

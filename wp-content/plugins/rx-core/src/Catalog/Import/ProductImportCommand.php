@@ -77,7 +77,7 @@ final class ProductImportCommand implements Service {
 			return;
 		}
 
-		$data = json_decode( (string) file_get_contents( $file ), true );
+		$data = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file path passed to a CLI command, not a URL.
 
 		if ( ! is_array( $data ) || ! isset( $data['products'] ) ) {
 			WP_CLI::error( 'File is not valid products.json (missing "products" key).' );
@@ -88,12 +88,12 @@ final class ProductImportCommand implements Service {
 		$only_handle = $assoc_args['handle'] ?? null;
 
 		$stats = array(
-			'products_created'    => 0,
-			'products_updated'    => 0,
-			'products_skipped'    => 0,
-			'variations_created'  => 0,
-			'variations_updated'  => 0,
-			'variations_skipped'  => 0,
+			'products_created'   => 0,
+			'products_updated'   => 0,
+			'products_skipped'   => 0,
+			'variations_created' => 0,
+			'variations_updated' => 0,
+			'variations_skipped' => 0,
 		);
 
 		foreach ( $data['products'] as $product_row ) {
@@ -120,14 +120,14 @@ final class ProductImportCommand implements Service {
 	/**
 	 * Create or update one product and its variations.
 	 *
-	 * @param array<string,mixed>    $row   Normalized product row.
-	 * @param bool                   $dry_run Whether to skip writes.
-	 * @param array<string,int>      $stats Running counters, by reference.
+	 * @param array<string,mixed> $row   Normalized product row.
+	 * @param bool                $dry_run Whether to skip writes.
+	 * @param array<string,int>   $stats Running counters, by reference.
 	 */
 	private function import_product( array $row, bool $dry_run, array &$stats ): void {
-		$handle = $row['handle'];
+		$handle      = $row['handle'];
 		$existing_id = $this->find_product_id_by_handle( $handle );
-		$is_new = null === $existing_id;
+		$is_new      = null === $existing_id;
 
 		WP_CLI::log( ( $is_new ? 'CREATE' : 'UPDATE' ) . " {$handle} — {$row['title']} ({$row['variant_attr_mode']}, " . count( $row['variants'] ) . ' variants)' );
 
@@ -161,21 +161,21 @@ final class ProductImportCommand implements Service {
 		// Collect the distinct colour/size term slugs this product needs,
 		// creating any missing terms in the global pa_colour / pa_size
 		// attribute taxonomies.
-		$colour_slugs = array();
-		$size_slugs   = array();
+		$colour_slugs         = array();
+		$size_slugs           = array();
 		$colour_slug_by_value = array();
 		$size_slug_by_value   = array();
 
 		foreach ( $row['variants'] as $variant ) {
 			if ( ! empty( $variant['colour'] ) ) {
-				$slug = $this->get_or_create_attribute_term( 'pa_colour', $variant['colour'] );
+				$slug                                       = $this->get_or_create_attribute_term( 'pa_colour', $variant['colour'] );
 				$colour_slug_by_value[ $variant['colour'] ] = $slug;
-				$colour_slugs[ $slug ] = true;
+				$colour_slugs[ $slug ]                      = true;
 			}
 			if ( ! empty( $variant['size'] ) ) {
-				$slug = $this->get_or_create_attribute_term( 'pa_size', $variant['size'] );
+				$slug                                   = $this->get_or_create_attribute_term( 'pa_size', $variant['size'] );
 				$size_slug_by_value[ $variant['size'] ] = $slug;
-				$size_slugs[ $slug ] = true;
+				$size_slugs[ $slug ]                    = true;
 			}
 		}
 
@@ -249,14 +249,14 @@ final class ProductImportCommand implements Service {
 	/**
 	 * Create or update a single variation, matched by SKU.
 	 *
-	 * @param int                  $product_id  Parent product ID.
-	 * @param array<string,mixed>  $variant     Variant row.
-	 * @param string               $colour_slug Resolved pa_colour term slug, or ''.
-	 * @param string               $size_slug   Resolved pa_size term slug, or ''.
-	 * @param array<string,int>    $stats       Running counters, by reference.
+	 * @param int                 $product_id  Parent product ID.
+	 * @param array<string,mixed> $variant     Variant row.
+	 * @param string              $colour_slug Resolved pa_colour term slug, or ''.
+	 * @param string              $size_slug   Resolved pa_size term slug, or ''.
+	 * @param array<string,int>   $stats       Running counters, by reference.
 	 */
 	private function import_variation( int $product_id, array $variant, string $colour_slug, string $size_slug, array &$stats ): void {
-		$sku = (string) $variant['sku'];
+		$sku          = (string) $variant['sku'];
 		$variation_id = wc_get_product_id_by_sku( $sku );
 
 		if ( $variation_id && (int) wp_get_post_parent_id( $variation_id ) !== $product_id ) {
@@ -367,6 +367,8 @@ final class ProductImportCommand implements Service {
 	 *    half elsewhere, so appear as pairs, not bare — see the importer's
 	 *    Option1/Option2 pairing in normalize.py.
 	 *
+	 * @param string $size   One variant's size string from the sheet.
+	 * @param string $gender Product gender slug: 'men', 'women' or 'unisex'.
 	 * @return array{0:?string,1:?string} [mens_value, womens_value].
 	 */
 	private function parse_size_filter_values( string $size, string $gender ): array {
@@ -389,6 +391,10 @@ final class ProductImportCommand implements Service {
 	/**
 	 * Find or create a term in a global product-attribute taxonomy
 	 * (pa_colour, pa_size), returning its slug.
+	 *
+	 * @param string $taxonomy Attribute taxonomy, e.g. 'pa_colour'.
+	 * @param string $value    Term name.
+	 * @return string Term slug, or '' if it couldn't be created.
 	 */
 	private function get_or_create_attribute_term( string $taxonomy, string $value ): string {
 		$term = get_term_by( 'name', $value, $taxonomy );
@@ -412,6 +418,9 @@ final class ProductImportCommand implements Service {
 	/**
 	 * Assign the WooCommerce Brands term for a Vendor name, creating it if
 	 * it doesn't already exist.
+	 *
+	 * @param int         $product_id Product to assign the brand to.
+	 * @param string|null $brand      Vendor name from the sheet.
 	 */
 	private function assign_brand( int $product_id, ?string $brand ): void {
 		if ( ! $brand || ! taxonomy_exists( 'product_brand' ) ) {
@@ -434,6 +443,10 @@ final class ProductImportCommand implements Service {
 	 * Assign product categories: the Collection (model line) plus the
 	 * Men/Women/Unisex gender term, both in product_cat, both created on
 	 * demand except gender which always pre-exists on this site.
+	 *
+	 * @param int         $product_id Product to categorise.
+	 * @param string|null $collection Collection (model line) name.
+	 * @param string      $gender     Gender category slug.
 	 */
 	private function assign_categories( int $product_id, ?string $collection, string $gender ): void {
 		$term_ids = array();
@@ -446,7 +459,7 @@ final class ProductImportCommand implements Service {
 		if ( $collection ) {
 			$collection_term = get_term_by( 'name', $collection, 'product_cat' );
 			if ( ! $collection_term ) {
-				$result = wp_insert_term( $collection, 'product_cat' );
+				$result          = wp_insert_term( $collection, 'product_cat' );
 				$collection_term = is_wp_error( $result ) ? null : get_term( $result['term_id'], 'product_cat' );
 			}
 			if ( $collection_term ) {
@@ -462,6 +475,9 @@ final class ProductImportCommand implements Service {
 	/**
 	 * Look up an existing product by the import Handle we stamped on it
 	 * last time this command ran.
+	 *
+	 * @param string $handle Import Handle from the sheet.
+	 * @return int|null Product ID, or null if not imported before.
 	 */
 	private function find_product_id_by_handle( string $handle ): ?int {
 		$posts = get_posts(
@@ -480,6 +496,8 @@ final class ProductImportCommand implements Service {
 
 	/**
 	 * Parse a price string from the spreadsheet into a float, or null.
+	 *
+	 * @param mixed $raw Price cell value.
 	 */
 	private function to_price( $raw ): ?float {
 		if ( null === $raw || '' === $raw ) {

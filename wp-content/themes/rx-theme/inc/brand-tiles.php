@@ -43,7 +43,9 @@ function rx_theme_brands_with_products(): array {
 			usort(
 				$terms,
 				static function ( WP_Term $a, WP_Term $b ): int {
-					return $b->count <=> $a->count ?: strnatcasecmp( $a->name, $b->name );
+					$rx_theme_by_count = $b->count <=> $a->count;
+
+					return 0 !== $rx_theme_by_count ? $rx_theme_by_count : strnatcasecmp( $a->name, $b->name );
 				}
 			);
 			$brands = $terms;

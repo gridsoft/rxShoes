@@ -48,7 +48,17 @@ $rx_theme_tiles = array_slice( $rx_theme_all_brands, 0, 7 );
 			<li>
 				<a class="rx-brand-tile" href="<?php echo esc_url( get_term_link( $rx_theme_brand ) ); ?>">
 					<?php if ( $rx_theme_logo_id ) : ?>
-						<?php echo wp_get_attachment_image( $rx_theme_logo_id, 'medium', false, array( 'class' => 'rx-brand-tile__logo', 'alt' => $rx_theme_brand->name ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core-generated <img>. ?>
+						<?php
+						echo wp_get_attachment_image(
+							$rx_theme_logo_id,
+							'medium',
+							false,
+							array(
+								'class' => 'rx-brand-tile__logo',
+								'alt'   => $rx_theme_brand->name,
+							)
+						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core-generated <img>. 
+						?>
 					<?php else : ?>
 						<span class="rx-brand-tile__name"><?php echo esc_html( $rx_theme_brand->name ); ?></span>
 					<?php endif; ?>

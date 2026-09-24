@@ -65,6 +65,9 @@ final class SizeFilterAttributes implements Service {
 
 	/**
 	 * Create one global attribute taxonomy if missing.
+	 *
+	 * @param string $slug  Attribute slug (without the pa_ prefix).
+	 * @param string $label Attribute label shown in admin.
 	 */
 	private function ensure_attribute( string $slug, string $label ): void {
 		if ( ! function_exists( 'wc_attribute_taxonomy_id_by_name' ) ) {

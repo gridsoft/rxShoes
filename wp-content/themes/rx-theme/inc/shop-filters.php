@@ -69,15 +69,17 @@ function rx_theme_shop_sort_labels( array $options ): array {
 }
 add_filter( 'woocommerce_catalog_orderby', 'rx_theme_shop_sort_labels' );
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Reading the current filter state
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * Which size mode is in play (?rx_size_mode=men|women|eu), or '' for the
  * plain unisex pa_size list (the default, unchanged behaviour).
  *
- * pa_mens-size / pa_womens-size are filter-only facets (never a variation
+ * The pa_mens-size / pa_womens-size taxonomies are filter-only facets (never a variation
  * attribute — see RX\Core\Catalog\SizeFilterAttributes): picking a size
  * from them still buys the same pa_size variation, they just let a
  * shopper find it by their own sizing system instead of the combined
@@ -185,7 +187,12 @@ function rx_theme_shop_pa_size_slugs_matching( string $gender, string $value ): 
 	static $terms = null;
 
 	if ( null === $terms ) {
-		$found = taxonomy_exists( 'pa_size' ) ? get_terms( array( 'taxonomy' => 'pa_size', 'hide_empty' => false ) ) : array();
+		$found = taxonomy_exists( 'pa_size' ) ? get_terms(
+			array(
+				'taxonomy'   => 'pa_size',
+				'hide_empty' => false,
+			)
+		) : array();
 		$terms = is_wp_error( $found ) ? array() : $found;
 	}
 
@@ -301,9 +308,11 @@ function rx_theme_shop_filters_active(): bool {
 	return array() !== array_intersect_key( $_GET, array_flip( rx_theme_shop_sidebar_params() ) );
 }
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Applying the filters to the product query
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * Apply the two custom toggles to the main product query. (The size
@@ -394,9 +403,11 @@ function rx_theme_shop_products_with_sizes_in_stock( array $slugs ): array {
 	return array_values( array_unique( array_map( 'absint', wp_list_pluck( $query->posts, 'post_parent' ) ) ) );
 }
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Data for the bar
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * The archive's own URL with filters changed. The base is the current
@@ -594,7 +605,13 @@ function rx_theme_shop_size_clear_url(): string {
  */
 function rx_theme_shop_size_mode_options(): array {
 	$has_gendered_sizes = taxonomy_exists( 'pa_mens-size' ) || taxonomy_exists( 'pa_womens-size' );
-	$size_names         = taxonomy_exists( 'pa_size' ) ? get_terms( array( 'taxonomy' => 'pa_size', 'hide_empty' => true, 'fields' => 'names' ) ) : array();
+	$size_names         = taxonomy_exists( 'pa_size' ) ? get_terms(
+		array(
+			'taxonomy'   => 'pa_size',
+			'hide_empty' => true,
+			'fields'     => 'names',
+		)
+	) : array();
 	$has_eu_sizes       = ! is_wp_error( $size_names ) && (bool) array_filter(
 		$size_names,
 		static function ( string $name ): bool {
@@ -619,12 +636,21 @@ function rx_theme_shop_size_mode_options(): array {
 	$options = array();
 
 	if ( $has_gendered_sizes ) {
-		$options[] = array( 'label' => __( "Men's", 'rx-theme' ), 'mode' => 'men' );
-		$options[] = array( 'label' => __( "Women's", 'rx-theme' ), 'mode' => 'women' );
+		$options[] = array(
+			'label' => __( "Men's", 'rx-theme' ),
+			'mode'  => 'men',
+		);
+		$options[] = array(
+			'label' => __( "Women's", 'rx-theme' ),
+			'mode'  => 'women',
+		);
 	}
 
 	if ( $has_eu_sizes ) {
-		$options[] = array( 'label' => __( 'EU', 'rx-theme' ), 'mode' => 'eu' );
+		$options[] = array(
+			'label' => __( 'EU', 'rx-theme' ),
+			'mode'  => 'eu',
+		);
 	}
 
 	foreach ( $options as &$option ) {
@@ -641,9 +667,11 @@ function rx_theme_shop_size_mode_options(): array {
 	return $options;
 }
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Rendering
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * Print the top of a product archive: the rotation-system strip, then

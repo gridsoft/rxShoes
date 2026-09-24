@@ -33,9 +33,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- template override: fires WooCommerce's own hooks by their core names.
+
 global $product;
 
-$attributes               = rx_theme_order_variation_attributes( $attributes );
+$attributes               = rx_theme_order_variation_attributes( $attributes ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's template variable, not a new global.
 $rx_theme_variations_json = wp_json_encode( $available_variations );
 $rx_theme_variations_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $rx_theme_variations_json ) : _wp_specialchars( $rx_theme_variations_json, ENT_QUOTES, 'UTF-8', true );
 
@@ -71,7 +73,7 @@ if ( $rx_theme_is_bundle ) {
 
 do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
-<form class="variations_form cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // WPCS: XSS ok. ?>">
+<form class="variations_form cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
 	<?php do_action( 'woocommerce_before_variations_form' ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>

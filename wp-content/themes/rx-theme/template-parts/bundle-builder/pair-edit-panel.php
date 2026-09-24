@@ -103,7 +103,7 @@ add_filter(
 );
 
 /**
- * woocommerce_single_variation_add_to_cart_button() (hooked to
+ * WooCommerce's woocommerce_single_variation_add_to_cart_button() (hooked to
  * woocommerce_single_variation at priority 20, called below) reads
  * `global $product` to build the button — this page's global $product
  * isn't set to any one product (it's not a single-product template), so
@@ -113,7 +113,7 @@ add_filter(
  */
 global $product;
 $rx_theme_previous_global_product = $product;
-$product                          = $rx_theme_parent;
+$product                          = $rx_theme_parent; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- WooCommerce's global, deliberately swapped and restored below.
 ?>
 <div class="rx-bundle-pair__edit-panel">
 	<div class="rx-bundle-pair__edit-panel-head">
@@ -131,7 +131,7 @@ $product                          = $rx_theme_parent;
 		<?php endif; ?>
 	</div>
 
-	<form class="variations_form cart" action="<?php echo esc_url( add_query_arg( 'rx_add_to_rotation', '1', $rx_theme_parent->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data" data-product_id="<?php echo absint( $rx_theme_parent->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // WPCS: XSS ok. ?>">
+	<form class="variations_form cart" action="<?php echo esc_url( add_query_arg( 'rx_add_to_rotation', '1', $rx_theme_parent->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data" data-product_id="<?php echo absint( $rx_theme_parent->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
 		<?php if ( $rx_theme_is_editing ) : ?>
 			<input type="hidden" name="rx_bundle_replace_key" value="<?php echo esc_attr( $rx_theme_entry['key'] ); ?>">
 			<?php wp_nonce_field( 'rx_bundle_replace_' . $rx_theme_entry['key'], 'rx_bundle_replace_nonce' ); ?>
@@ -167,9 +167,11 @@ $product                          = $rx_theme_parent;
 
 				<div class="single_variation_wrap rx-bundle-pair__edit-confirm">
 					<?php
+					// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce's own variation hooks, fired as the single-product form does.
 					do_action( 'woocommerce_before_single_variation' );
 					do_action( 'woocommerce_single_variation' );
 					do_action( 'woocommerce_after_single_variation' );
+					// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 					?>
 				</div>
 			</div>
@@ -177,4 +179,4 @@ $product                          = $rx_theme_parent;
 	</form>
 </div>
 <?php
-$product = $rx_theme_previous_global_product;
+$product = $rx_theme_previous_global_product; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- restoring WooCommerce's global.

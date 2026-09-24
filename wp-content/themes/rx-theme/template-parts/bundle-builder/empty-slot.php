@@ -43,11 +43,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$rx_theme_pair       = (int) ( $args['pair_number'] ?? 0 );
-$rx_theme_recommend  = $args['recommendation'] ?? null;
-$rx_theme_eligible   = $args['eligible_entries'] ?? array();
-$rx_theme_slot_tier  = rx_theme_bundle_builder_tier( $rx_theme_pair );
-$rx_theme_filled     = count( $rx_theme_eligible );
+$rx_theme_pair          = (int) ( $args['pair_number'] ?? 0 );
+$rx_theme_recommend     = $args['recommendation'] ?? null;
+$rx_theme_eligible      = $args['eligible_entries'] ?? array();
+$rx_theme_slot_tier     = rx_theme_bundle_builder_tier( $rx_theme_pair );
+$rx_theme_filled        = count( $rx_theme_eligible );
 $rx_theme_add_toggle_id = 'rx-pair-add-toggle-' . $rx_theme_pair;
 /**
  * "Browse shoe vault" has to land on bundle-eligible products only —
@@ -72,14 +72,14 @@ $rx_theme_vault_url = add_query_arg( 'rx_bundle', '1', wc_get_page_permalink( 's
 				printf(
 					/* translators: 1: pair number, 2: discount percentage this slot would unlock. */
 					esc_html__( 'Pair %1$d • Unlock %2$s%% off bundle', 'rx-theme' ),
-					$rx_theme_pair,
+					(int) $rx_theme_pair,
 					esc_html( rx_theme_format_percent( $rx_theme_slot_tier['percent'] ) )
 				);
 			} else {
 				printf(
 					/* translators: %d: pair number. */
 					esc_html__( 'Pair %d • Open slot', 'rx-theme' ),
-					$rx_theme_pair
+					(int) $rx_theme_pair
 				);
 			}
 			?>
@@ -141,7 +141,7 @@ $rx_theme_vault_url = add_query_arg( 'rx_bundle', '1', wc_get_page_permalink( 's
 									/* translators: 1: discounted item price, 2: total pairs this bundle would have. */
 									esc_html__( 'Only %1$s when added to this %2$d-bundle!', 'rx-theme' ),
 									esc_html( rx_theme_format_money( $rx_theme_pricing['item_price'], true ) ),
-									$rx_theme_filled + 1
+									(int) $rx_theme_filled + 1
 								);
 								?>
 							</p>

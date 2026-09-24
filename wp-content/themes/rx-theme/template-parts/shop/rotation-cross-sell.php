@@ -112,7 +112,7 @@ $rx_theme_tier_discounts = array(
 								/* translators: 1: discount percentage, 2: pair number. */
 								esc_html__( 'Unlock %1$s%% on all %2$d', 'rx-theme' ),
 								esc_html( rx_theme_format_percent( $rx_theme_discount ) ),
-								$rx_theme_pair_number
+								(int) $rx_theme_pair_number
 							);
 							?>
 						<?php endif; ?>
@@ -172,7 +172,7 @@ $rx_theme_tier_discounts = array(
 							printf(
 								/* translators: 1: pair number, 2: discount percentage. */
 								esc_html__( 'Add as pair %1$d (save %2$s%%)', 'rx-theme' ),
-								$rx_theme_pair_number,
+								(int) $rx_theme_pair_number,
 								esc_html( rx_theme_format_percent( $rx_theme_discount ) )
 							);
 							?>

@@ -54,12 +54,12 @@ add_filter(
 
 get_header();
 
-$rx_theme_buckets   = rx_theme_bundle_builder_cart_buckets();
-$rx_theme_eligible  = $rx_theme_buckets['eligible'];
-$rx_theme_other     = $rx_theme_buckets['other'];
-$rx_theme_totals    = rx_theme_bundle_builder_totals( $rx_theme_eligible );
-$rx_theme_two_pack  = rx_theme_bundle_two_pack_discount_percent();
-$rx_theme_max_pack  = rx_theme_bundle_max_discount_percent();
+$rx_theme_buckets  = rx_theme_bundle_builder_cart_buckets();
+$rx_theme_eligible = $rx_theme_buckets['eligible'];
+$rx_theme_other    = $rx_theme_buckets['other'];
+$rx_theme_totals   = rx_theme_bundle_builder_totals( $rx_theme_eligible );
+$rx_theme_two_pack = rx_theme_bundle_two_pack_discount_percent();
+$rx_theme_max_pack = rx_theme_bundle_max_discount_percent();
 /**
  * Only ever ONE empty slot rendered at a time — the next one to fill —
  * not every remaining slot at once. With 1 pair in the rotation, that's
@@ -76,9 +76,9 @@ $rx_theme_max_pack  = rx_theme_bundle_max_discount_percent();
  */
 $rx_theme_target_slots = max( 3, count( $rx_theme_eligible ) );
 $rx_theme_slots        = min( $rx_theme_target_slots, count( $rx_theme_eligible ) + 1 );
-$rx_theme_anchor    = $rx_theme_eligible ? end( $rx_theme_eligible )['parent'] : null;
-$rx_theme_in_cart   = wp_list_pluck( wp_list_pluck( $rx_theme_eligible, 'parent' ), 'id' );
-$rx_theme_recommend = rx_theme_bundle_builder_recommendation( $rx_theme_anchor, $rx_theme_in_cart );
+$rx_theme_anchor       = $rx_theme_eligible ? end( $rx_theme_eligible )['parent'] : null;
+$rx_theme_in_cart      = wp_list_pluck( wp_list_pluck( $rx_theme_eligible, 'parent' ), 'id' );
+$rx_theme_recommend    = rx_theme_bundle_builder_recommendation( $rx_theme_anchor, $rx_theme_in_cart );
 
 switch ( $rx_theme_totals['pairs_count'] ) {
 	case 0:
@@ -182,8 +182,8 @@ if ( $rx_theme_show_projected ) {
 				printf(
 					/* translators: 1: pairs added, 2: total pairs for the max tier. */
 					esc_html__( '%1$d of %2$d shoes locked', 'rx-theme' ),
-					min( $rx_theme_totals['pairs_count'], $rx_theme_target_slots ),
-					$rx_theme_target_slots
+					(int) min( $rx_theme_totals['pairs_count'], $rx_theme_target_slots ),
+					(int) $rx_theme_target_slots
 				);
 				?>
 				<span class="rx-bundle-builder__progress-note"><?php echo esc_html( $rx_theme_progress_note ); ?></span>
@@ -224,7 +224,7 @@ if ( $rx_theme_show_projected ) {
 						null,
 						array(
 							'pair_number'      => $rx_theme_i + 1,
-							'recommendation'   => $rx_theme_i === count( $rx_theme_eligible ) ? $rx_theme_recommend : null,
+							'recommendation'   => count( $rx_theme_eligible ) === $rx_theme_i ? $rx_theme_recommend : null,
 							'eligible_entries' => $rx_theme_eligible,
 						)
 					);

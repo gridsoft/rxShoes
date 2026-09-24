@@ -53,6 +53,9 @@ final class ColourSwatches implements Service {
 	 */
 	private const TAXONOMY = 'pa_colour';
 
+	/**
+	 * Hook the term meta registration, form fields and save handlers.
+	 */
 	public function register(): void {
 		add_action( 'init', array( $this, 'register_term_meta' ) );
 		add_action( self::TAXONOMY . '_add_form_fields', array( $this, 'render_add_fields' ) );
@@ -72,9 +75,9 @@ final class ColourSwatches implements Service {
 				self::TAXONOMY,
 				$key,
 				array(
-					'type'          => 'string',
-					'single'        => true,
-					'show_in_rest'  => true,
+					'type'              => 'string',
+					'single'            => true,
+					'show_in_rest'      => true,
 					'sanitize_callback' => array( self::class, 'sanitize_hex' ),
 				)
 			);
@@ -192,15 +195,18 @@ final class ColourSwatches implements Service {
 	}
 
 	/**
+	 * Save the swatch fields. Only called after check_admin_referer() in
+	 * save_on_create() / save_on_edit().
+	 *
 	 * @param int $term_id Term to save meta on.
 	 */
 	private function save_fields( int $term_id ): void {
 		foreach ( array_keys( $this->field_definitions() ) as $key ) {
-			if ( ! isset( $_POST[ $key ] ) ) {
+			if ( ! isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by both callers.
 				continue;
 			}
 
-			$value = self::sanitize_hex( wp_unslash( $_POST[ $key ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized on the next line via sanitize_hex().
+			$value = self::sanitize_hex( wp_unslash( $_POST[ $key ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce verified by both callers; sanitized via sanitize_hex().
 
 			if ( '' === $value ) {
 				delete_term_meta( $term_id, $key );

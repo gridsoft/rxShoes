@@ -165,7 +165,7 @@ function rx_theme_bundle_builder_variation_summary( array $cart_item ): string {
 			$rx_theme_term  = get_term_by( 'slug', $rx_theme_value, $rx_theme_taxonomy );
 			$rx_theme_value = ( $rx_theme_term && ! is_wp_error( $rx_theme_term ) ) ? $rx_theme_term->name : $rx_theme_value;
 		} else {
-			$rx_theme_value = apply_filters( 'woocommerce_variation_option_name', $rx_theme_value, null, $rx_theme_taxonomy, $rx_theme_product );
+			$rx_theme_value = apply_filters( 'woocommerce_variation_option_name', $rx_theme_value, null, $rx_theme_taxonomy, $rx_theme_product ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core filter, applied as core does.
 		}
 
 		if ( '' !== $rx_theme_value ) {
@@ -324,12 +324,12 @@ function rx_theme_bundle_builder_recommendation_pricing( array $eligible_entries
 	$rx_theme_combined_discounted = round( $rx_theme_combined_regular * ( 1 - $rx_theme_tier['percent'] / 100 ), 2 );
 
 	return array(
-		'item_price'              => $rx_theme_item,
-		'item_regular_price'      => $rx_theme_regular,
-		'tier_percent'            => $rx_theme_tier['percent'],
-		'combined_savings'        => round( $rx_theme_combined_regular - $rx_theme_combined_discounted, 2 ),
-		'combined_regular_total'  => round( $rx_theme_combined_regular, 2 ),
-		'combined_preview_total'  => $rx_theme_combined_discounted,
+		'item_price'             => $rx_theme_item,
+		'item_regular_price'     => $rx_theme_regular,
+		'tier_percent'           => $rx_theme_tier['percent'],
+		'combined_savings'       => round( $rx_theme_combined_regular - $rx_theme_combined_discounted, 2 ),
+		'combined_regular_total' => round( $rx_theme_combined_regular, 2 ),
+		'combined_preview_total' => $rx_theme_combined_discounted,
 	);
 }
 

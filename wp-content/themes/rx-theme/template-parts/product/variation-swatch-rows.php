@@ -47,9 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$rx_theme_product        = $args['product'] ?? null;
-$rx_theme_attributes     = $args['attributes'] ?? array();
-$rx_theme_id_prefix      = $args['id_prefix'] ?? '';
+$rx_theme_product         = $args['product'] ?? null;
+$rx_theme_attributes      = $args['attributes'] ?? array();
+$rx_theme_id_prefix       = $args['id_prefix'] ?? '';
 $rx_theme_selected_values = $args['selected_values'] ?? array();
 
 if ( ! $rx_theme_product instanceof WC_Product || ! $rx_theme_attributes ) {
@@ -78,8 +78,8 @@ $rx_theme_attribute_keys = array_keys( $rx_theme_attributes );
 	 * product's own generic default — so leaving $rx_theme_selected_values
 	 * empty (the single product page's case) behaves exactly as before.
 	 */
-	$rx_theme_request_key = 'attribute_' . sanitize_title( $rx_theme_attribute_name );
-	$rx_theme_default     = $rx_theme_selected_values[ $rx_theme_attribute_name ]
+	$rx_theme_request_key   = 'attribute_' . sanitize_title( $rx_theme_attribute_name );
+	$rx_theme_default       = $rx_theme_selected_values[ $rx_theme_attribute_name ]
 		?? ( isset( $_REQUEST[ $rx_theme_request_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $rx_theme_request_key ] ) ) : null ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- matches wc_dropdown_variation_attribute_options()'s own unnonced read of the same key; only affects which option is pre-selected, not any state change.
 		?? $rx_theme_product->get_variation_default_attribute( $rx_theme_attribute_name );
 	$rx_theme_selected_term = null;
@@ -125,7 +125,7 @@ $rx_theme_attribute_keys = array_keys( $rx_theme_attributes );
 					<?php endif; ?>
 				</label>
 				<?php if ( end( $rx_theme_attribute_keys ) === $rx_theme_attribute_name ) : ?>
-					<?php echo wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#" aria-label="' . esc_attr__( 'Clear options', 'woocommerce' ) . '">' . esc_html__( 'Clear', 'woocommerce' ) . '</a>' ) ); ?>
+					<?php echo wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#" aria-label="' . esc_attr__( 'Clear options', 'woocommerce' ) . '">' . esc_html__( 'Clear', 'woocommerce' ) . '</a>' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core filter. ?>
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>
@@ -148,7 +148,11 @@ $rx_theme_attribute_keys = array_keys( $rx_theme_attributes );
 		<?php if ( $rx_theme_terms && ! is_wp_error( $rx_theme_terms ) ) : ?>
 			<div class="rx-variation-swatches rx-variation-swatches--<?php echo esc_attr( $rx_theme_is_colour ? 'colour' : 'text' ); ?>" data-select-id="<?php echo esc_attr( $rx_theme_select_id ); ?>">
 				<?php foreach ( $rx_theme_terms as $rx_theme_term ) : ?>
-					<?php if ( ! in_array( $rx_theme_term->slug, $rx_theme_options, true ) ) : continue; endif; ?>
+					<?php
+					if ( ! in_array( $rx_theme_term->slug, $rx_theme_options, true ) ) :
+						continue;
+endif;
+					?>
 					<?php if ( $rx_theme_is_colour ) : ?>
 						<button type="button" class="rx-swatch-card" data-value="<?php echo esc_attr( $rx_theme_term->slug ); ?>" data-name="<?php echo esc_attr( $rx_theme_term->name ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $rx_theme_term->name ); ?>">
 							<span class="rx-swatch-card__box" style="<?php echo esc_attr( rx_theme_colour_swatch_style( $rx_theme_term ) . 'color:' . rx_theme_colour_swatch_label_color( $rx_theme_term ) . ';' ); ?>">

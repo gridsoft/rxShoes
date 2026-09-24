@@ -248,7 +248,7 @@ function rx_theme_variation_term_label( WP_Term $term ): string {
 }
 
 /**
- * pa_size terms, smallest to largest — wc_get_product_terms() otherwise
+ * The pa_size terms, smallest to largest — wc_get_product_terms() otherwise
  * returns them in the taxonomy's own (effectively alphabetical) term
  * order, which sorts "10" and "11" before "7", "8", "9" as strings. Reads
  * the leading number out of each term's name regardless of format (plain
@@ -359,7 +359,7 @@ function rx_theme_product_size_equivalent_line( WC_Product $product ): string {
 
 	return sprintf(
 		/* translators: 1: men's US size, 2: women's US size. */
-		__( "Mens US %1\$s = Womens US %2\$s", 'rx-theme' ),
+		__( 'Mens US %1$s = Womens US %2$s', 'rx-theme' ),
 		$matches[1],
 		$matches[2]
 	);
@@ -475,9 +475,9 @@ function rx_theme_rotation_related_products( WC_Product $product, int $limit ): 
  * @return array{item_price:float,item_regular_price:float,item_savings:float,combined_total:float,combined_regular_total:float}
  */
 function rx_theme_rotation_pair_data( WC_Product $current_product, array $pair_products, int $pair_index, float $discount_percent ): array {
-	$item             = $pair_products[ $pair_index - 2 ];
-	$item_regular     = rx_theme_product_price( $item );
-	$item_discounted  = round( $item_regular * ( 1 - $discount_percent / 100 ), 2 );
+	$item            = $pair_products[ $pair_index - 2 ];
+	$item_regular    = rx_theme_product_price( $item );
+	$item_discounted = round( $item_regular * ( 1 - $discount_percent / 100 ), 2 );
 
 	$regular_total = rx_theme_product_price( $current_product );
 	foreach ( array_slice( $pair_products, 0, $pair_index - 1 ) as $included ) {

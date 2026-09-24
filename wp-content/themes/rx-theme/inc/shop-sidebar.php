@@ -31,9 +31,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'woocommerce_before_shop_loop', 'rx_theme_open_shop_layout', 40 );
 add_action( 'woocommerce_after_shop_loop', 'rx_theme_close_shop_layout', 100 );
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Parameters and the product query
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * The taxonomy behind each sidebar facet, keyed by its query-string
@@ -98,9 +100,11 @@ function rx_theme_shop_apply_sidebar_filters( WP_Query $query ): void {
 }
 add_action( 'woocommerce_product_query', 'rx_theme_shop_apply_sidebar_filters' );
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Widget data
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * The options for one facet widget: the terms that at least one product
@@ -128,7 +132,7 @@ function rx_theme_shop_facet_options( string $param ): array {
 	$products = array();
 
 	foreach ( $rows as $row ) {
-		$terms[ $row->term_id ]                    = $row;
+		$terms[ $row->term_id ]                       = $row;
 		$products[ $row->term_id ][ $row->object_id ] = true;
 	}
 
@@ -259,9 +263,11 @@ function rx_theme_shop_facet_reset_url( string $param ): string {
 	return rx_theme_shop_url( array( $param => false ) );
 }
 
-/* ---------------------------------------------------------------------
+/*
+ * ---------------------------------------------------------------------
  * Layout and assets
- * ------------------------------------------------------------------ */
+ * ---------------------------------------------------------------------
+ */
 
 /**
  * Open the layout container, print the sidebar (when it has anything to

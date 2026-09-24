@@ -86,6 +86,7 @@ final class Plugin {
 			new Catalog\Import\ProductImportCommand(),
 			new Admin\ProductCardTab(),
 			new Admin\ProductCardCopyFields(),
+			new Admin\PerformanceProfileFields(),
 			new Bundles\BundleTab(),
 			new Bundles\BundleEligibility(),
 			new Bundles\BundleRotationPairs(),

@@ -2469,7 +2469,18 @@ a {
 .rx-single-product {
 	max-width: var( --rx-container-max );
 	margin-inline: auto;
-	padding: 1.5rem var( --rx-container-pad ) 3rem;
+	padding: 1.5rem 0 3rem; /* No side padding: the page wrapper (main.rx-shop) already has the container gutter — this doubled it. */
+}
+/* Same gray page as the cart, checkout and bundle builder (client
+   request, 2026-09-24); the white boxes on it (feature tiles,
+   performance profile, rotation box) read as cards. */
+body.single-product {
+	background: var( --rx-color-section );
+}
+/* Size buttons' light-gray fill nearly vanishes on the gray page: white
+   in their resting state only (hover / selected / sold-out unchanged). */
+body.single-product .rx-swatch--text:not( .is-active, .is-disabled, :hover ) {
+	background: var( --rx-color-white );
 }
 .rx-single-product__layout {
 	display: flex;
@@ -2498,6 +2509,104 @@ a {
 .rx-single-product__gallery .woocommerce-product-gallery__image img {
 	border-radius: var( --rx-radius-md );
 }
+/* Performance dispersion profile (template-parts/product/performance-
+   profile.php), in the PDP summary under "Best for", per the client's
+   reference: ratings as five dots + "N/5" (two columns when there's
+   room), then a divided row of specs. Only entered values render. */
+.rx-perf {
+	margin: 0 0 1.25rem;
+	padding: 1rem 1.25rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+}
+.rx-perf__title {
+	margin: 0 0 0.85rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-perf__ratings {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 12.5rem, 1fr ) );
+	gap: 0.5rem 2rem;
+	margin: 0;
+}
+.rx-perf__rating {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+.rx-perf__rating-label {
+	font-size: var( --rx-text-sm );
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #333;
+}
+.rx-perf__rating-value {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0;
+}
+.rx-perf__dots {
+	display: inline-flex;
+	gap: 3px;
+}
+.rx-perf__dot {
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 50%;
+	background: var( --rx-color-gray-200 );
+}
+.rx-perf__dot.is-on {
+	background: var( --rx-color-ink );
+}
+.rx-perf__score {
+	min-width: 1.6rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+	text-align: right;
+}
+.rx-perf__specs {
+	display: grid;
+	grid-auto-columns: minmax( 0, 1fr );
+	grid-auto-flow: column;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+}
+.rx-perf__ratings + .rx-perf__specs {
+	margin-top: 0.85rem;
+	padding-top: 0.85rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-perf__spec {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	min-width: 0;
+	text-transform: uppercase;
+}
+.rx-perf__spec-value {
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	color: var( --rx-color-ink );
+	overflow-wrap: anywhere;
+}
+.rx-perf__spec-label {
+	font-size: var( --rx-text-xs );
+	letter-spacing: 0.03em;
+	color: var( --rx-color-gray-600 );
+}
 /* Key feature tiles (template-parts/product/key-features.php) under the
    PDP gallery, per the client's reference: one white box, up to three
    centred columns split by hairlines — blue icon, condensed uppercase
@@ -2507,7 +2616,7 @@ a {
 	grid-auto-columns: minmax( 0, 1fr );
 	grid-auto-flow: column;
 	margin: 0;
-	padding: 1rem 0;
+	padding: 1.125rem 0 0.875rem; /* Figma: icon 18px from the top, 88px tall with one-line copy. */
 	list-style: none;
 	border: 1px solid var( --rx-color-gray-200 );
 	border-radius: var( --rx-radius-md );
@@ -2517,7 +2626,7 @@ a {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 0.2rem;
+	gap: 0.1rem;
 	padding: 0 0.75rem;
 	text-align: center;
 }
@@ -2525,21 +2634,23 @@ a {
 	border-left: 1px solid var( --rx-color-gray-200 );
 }
 .rx-key-features__icon {
-	margin-bottom: 0.25rem;
+	width: 1.1875rem;
+	height: 1.1875rem;
+	margin-bottom: 0.5rem;
 	color: var( --rx-color-blue );
 }
 .rx-key-features__title {
 	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-md );
+	font-size: 0.875rem;
 	font-weight: 700;
-	line-height: 1.15;
-	letter-spacing: 0.03em;
+	line-height: 1;
+	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	color: var( --rx-color-ink );
 }
 .rx-key-features__text {
-	font-size: var( --rx-text-sm );
-	line-height: 1.35;
+	font-size: 0.6875rem;
+	line-height: 1.2;
 	color: var( --rx-color-gray-600 );
 }
 /* Product description (woocommerce/content-single-product.php): under the
@@ -2743,6 +2854,135 @@ a {
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
 	color: var( --rx-color-ink );
+}
+
+/* Single product page, desktop — sizes and spacing measured from the
+   client's Figma PDP frame (1280px, saved as design-reference/
+   pdp-figma-1280.png, 2026-09-24): 684px gallery column | 40px gap |
+   476px summary; gallery image box 684x512 with a hairline border and
+   16px between gallery / feature tiles / description; brand 20px, title
+   48px, price 52px; "Best for" as a tinted box with the label stacked. */
+@media ( min-width: 62em ) {
+	.rx-single-product__description {
+		margin-top: 1.5rem;
+	}
+	.rx-single-product__gallery .woocommerce-product-gallery__image {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 684 / 512;
+		border: 1px solid var( --rx-color-gray-200 );
+		border-radius: var( --rx-radius-sm );
+		background: var( --rx-color-surface );
+		overflow: hidden;
+	}
+	.rx-single-product__gallery .woocommerce-product-gallery__image a {
+		display: contents;
+	}
+	.rx-single-product__gallery .woocommerce-product-gallery__image img {
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+		object-fit: contain;
+	}
+	.rx-single-product__gallery .flex-control-thumbs {
+		display: grid;
+		grid-template-columns: repeat( 5, minmax( 0, 1fr ) );
+		gap: 1rem;
+		margin: 1rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.rx-single-product__gallery .flex-control-thumbs img {
+		width: 100%;
+		aspect-ratio: 1;
+		border: 1px solid var( --rx-color-gray-200 );
+		background: var( --rx-color-surface );
+		object-fit: cover;
+		cursor: pointer;
+	}
+	.rx-single-product__gallery .flex-control-thumbs img.flex-active {
+		border: 2px solid var( --rx-color-ink );
+	}
+
+	.rx-single-product__brand {
+		margin: 0 0 0.9rem;
+		font-family: var( --rx-font-display );
+		font-size: 1.25rem;
+		font-weight: 500;
+		line-height: 1.1;
+		letter-spacing: 0.15em;
+		color: #555;
+	}
+	.rx-single-product__title {
+		margin: 0 0 1rem;
+		font-size: 3rem;
+		line-height: 1;
+	}
+	.rx-single-product__title-tail {
+		font-weight: 400;
+		color: #555;
+	}
+	.rx-single-product__model-line,
+	.rx-single-product__meta-row {
+		margin-bottom: 1.25rem;
+	}
+	.rx-single-product__price {
+		margin-bottom: 1rem;
+	}
+	.rx-single-product__price-amount {
+		font-size: 3.25rem;
+		line-height: 1;
+	}
+	.rx-single-product__price-currency {
+		font-size: var( --rx-text-sm );
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var( --rx-color-ink );
+	}
+	.rx-single-product__best-for {
+		align-items: flex-start;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
+		padding: 0.6rem 0.9rem;
+		background: #ebebeb;
+		font-size: 0.9375rem;
+		line-height: 1.4;
+		color: #555;
+	}
+	.rx-single-product__best-for-label {
+		flex: 0 0 2.5rem;
+		font-family: var( --rx-font-display );
+		font-size: 0.8125rem;
+		line-height: 1.2;
+		letter-spacing: 0.05em;
+	}
+	.rx-single-product__summary .rx-perf {
+		margin-bottom: 1.75rem;
+	}
+
+	/* Colour cards ~78x110 with 8px gaps; sizes 6 per row, 54px tall, 3-4px
+	   gaps (PDP only — the same picker in the bundle builder / cart edit
+	   panels keeps its own sizing). */
+	.rx-single-product .rx-variation-swatches--colour {
+		gap: 0.5rem;
+	}
+	.rx-single-product .rx-swatch-card {
+		width: 4.875rem;
+	}
+	.rx-single-product .rx-swatch-card__box {
+		height: 4rem;
+	}
+	.rx-single-product .rx-variation-swatches--text {
+		display: grid;
+		grid-template-columns: repeat( 6, minmax( 0, 1fr ) );
+		gap: 4px 3px;
+	}
+	.rx-single-product .rx-swatch--text {
+		min-width: 0;
+		min-height: 3.375rem;
+	}
 }
 .rx-single-product__variation-count {
 	margin: 0 0 0.5rem;
@@ -3158,9 +3398,9 @@ a {
 	   up), the summary on the right spanning those rows. */
 	.rx-single-product__layout {
 		display: grid;
-		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		grid-template-columns: minmax( 0, 684fr ) minmax( 0, 476fr ); /* Figma: 684 | 40 | 476. */
 		align-items: start;
-		gap: 2rem 3rem;
+		gap: 1rem 2.5rem;
 	}
 	.rx-single-product__gallery,
 	.rx-single-product__features,

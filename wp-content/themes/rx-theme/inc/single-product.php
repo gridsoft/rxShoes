@@ -509,3 +509,64 @@ function rx_theme_product_key_features( WC_Product $product ): array {
 
 	return \RX\Core\Catalog\KeyFeatures::get_rows( $product );
 }
+
+/**
+ * The product's "Performance dispersion profile" values (ratings 1–5 +
+ * drop / weight / forefoot / midsole), entered on the product's "Shop
+ * card" tab — owned by rx-core (RX\Core\Admin\PerformanceProfileFields).
+ * Null when rx-core is inactive or nothing is entered, so the PDP shows
+ * the box only when there's at least one real value.
+ *
+ * @param WC_Product $product Product being rendered.
+ * @return array{ratings: array<string,array{label:string,value:int}>, specs: array<int,array{value:string,label:string}>}|null
+ */
+function rx_theme_product_performance( WC_Product $product ): ?array {
+	if ( ! class_exists( '\RX\Core\Admin\PerformanceProfileFields' ) ) {
+		return null;
+	}
+
+	$values  = \RX\Core\Admin\PerformanceProfileFields::get_values( $product );
+	$ratings = array();
+
+	foreach ( \RX\Core\Admin\PerformanceProfileFields::ratings() as $key => $label ) {
+		if ( isset( $values['ratings'][ $key ] ) ) {
+			$ratings[ $key ] = array(
+				'label' => $label,
+				'value' => $values['ratings'][ $key ],
+			);
+		}
+	}
+
+	$specs = array();
+	if ( isset( $values['drop'] ) ) {
+		$specs[] = array(
+			/* translators: %s: heel-to-toe drop in millimetres. */
+			'value' => sprintf( __( '%smm', 'rx-theme' ), wc_format_decimal( $values['drop'], 1, true ) ),
+			'label' => __( 'Drop', 'rx-theme' ),
+		);
+	}
+	if ( isset( $values['weight'] ) ) {
+		$specs[] = array(
+			/* translators: %d: weight in grams. */
+			'value' => sprintf( __( '%dg', 'rx-theme' ), $values['weight'] ),
+			'label' => __( 'Weight (M9)', 'rx-theme' ),
+		);
+	}
+	if ( isset( $values['forefoot'] ) ) {
+		$specs[] = array(
+			'value' => $values['forefoot'],
+			'label' => __( 'Forefoot', 'rx-theme' ),
+		);
+	}
+	if ( isset( $values['midsole'] ) ) {
+		$specs[] = array(
+			'value' => $values['midsole'],
+			'label' => __( 'Midsole', 'rx-theme' ),
+		);
+	}
+
+	return ( $ratings || $specs ) ? array(
+		'ratings' => $ratings,
+		'specs'   => $specs,
+	) : null;
+}

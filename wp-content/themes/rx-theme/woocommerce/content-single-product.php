@@ -161,6 +161,17 @@ $rx_theme_size_equiv = rx_theme_product_size_equivalent_line( $product );
 			<?php endif; ?>
 
 			<?php
+			/*
+			 * Performance dispersion profile — only when the product has at
+			 * least one value entered on its "Shop card" tab.
+			 */
+			$rx_theme_performance = rx_theme_product_performance( $product );
+			if ( $rx_theme_performance ) {
+				get_template_part( 'template-parts/product/performance-profile', null, $rx_theme_performance );
+			}
+			?>
+
+			<?php
 			/**
 			 * Just the add-to-cart form (colour swatches, size pills,
 			 * quantity and the button — see the variable.php override).

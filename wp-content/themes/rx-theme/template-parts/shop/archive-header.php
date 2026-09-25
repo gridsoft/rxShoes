@@ -18,6 +18,9 @@ $rx_theme_has_stats = rx_theme_archive_has_stats();
 if ( $rx_theme_has_stats ) {
 	$rx_theme_brands     = rx_theme_archive_brand_count( rx_theme_archive_product_ids() );
 	$rx_theme_save_up_to = rx_theme_format_percent( rx_theme_bundle_max_discount_percent() );
+	// "Save up to …" only while the bundle offer runs (inc/bundle-offer.php).
+	$rx_theme_show_save = rx_theme_bundle_offer_is_active();
+	$rx_theme_has_stats = $rx_theme_brands > 0 || $rx_theme_show_save;
 }
 ?>
 <div class="rx-archive-header<?php echo $rx_theme_has_stats ? ' rx-archive-header--stats' : ''; ?>">
@@ -50,9 +53,12 @@ if ( $rx_theme_has_stats ) {
 						</strong>
 						<span class="rx-archive-stats__label"><?php esc_html_e( 'Cross-discipline', 'rx-theme' ); ?></span>
 					</p>
-					<span class="rx-archive-stats__divider" aria-hidden="true"></span>
+					<?php if ( $rx_theme_show_save ) : ?>
+						<span class="rx-archive-stats__divider" aria-hidden="true"></span>
+					<?php endif; ?>
 				<?php endif; ?>
 
+				<?php if ( $rx_theme_show_save ) : ?>
 				<p class="rx-archive-stats__item">
 					<strong class="rx-archive-stats__value rx-archive-stats__value--save">
 						<?php
@@ -65,6 +71,7 @@ if ( $rx_theme_has_stats ) {
 					</strong>
 					<span class="rx-archive-stats__label"><?php esc_html_e( 'Rotation incentive', 'rx-theme' ); ?></span>
 				</p>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 	</div>

@@ -697,7 +697,7 @@ add_filter( 'wc_add_to_cart_message_html', 'rx_theme_bundle_builder_swap_message
  * @param WC_Cart $cart The cart being totalled.
  */
 function rx_theme_bundle_builder_apply_tier_discount( WC_Cart $cart ): void {
-	if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+	if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) || ! rx_theme_bundle_offer_is_active() ) {
 		return;
 	}
 

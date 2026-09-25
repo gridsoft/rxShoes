@@ -36,6 +36,15 @@ $rx_theme_hero_image = rx_theme_local_upload_url( (string) get_theme_mod( 'rx_he
 $rx_theme_hero_resolve_url = static function ( string $url ): string {
 	return preg_match( '#^https?://#i', $url ) ? $url : home_url( $url );
 };
+
+/*
+ * Outside the bundle offer's run window the tier callout goes, and so
+ * does a primary button that leads to the bundle builder (which would
+ * only redirect to the shop — the secondary button already goes there).
+ */
+$rx_theme_hero_bundles      = rx_theme_bundle_offer_is_active();
+$rx_theme_hero_primary_url  = $rx_theme_hero_resolve_url( rx_theme_get_mod( 'rx_hero_cta_primary_url' ) );
+$rx_theme_hero_show_primary = $rx_theme_hero_bundles || false === strpos( $rx_theme_hero_primary_url, '/build-a-bundle' );
 ?>
 <section class="rx-hero"<?php echo $rx_theme_hero_image ? ' style="--rx-hero-image: url(' . esc_url( $rx_theme_hero_image ) . ');"' : ''; ?>>
 	<div class="rx-hero__content">
@@ -56,6 +65,7 @@ $rx_theme_hero_resolve_url = static function ( string $url ): string {
 			<?php echo esc_html( rx_theme_get_mod( 'rx_hero_description' ) ); ?>
 		</p>
 
+		<?php if ( $rx_theme_hero_bundles ) : ?>
 		<div class="rx-hero__callout">
 			<div class="rx-hero__tiers">
 				<div class="rx-hero__tier">
@@ -71,11 +81,14 @@ $rx_theme_hero_resolve_url = static function ( string $url ): string {
 				<?php echo esc_html( rx_theme_get_mod( 'rx_hero_tier_note' ) ); ?>
 			</p>
 		</div>
+		<?php endif; ?>
 
 		<div class="rx-hero__actions">
-			<a class="rx-btn rx-btn--bundle" href="<?php echo esc_url( $rx_theme_hero_resolve_url( rx_theme_get_mod( 'rx_hero_cta_primary_url' ) ) ); ?>">
+			<?php if ( $rx_theme_hero_show_primary ) : ?>
+			<a class="rx-btn rx-btn--bundle" href="<?php echo esc_url( $rx_theme_hero_primary_url ); ?>">
 				<span data-customize-partial="rx_hero_cta_primary_text"><?php echo esc_html( rx_theme_get_mod( 'rx_hero_cta_primary_text' ) ); ?></span>
 			</a>
+			<?php endif; ?>
 			<a class="rx-btn rx-btn--secondary" href="<?php echo esc_url( $rx_theme_hero_resolve_url( rx_theme_get_mod( 'rx_hero_cta_secondary_url' ) ) ); ?>">
 				<span data-customize-partial="rx_hero_cta_secondary_text"><?php echo esc_html( rx_theme_get_mod( 'rx_hero_cta_secondary_text' ) ); ?></span>
 			</a>

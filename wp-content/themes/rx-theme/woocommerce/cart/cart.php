@@ -136,7 +136,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 										<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="#111"/><path d="m8 12.5 2.8 2.8L16 9.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 										<?php echo esc_html( sprintf( /* translators: %d: pair number. */ __( 'Pair %d • Complete', 'rx-theme' ), $rx_theme_pair_no ) ); ?>
 									</span>
-								<?php else : ?>
+								<?php elseif ( rx_theme_bundle_offer_is_active() ) : ?>
+									<?php // "Full price" only means something next to discounted pairs; with the offer off every line is a plain product. ?>
 									<span class="rx-badge"><?php esc_html_e( 'Full price', 'rx-theme' ); ?></span>
 								<?php endif; ?>
 								<?php if ( $rx_theme_series ) : ?>

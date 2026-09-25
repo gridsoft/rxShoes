@@ -239,6 +239,11 @@ function rx_theme_shop_bundle_only(): bool {
  * @return array<string,mixed>
  */
 function rx_theme_shop_bundle_meta_query(): array {
+	// No "Bundle eligible" filter while the offer is off (inc/bundle-offer.php).
+	if ( ! rx_theme_bundle_offer_is_active() ) {
+		return array();
+	}
+
 	/**
 	 * Filters the meta-query clause matching bundle-eligible products.
 	 * rx-core answers this from the "Eligible for bundle" checkbox
@@ -678,7 +683,9 @@ function rx_theme_shop_size_mode_options(): array {
  * the filter bar (both above the grid).
  */
 function rx_theme_render_shop_filters(): void {
-	get_template_part( 'template-parts/shop/rotation-strip' );
+	if ( rx_theme_bundle_offer_is_active() ) {
+		get_template_part( 'template-parts/shop/rotation-strip' );
+	}
 	get_template_part( 'template-parts/shop/filter-bar' );
 }
 

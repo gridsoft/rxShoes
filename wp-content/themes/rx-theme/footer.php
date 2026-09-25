@@ -84,6 +84,17 @@ $rx_theme_footer_columns = array(
 );
 
 $rx_theme_payments = array( 'PayID', 'PayTo', 'Card (Stripe)' );
+
+// Outside the bundle offer's run window: no builder link, no rotation bar.
+$rx_theme_bundles = rx_theme_bundle_offer_is_active();
+if ( ! $rx_theme_bundles ) {
+	$rx_theme_footer_columns[ __( 'Shop', 'rx-theme' ) ] = array_values(
+		array_filter(
+			$rx_theme_footer_columns[ __( 'Shop', 'rx-theme' ) ],
+			static fn( array $link ): bool => 'bundle' !== $link[2]
+		)
+	);
+}
 ?>
 <footer id="site-footer" class="rx-footer">
 	<div class="rx-footer__inner">
@@ -136,6 +147,7 @@ $rx_theme_payments = array( 'PayID', 'PayTo', 'Card (Stripe)' );
 		</div>
 	</div>
 
+	<?php if ( $rx_theme_bundles ) : ?>
 	<div class="rx-rotation-bar" role="region" aria-label="<?php esc_attr_e( 'Your rotation', 'rx-theme' ); ?>">
 		<div class="rx-rotation-bar__lead">
 			<span class="rx-rotation-bar__dot" aria-hidden="true"></span>
@@ -166,6 +178,7 @@ $rx_theme_payments = array( 'PayID', 'PayTo', 'Card (Stripe)' );
 			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 	</div>
+	<?php endif; ?>
 </footer>
 
 <?php wp_footer(); ?>

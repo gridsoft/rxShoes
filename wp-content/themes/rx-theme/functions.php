@@ -26,6 +26,7 @@ require RX_THEME_DIR . '/inc/shop-sidebar.php';
 require RX_THEME_DIR . '/inc/shop-pagination.php';
 require RX_THEME_DIR . '/inc/single-product.php';
 require RX_THEME_DIR . '/inc/customizer-bundle.php';
+require RX_THEME_DIR . '/inc/bundle-offer.php';
 require RX_THEME_DIR . '/inc/biomechanics.php';
 require RX_THEME_DIR . '/inc/brand-tiles.php';
 require RX_THEME_DIR . '/inc/community.php';

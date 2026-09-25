@@ -72,6 +72,11 @@ add_filter(
  * @param WC_Product $product Product being rendered.
  */
 function rx_theme_product_is_bundle_eligible( WC_Product $product ): bool {
+	// Outside the offer's run window nothing is eligible (inc/bundle-offer.php).
+	if ( ! rx_theme_bundle_offer_is_active() ) {
+		return false;
+	}
+
 	/**
 	 * Filters whether a product is bundle-eligible.
 	 *

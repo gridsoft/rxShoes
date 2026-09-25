@@ -64,8 +64,10 @@ function rx_theme_mini_cart_data(): array {
 	$totals   = rx_theme_bundle_builder_totals( $eligible );
 	$percent  = (float) $totals['tier']['percent'];
 
+	// Outside the offer's run window the drawer is a plain cart: no open slot, no progress.
+	$bundles      = rx_theme_bundle_offer_is_active();
 	$target_slots = max( 3, count( $eligible ) );
-	$next_pair    = count( $eligible ) < $target_slots ? count( $eligible ) + 1 : null;
+	$next_pair    = $bundles && count( $eligible ) < $target_slots ? count( $eligible ) + 1 : null;
 
 	/*
 	 * Same "next unlock" figure as the builder's progress bar: real
@@ -91,6 +93,7 @@ function rx_theme_mini_cart_data(): array {
 	$regular_total = round( $totals['regular_total'] + $other_total, 2 );
 
 	return array(
+		'bundles'       => $bundles,
 		'is_empty'      => ! $eligible && ! $other,
 		'eligible'      => $eligible,
 		'other'         => $other,
@@ -103,7 +106,7 @@ function rx_theme_mini_cart_data(): array {
 		'next_pricing'  => $next_pricing,
 		'regular_total' => $regular_total,
 		'total'         => round( $regular_total - $totals['savings'], 2 ),
-		'vault_url'     => add_query_arg( 'rx_bundle', '1', wc_get_page_permalink( 'shop' ) ),
+		'vault_url'     => $bundles ? add_query_arg( 'rx_bundle', '1', wc_get_page_permalink( 'shop' ) ) : wc_get_page_permalink( 'shop' ),
 	);
 }
 
@@ -140,7 +143,7 @@ function rx_theme_mini_cart_output(): void {
 	<div class="rx-mini-cart-backdrop" data-rx-mini-cart-close hidden></div>
 	<aside id="rx-mini-cart" class="rx-mini-cart" role="dialog" aria-modal="false" aria-labelledby="rx-mini-cart-title" aria-hidden="true">
 		<div class="rx-mini-cart__head">
-			<h2 id="rx-mini-cart-title" class="rx-mini-cart__title"><span class="rx-mini-cart__title-dot" aria-hidden="true"></span><?php esc_html_e( 'Rotation drawer', 'rx-theme' ); ?></h2>
+			<h2 id="rx-mini-cart-title" class="rx-mini-cart__title"><span class="rx-mini-cart__title-dot" aria-hidden="true"></span><?php echo esc_html( rx_theme_bundle_offer_is_active() ? __( 'Rotation drawer', 'rx-theme' ) : __( 'Your cart', 'rx-theme' ) ); ?></h2>
 			<button type="button" class="rx-mini-cart__close" data-rx-mini-cart-close aria-label="<?php esc_attr_e( 'Close cart', 'rx-theme' ); ?>">
 				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
 			</button>

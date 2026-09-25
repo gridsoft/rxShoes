@@ -28,7 +28,7 @@ function rx_theme_customize_bundle_register( WP_Customize_Manager $wp_customize 
 		'rx_bundle',
 		array(
 			'title'       => __( 'Bundle Discount', 'rx-theme' ),
-			'description' => __( 'These two numbers drive every discount shown on the site: the shop product cards ("As low as … in 3-pack", the tier on the rotation row) and the homepage Hero and Power Rotation sections (their texts use the placeholders {two_pack} and {three_pack}). The 2-pack number will also drive the cart discount calculation.', 'rx-theme' ),
+			'description' => __( 'These two numbers drive every discount shown on the site: the shop product cards ("As low as … in 3-pack", the tier on the rotation row) and the homepage Hero and Power Rotation sections (their texts use the placeholders {two_pack} and {three_pack}). The 2-pack number will also drive the cart discount calculation. "Offer starts" / "Offer ends" limit when bundles run at all.', 'rx-theme' ),
 			'priority'    => 31,
 		)
 	);
@@ -71,8 +71,80 @@ function rx_theme_customize_bundle_register( WP_Customize_Manager $wp_customize 
 			)
 		);
 	}
+
+	/*
+	 * The offer's run window (inc/bundle-offer.php). Options, like the
+	 * percentages, so a theme switch can't silently reopen an ended offer.
+	 */
+	$dates = array(
+		'rx_bundle_offer_start' => array(
+			'label'       => __( 'Offer starts', 'rx-theme' ),
+			'description' => __( 'Leave empty to run the offer from now.', 'rx-theme' ),
+		),
+		'rx_bundle_offer_end'   => array(
+			'label'       => __( 'Offer ends', 'rx-theme' ),
+			'description' => sprintf(
+				/* translators: %s: current bundle offer status. */
+				__( 'From this moment bundles switch off everywhere (discount, bundle badges and buttons, Build a Bundle page) and the store sells at normal prices. Leave empty to run with no end. Site time zone (Settings > General). %s', 'rx-theme' ),
+				rx_theme_bundle_offer_status_text()
+			),
+		),
+	);
+
+	foreach ( $dates as $id => $date ) {
+		$wp_customize->add_setting(
+			$id,
+			array(
+				'type'              => 'option',
+				'default'           => '',
+				'sanitize_callback' => 'rx_theme_sanitize_bundle_offer_date',
+				'validate_callback' => 'rx_theme_validate_bundle_offer_dates',
+				'transport'         => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			$id,
+			array(
+				'section'     => 'rx_bundle',
+				'type'        => 'datetime-local',
+				'label'       => $date['label'],
+				'description' => $date['description'],
+			)
+		);
+	}
 }
 add_action( 'customize_register', 'rx_theme_customize_bundle_register' );
+
+/**
+ * Reject an offer window that ends before (or when) it starts. Same
+ * pattern as rx_theme_validate_bundle_tiers(): compare with the other
+ * date's pending (or saved) value, read without post_value() to avoid
+ * recursion.
+ *
+ * @param WP_Error             $validity Validity so far.
+ * @param mixed                $value    Submitted value.
+ * @param WP_Customize_Setting $setting  Setting being validated.
+ */
+function rx_theme_validate_bundle_offer_dates( WP_Error $validity, $value, WP_Customize_Setting $setting ): WP_Error {
+	$is_start = 'rx_bundle_offer_start' === $setting->id;
+	$other_id = $is_start ? 'rx_bundle_offer_end' : 'rx_bundle_offer_start';
+	$posted   = $setting->manager->unsanitized_post_values();
+	$other    = rx_theme_sanitize_bundle_offer_date( $posted[ $other_id ] ?? get_option( $other_id, '' ) );
+	$value    = rx_theme_sanitize_bundle_offer_date( $value );
+	$start    = $is_start ? $value : $other;
+	$end      = $is_start ? $other : $value;
+
+	// The fixed-width stored format compares correctly as a string.
+	if ( '' !== $start && '' !== $end && $end <= $start ) {
+		$validity->add(
+			'rx_bundle_offer_order',
+			__( 'The offer has to end after it starts.', 'rx-theme' )
+		);
+	}
+
+	return $validity;
+}
 
 /**
  * Reject a 2-pack discount that is bigger than the 3-pack one: shop

@@ -21,7 +21,9 @@ get_header();
 
 get_template_part( 'template-parts/front-page/hero' );
 get_template_part( 'template-parts/front-page/category-cards' );
-get_template_part( 'template-parts/front-page/power-rotation' );
+if ( rx_theme_bundle_offer_is_active() ) {
+	get_template_part( 'template-parts/front-page/power-rotation' );
+}
 
 get_template_part( 'template-parts/front-page/best-sellers' );
 get_template_part( 'template-parts/front-page/biomechanics' );

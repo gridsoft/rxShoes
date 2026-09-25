@@ -52,6 +52,7 @@ $rx_theme_extra = $rx_theme_pricing ? max( 0.0, $rx_theme_pricing['combined_savi
 $rx_theme_segments = min( 3, $rx_theme_pairs );
 ?>
 <div class="rx-mini-cart__content">
+	<?php if ( $rx_theme_d['bundles'] ) : ?>
 	<div class="rx-mini-cart__progress">
 		<div class="rx-mini-cart__progress-top">
 			<p class="rx-mini-cart__progress-title"><?php echo esc_html( $rx_theme_headline ); ?></p>
@@ -109,12 +110,13 @@ $rx_theme_segments = min( 3, $rx_theme_pairs );
 			<?php endif; ?>
 		</p>
 	</div>
+	<?php endif; ?>
 
 	<div class="rx-mini-cart__body">
 		<?php if ( $rx_theme_d['is_empty'] ) : ?>
 			<div class="rx-mini-cart__empty">
 				<p class="rx-mini-cart__empty-title"><?php esc_html_e( 'Your cart is empty', 'rx-theme' ); ?></p>
-				<p class="rx-mini-cart__empty-text"><?php esc_html_e( 'Pick your first pair to start a rotation — the more pairs, the bigger the discount.', 'rx-theme' ); ?></p>
+				<p class="rx-mini-cart__empty-text"><?php echo esc_html( $rx_theme_d['bundles'] ? __( 'Pick your first pair to start a rotation — the more pairs, the bigger the discount.', 'rx-theme' ) : __( 'Browse the shoe vault to find your next pair.', 'rx-theme' ) ); ?></p>
 				<a class="rx-btn rx-btn--dark" href="<?php echo esc_url( $rx_theme_d['vault_url'] ); ?>"><?php esc_html_e( 'Browse shoe vault', 'rx-theme' ); ?></a>
 			</div>
 		<?php else : ?>
@@ -188,8 +190,10 @@ $rx_theme_segments = min( 3, $rx_theme_pairs );
 			<?php endif; ?>
 
 			<?php if ( $rx_theme_d['other'] ) : ?>
-				<p class="rx-mini-cart__subheading"><?php esc_html_e( 'Other items', 'rx-theme' ); ?></p>
-				<p class="rx-mini-cart__subnote"><?php esc_html_e( 'Not part of the rotation discount — charged at full price.', 'rx-theme' ); ?></p>
+				<?php if ( $rx_theme_d['bundles'] ) : ?>
+					<p class="rx-mini-cart__subheading"><?php esc_html_e( 'Other items', 'rx-theme' ); ?></p>
+					<p class="rx-mini-cart__subnote"><?php esc_html_e( 'Not part of the rotation discount — charged at full price.', 'rx-theme' ); ?></p>
+				<?php endif; ?>
 				<ul class="rx-mini-cart__items">
 					<?php foreach ( $rx_theme_d['other'] as $rx_theme_entry ) : ?>
 						<?php
@@ -209,7 +213,7 @@ $rx_theme_segments = min( 3, $rx_theme_pairs );
 
 			<div class="rx-mini-cart__totals">
 				<p class="rx-mini-cart__totals-row">
-					<span><?php esc_html_e( 'Standard retail value', 'rx-theme' ); ?></span>
+					<span><?php echo esc_html( $rx_theme_d['bundles'] ? __( 'Standard retail value', 'rx-theme' ) : __( 'Subtotal', 'rx-theme' ) ); ?></span>
 					<span<?php echo $rx_theme_d['savings'] > 0 ? ' class="rx-mini-cart__strike"' : ''; ?>><?php echo esc_html( rx_theme_format_money( $rx_theme_d['regular_total'] ) ); ?></span>
 				</p>
 				<?php if ( $rx_theme_d['savings'] > 0 ) : ?>

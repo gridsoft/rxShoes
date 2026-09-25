@@ -24,6 +24,7 @@
 
 $rx_theme_header_two_pack = rx_theme_format_percent( rx_theme_bundle_two_pack_discount_percent() );
 $rx_theme_header_max_pack = rx_theme_format_percent( rx_theme_bundle_max_discount_percent() );
+$rx_theme_header_bundles  = rx_theme_bundle_offer_is_active();
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -43,16 +44,18 @@ $rx_theme_header_max_pack = rx_theme_format_percent( rx_theme_bundle_max_discoun
 			<?php esc_html_e( 'Australian Athlete Performance Hub', 'rx-theme' ); ?>
 		</p>
 		<p class="rx-announcement-bar__promo">
-			<a class="rx-announcement-bar__promo-link" href="<?php echo esc_url( home_url( '/build-a-bundle/' ) ); ?>"><?php esc_html_e( 'Build Your Rotation', 'rx-theme' ); ?></a>
-			<?php
-			printf(
-				/* translators: 1: 2-pack discount percentage, 2: 3-pack discount percentage. */
-				esc_html__( '— 2 Pairs Save %1$s%% | 3 Pairs Save %2$s%%', 'rx-theme' ),
-				esc_html( $rx_theme_header_two_pack ),
-				esc_html( $rx_theme_header_max_pack )
-			);
-			?>
-			<span class="rx-announcement-bar__sep" aria-hidden="true">•</span>
+			<?php if ( $rx_theme_header_bundles ) : ?>
+				<a class="rx-announcement-bar__promo-link" href="<?php echo esc_url( home_url( '/build-a-bundle/' ) ); ?>"><?php esc_html_e( 'Build Your Rotation', 'rx-theme' ); ?></a>
+				<?php
+				printf(
+					/* translators: 1: 2-pack discount percentage, 2: 3-pack discount percentage. */
+					esc_html__( '— 2 Pairs Save %1$s%% | 3 Pairs Save %2$s%%', 'rx-theme' ),
+					esc_html( $rx_theme_header_two_pack ),
+					esc_html( $rx_theme_header_max_pack )
+				);
+				?>
+				<span class="rx-announcement-bar__sep" aria-hidden="true">•</span>
+			<?php endif; ?>
 			<?php esc_html_e( 'Free Express Shipping Over $150', 'rx-theme' ); ?>
 			<span class="rx-announcement-bar__sep" aria-hidden="true">•</span>
 			<?php esc_html_e( '30-Day Hassle-Free Returns', 'rx-theme' ); ?>
@@ -92,10 +95,12 @@ $rx_theme_header_max_pack = rx_theme_format_percent( rx_theme_bundle_max_discoun
 		</form>
 
 		<div class="rx-header__actions">
-			<a class="rx-btn rx-btn--bundle" href="<?php echo esc_url( home_url( '/build-a-bundle/' ) ); ?>">
-				<?php esc_html_e( 'Build a Bundle', 'rx-theme' ); ?>
-				<span class="rx-btn--bundle__badge"><?php echo esc_html( sprintf( /* translators: %s: top bundle discount percentage. */ __( 'Save %s%%', 'rx-theme' ), $rx_theme_header_max_pack ) ); ?></span>
-			</a>
+			<?php if ( $rx_theme_header_bundles ) : ?>
+				<a class="rx-btn rx-btn--bundle" href="<?php echo esc_url( home_url( '/build-a-bundle/' ) ); ?>">
+					<?php esc_html_e( 'Build a Bundle', 'rx-theme' ); ?>
+					<span class="rx-btn--bundle__badge"><?php echo esc_html( sprintf( /* translators: %s: top bundle discount percentage. */ __( 'Save %s%%', 'rx-theme' ), $rx_theme_header_max_pack ) ); ?></span>
+				</a>
+			<?php endif; ?>
 
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<a class="rx-icon-link rx-icon-link--account" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php esc_attr_e( 'My account', 'rx-theme' ); ?>">

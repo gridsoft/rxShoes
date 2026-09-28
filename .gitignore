@@ -11,6 +11,7 @@
 # Third-party / contrib content (WooCommerce, default themes, etc.) is not versioned.
 /wp-content/plugins/*
 !/wp-content/plugins/rx-core/
+!/wp-content/plugins/rx-azupay/
 /wp-content/themes/*
 !/wp-content/themes/rx-theme/
 /wp-content/upgrade/

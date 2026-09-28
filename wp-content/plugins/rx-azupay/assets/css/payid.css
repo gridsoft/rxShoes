@@ -1,0 +1,147 @@
+/*
+ * PayID payment instructions (templates/payid-instructions.php) — order-
+ * received page and My Account order view. Uses the active theme's
+ * design tokens (--rx-*) when it defines them, plain fallbacks otherwise.
+ * Mobile-first: the PayID wraps rather than overflowing, and the copy
+ * buttons are 44px tap targets.
+ */
+.rx-payid {
+	margin: 1.5rem 0;
+	padding: 1.25rem;
+	border-radius: var( --rx-radius-lg, 6px );
+	background: var( --rx-color-white, #fff );
+	box-shadow: inset 0 0 0 2px var( --rx-color-blue, #0066ff );
+}
+.rx-payid--paid {
+	box-shadow: inset 0 0 0 2px var( --rx-color-lime, #aafd30 );
+}
+.rx-payid--closed {
+	box-shadow: inset 0 0 0 1px var( --rx-color-gray-300, #d9d9d9 );
+}
+.rx-payid__title {
+	margin: 0 0 0.5rem;
+	font-family: var( --rx-font-display, inherit );
+	font-size: var( --rx-text-xl, 1.375rem );
+	font-weight: 800;
+	line-height: 1.1;
+	text-transform: uppercase;
+	color: var( --rx-color-ink, #111 );
+}
+.rx-payid__lead,
+.rx-payid__note {
+	margin: 0 0 1rem;
+	font-size: var( --rx-text-base, 0.875rem );
+	color: var( --rx-color-gray-600, #545454 );
+}
+.rx-payid__details {
+	margin: 0 0 1rem;
+}
+.rx-payid__row {
+	padding: 0.75rem 0;
+	border-top: 1px solid var( --rx-color-gray-200, #e8e8e8 );
+}
+.rx-payid__row:last-child {
+	border-bottom: 1px solid var( --rx-color-gray-200, #e8e8e8 );
+}
+.rx-payid__row dt {
+	margin-bottom: 0.25rem;
+	font-size: var( --rx-text-sm, 0.75rem );
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var( --rx-color-gray-600, #545454 );
+}
+.rx-payid__row dd {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0;
+}
+.rx-payid__value {
+	flex: 1;
+	min-width: 0;
+	font-size: var( --rx-text-md, 1rem );
+	font-weight: 700;
+	color: var( --rx-color-ink, #111 );
+	overflow-wrap: anywhere;
+}
+.rx-payid__copy {
+	flex: none;
+	min-width: 4.5rem;
+	min-height: 2.75rem;
+	padding: 0 1rem;
+	border: 0;
+	border-radius: var( --rx-radius-md, 4px );
+	background: var( --rx-color-blue, #0066ff );
+	font-family: var( --rx-font-display, inherit );
+	font-size: var( --rx-text-md, 1rem );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-white, #fff );
+	cursor: pointer;
+}
+.rx-payid__copy.is-copied {
+	background: var( --rx-color-lime, #aafd30 );
+	color: var( --rx-color-ink, #111 );
+}
+.rx-payid__qr {
+	font-size: var( --rx-text-base, 0.875rem );
+	font-weight: 600;
+	color: var( --rx-color-blue, #0066ff );
+}
+.rx-payid__status {
+	margin: 1rem 0 0;
+	padding: 0.75rem 1rem;
+	border-radius: var( --rx-radius-md, 4px );
+	background: var( --rx-color-surface, #f5f5f5 );
+	font-size: var( --rx-text-base, 0.875rem );
+	color: var( --rx-color-ink, #111 );
+}
+.rx-payid__status::before {
+	content: "";
+	display: inline-block;
+	width: 0.5rem;
+	height: 0.5rem;
+	margin-right: 0.5rem;
+	border-radius: 50%;
+	background: var( --rx-color-orange, #f59e0b );
+	vertical-align: middle;
+	animation: rx-payid-pulse 1.4s ease-in-out infinite;
+}
+@keyframes rx-payid-pulse {
+	50% {
+		opacity: 0.3;
+	}
+}
+@media ( prefers-reduced-motion: reduce ) {
+	.rx-payid__status::before {
+		animation: none;
+	}
+}
+
+/* Simulator mode only (RX_AZUPAY_SIMULATE) — deliberately loud so it's
+   never mistaken for a real customer-facing control. */
+.rx-payid__simulator {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	padding: 0.75rem;
+	border: 2px dashed var( --rx-color-orange, #f59e0b );
+	border-radius: var( --rx-radius-md, 4px );
+	font-size: var( --rx-text-base, 0.875rem );
+}
+.rx-payid__simulator strong {
+	flex-basis: 100%;
+	text-transform: uppercase;
+}
+.rx-payid__simulator button {
+	min-height: 2.75rem;
+	padding: 0 1rem;
+	border: 1px solid var( --rx-color-ink, #111 );
+	border-radius: var( --rx-radius-md, 4px );
+	background: var( --rx-color-white, #fff );
+	font-weight: 600;
+	cursor: pointer;
+}

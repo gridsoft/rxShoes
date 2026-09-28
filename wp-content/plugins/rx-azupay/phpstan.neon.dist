@@ -1,0 +1,18 @@
+# No Composer of its own — run with rx-core's dev tools:
+#   ../rx-core/vendor/bin/phpstan analyse -c phpstan.neon.dist
+parameters:
+    level: 5
+    paths:
+        - rx-azupay.php
+        - src
+    excludePaths:
+        - tests
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+        - ../rx-core/vendor/autoload.php
+    scanFiles:
+        - ../rx-core/vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+        - ../rx-core/vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
+
+includes:
+    - ../rx-core/vendor/szepeviktor/phpstan-wordpress/extension.neon

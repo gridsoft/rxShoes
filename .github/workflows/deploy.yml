@@ -9,8 +9,8 @@ on:
 
 # Only WordPress core, other plugins, and uploads live directly on the
 # server and are never tracked in this repo (see .gitignore's own
-# comment on that) — so this workflow deploys ONLY the two directories
-# this repo actually owns (rx-core, rx-theme), each to its own exact
+# comment on that) — so this workflow deploys ONLY the directories this
+# repo actually owns (rx-core, rx-azupay, rx-theme), each to its own exact
 # remote folder. It never syncs the repository root or the site's
 # document root as a whole: doing that with an FTP action that can
 # delete remote files not present locally would wipe out WordPress core
@@ -64,6 +64,28 @@ jobs:
           # useful once you trust the pipeline, but the wrong thing to
           # enable before you've watched it run successfully at least
           # once against a real host.
+          # dangerous-clean-slate: true
+
+      - name: Deploy rx-azupay plugin
+        # PayID payments (AzuPay). Standalone — its own autoloader, no
+        # Composer step. Credentials live only in the server's
+        # wp-config.php (RX_AZUPAY_CLIENT_ID / _SECRET_KEY / _SANDBOX),
+        # never here. A newly uploaded plugin still has to be activated
+        # once in wp-admin → Plugins.
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./wp-content/plugins/rx-azupay/
+          server-dir: /public_html/rx/wp-content/plugins/rx-azupay/
+          exclude: |
+            **/tests/**
+            **/phpcs.xml.dist
+            **/phpstan.neon.dist
+            **/.git*
+          # Same note as above — enable once the pipeline is proven:
           # dangerous-clean-slate: true
 
       - name: Deploy rx-theme

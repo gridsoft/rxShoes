@@ -91,6 +91,8 @@ final class Plugin {
 			new Bundles\BundleEligibility(),
 			new Bundles\BundleRotationPairs(),
 			new Community\CommunityPostType(),
+			new Cart\FreeGift(),
+			new Media\WebpSubsizes(),
 		);
 	}
 

@@ -147,7 +147,7 @@ if ( ! $rx_theme_bundles ) {
 		</div>
 	</div>
 
-	<?php if ( $rx_theme_bundles ) : ?>
+	<?php if ( $rx_theme_bundles && ! is_checkout() ) : // Not on checkout: an upsell to keep building there, and it would sit on the checkout's own bottom bar. ?>
 	<div class="rx-rotation-bar" role="region" aria-label="<?php esc_attr_e( 'Your rotation', 'rx-theme' ); ?>">
 		<div class="rx-rotation-bar__lead">
 			<span class="rx-rotation-bar__dot" aria-hidden="true"></span>

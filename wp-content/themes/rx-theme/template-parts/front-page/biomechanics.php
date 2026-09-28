@@ -38,7 +38,16 @@ if ( ! $rx_theme_biomech_posts ) {
 			<article class="rx-biomech-card">
 				<?php if ( has_post_thumbnail( $rx_theme_post ) ) : ?>
 					<a class="rx-biomech-card__image" href="<?php echo esc_url( $rx_theme_link ); ?>" tabindex="-1" aria-hidden="true">
-						<?php echo get_the_post_thumbnail( $rx_theme_post, 'large', array( 'class' => 'rx-biomech-card__photo' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core-generated <img>. ?>
+						<?php
+						echo get_the_post_thumbnail(
+							$rx_theme_post,
+							'large',
+							array(
+								'class'   => 'rx-biomech-card__photo',
+								'loading' => 'lazy',
+							)
+						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core-generated <img>. 
+						?>
 					</a>
 				<?php endif; ?>
 

@@ -97,6 +97,7 @@ function rx_theme_mini_cart_data(): array {
 		'is_empty'      => ! $eligible && ! $other,
 		'eligible'      => $eligible,
 		'other'         => $other,
+		'gifts'         => rx_theme_cart_free_gifts(),
 		'pairs_count'   => (int) $totals['pairs_count'],
 		'percent'       => $percent,
 		'savings'       => (float) $totals['savings'],

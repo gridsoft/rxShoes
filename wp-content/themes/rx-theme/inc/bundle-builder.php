@@ -41,6 +41,11 @@ function rx_theme_bundle_builder_cart_buckets(): array {
 	}
 
 	foreach ( WC()->cart->get_cart() as $rx_theme_key => $rx_theme_cart_item ) {
+		// The free gift is neither a pair nor a paid "other" item (inc/free-gift.php).
+		if ( rx_theme_cart_item_is_free_gift( $rx_theme_cart_item ) ) {
+			continue;
+		}
+
 		$rx_theme_product = $rx_theme_cart_item['data'] ?? null;
 
 		if ( ! $rx_theme_product instanceof WC_Product ) {
@@ -280,9 +285,11 @@ function rx_theme_bundle_pair_label( WC_Product $product, int $pair_number ): st
 /**
  * Grouping data for the cart page and checkout order-review tables:
  * rotation pairs first (in rotation order), then everything else, plus
- * the rotation header's note ("2 pairs • 35% off applied").
+ * the rotation header's note ("2 pairs • 35% off applied"). The free
+ * gift is left out of "items" and returned under "gifts", for its own
+ * "Free with your order" row.
  *
- * @return array{items: array<string,array>, pair_numbers: array<string,int>, rotation_note: string, tier_percent: float}
+ * @return array{items: array<string,array>, gifts: array<string,array>, pair_numbers: array<string,int>, rotation_note: string, tier_percent: float}
  */
 function rx_theme_cart_grouping(): array {
 	$rx_theme_eligible     = rx_theme_bundle_builder_cart_buckets()['eligible'];
@@ -294,6 +301,8 @@ function rx_theme_cart_grouping(): array {
 	}
 
 	$rx_theme_items = WC()->cart ? WC()->cart->get_cart() : array();
+	$rx_theme_gifts = array_filter( $rx_theme_items, 'rx_theme_cart_item_is_free_gift' );
+	$rx_theme_items = array_diff_key( $rx_theme_items, $rx_theme_gifts );
 	if ( $rx_theme_pair_numbers ) {
 		// "+" (not array_merge) keeps the cart keys exactly as they are.
 		$rx_theme_items = array_intersect_key( $rx_theme_items, $rx_theme_pair_numbers ) + array_diff_key( $rx_theme_items, $rx_theme_pair_numbers );
@@ -316,6 +325,7 @@ function rx_theme_cart_grouping(): array {
 
 	return array(
 		'items'         => $rx_theme_items,
+		'gifts'         => $rx_theme_gifts,
 		'pair_numbers'  => $rx_theme_pair_numbers,
 		'rotation_note' => $rx_theme_note,
 		'tier_percent'  => (float) $rx_theme_totals['tier']['percent'],
@@ -694,10 +704,16 @@ add_filter( 'wc_add_to_cart_message_html', 'rx_theme_bundle_builder_swap_message
  * reuse rather than re-deriving the same eligible-items loop a second
  * time.
  *
+ * PayID-only (client rule, PROJECT.md §6.2 / §8): at checkout the
+ * discount is only applied while the chosen payment method qualifies
+ * (rx_theme_bundle_payment_method_qualifies()). This is the server-side
+ * enforcement — the same calculation runs when the order is placed, with
+ * the posted payment method, so it can't be bypassed from the browser.
+ *
  * @param WC_Cart $cart The cart being totalled.
  */
 function rx_theme_bundle_builder_apply_tier_discount( WC_Cart $cart ): void {
-	if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) || ! rx_theme_bundle_offer_is_active() ) {
+	if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) || ! rx_theme_bundle_offer_is_active() || ! rx_theme_bundle_payment_method_qualifies() ) {
 		return;
 	}
 
@@ -719,3 +735,35 @@ function rx_theme_bundle_builder_apply_tier_discount( WC_Cart $cart ): void {
 	);
 }
 add_action( 'woocommerce_cart_calculate_fees', 'rx_theme_bundle_builder_apply_tier_discount' );
+
+/**
+ * Payment methods that get the rotation discount: PayID and PayTo (both
+ * AzuPay). Filterable, e.g. if the client adds another qualifying method.
+ *
+ * @return string[] Gateway ids.
+ */
+function rx_theme_bundle_discount_payment_methods(): array {
+	return (array) apply_filters( 'rx_theme_bundle_discount_payment_methods', array( 'azupay_payid', 'azupay_payto' ) );
+}
+
+/**
+ * Whether the rotation discount may apply given the payment method.
+ *
+ * Only checked at checkout (is_checkout() is also true during the
+ * checkout's AJAX refresh and when the order is placed): there the
+ * chosen method is known — WooCommerce stores it in the session from
+ * the posted form before totalling. On the cart page, mini cart and
+ * bundle builder no method has been picked yet, so the discount shows as
+ * it will with PayID. No method chosen yet at checkout counts as
+ * qualifying too; the order itself is always totalled with the method
+ * actually posted.
+ */
+function rx_theme_bundle_payment_method_qualifies(): bool {
+	if ( ! is_checkout() || ! WC()->session ) {
+		return true;
+	}
+
+	$chosen = (string) WC()->session->get( 'chosen_payment_method', '' );
+
+	return '' === $chosen || in_array( $chosen, rx_theme_bundle_discount_payment_methods(), true );
+}

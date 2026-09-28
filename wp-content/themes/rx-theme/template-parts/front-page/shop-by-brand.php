@@ -54,8 +54,9 @@ $rx_theme_tiles = array_slice( $rx_theme_all_brands, 0, 7 );
 							'medium',
 							false,
 							array(
-								'class' => 'rx-brand-tile__logo',
-								'alt'   => $rx_theme_brand->name,
+								'class'   => 'rx-brand-tile__logo',
+								'alt'     => $rx_theme_brand->name,
+								'loading' => 'lazy',
 							)
 						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core-generated <img>. 
 						?>

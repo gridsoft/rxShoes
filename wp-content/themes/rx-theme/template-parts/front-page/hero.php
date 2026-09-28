@@ -26,7 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$rx_theme_hero_image = rx_theme_local_upload_url( (string) get_theme_mod( 'rx_hero_image', '' ) );
+// Full photo + a phone-sized one (inc/performance.php also preloads them).
+$rx_theme_hero_images = rx_theme_hero_image_urls();
+$rx_theme_hero_image  = $rx_theme_hero_images['full'];
 
 /**
  * A Customizer URL field may hold a relative path ("/shop/") or a full
@@ -46,7 +48,7 @@ $rx_theme_hero_bundles      = rx_theme_bundle_offer_is_active();
 $rx_theme_hero_primary_url  = $rx_theme_hero_resolve_url( rx_theme_get_mod( 'rx_hero_cta_primary_url' ) );
 $rx_theme_hero_show_primary = $rx_theme_hero_bundles || false === strpos( $rx_theme_hero_primary_url, '/build-a-bundle' );
 ?>
-<section class="rx-hero"<?php echo $rx_theme_hero_image ? ' style="--rx-hero-image: url(' . esc_url( $rx_theme_hero_image ) . ');"' : ''; ?>>
+<section class="rx-hero"<?php echo $rx_theme_hero_image ? ' style="--rx-hero-image: url(' . esc_url( $rx_theme_hero_image ) . '); --rx-hero-image-sm: url(' . esc_url( $rx_theme_hero_images['small'] ) . ');"' : ''; ?>>
 	<div class="rx-hero__content">
 		<p class="rx-hero__eyebrow" data-customize-partial="rx_hero_eyebrow">
 			<span class="rx-hero__eyebrow-icon" aria-hidden="true"></span>

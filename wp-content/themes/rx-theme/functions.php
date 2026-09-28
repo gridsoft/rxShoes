@@ -17,6 +17,7 @@ define( 'RX_THEME_DIR', get_template_directory() );
 define( 'RX_THEME_URI', get_template_directory_uri() );
 
 require RX_THEME_DIR . '/inc/template-tags.php';
+require RX_THEME_DIR . '/inc/performance.php';
 require RX_THEME_DIR . '/inc/customizer.php';
 require RX_THEME_DIR . '/inc/taxonomy-fields.php';
 require RX_THEME_DIR . '/inc/woocommerce.php';
@@ -33,7 +34,11 @@ require RX_THEME_DIR . '/inc/community.php';
 require RX_THEME_DIR . '/inc/best-sellers.php';
 require RX_THEME_DIR . '/inc/bundle-builder.php';
 require RX_THEME_DIR . '/inc/mini-cart.php';
+require RX_THEME_DIR . '/inc/free-gift.php';
 require RX_THEME_DIR . '/inc/cart-page.php';
+require RX_THEME_DIR . '/inc/checkout.php';
+require RX_THEME_DIR . '/inc/my-account.php';
+require RX_THEME_DIR . '/inc/order-details.php';
 
 /**
  * Theme setup: supports, menus, image sizes.

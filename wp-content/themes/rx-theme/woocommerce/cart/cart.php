@@ -321,6 +321,35 @@ do_action( 'woocommerce_before_cart' ); ?>
 			}
 			?>
 
+			<?php
+			// The free gift (inc/free-gift.php): its own group and row — no quantity, no remove.
+			foreach ( $rx_theme_grouping['gifts'] as $rx_theme_gift ) :
+				$rx_theme_gift_product = $rx_theme_gift['data'] ?? null;
+				if ( ! $rx_theme_gift_product instanceof WC_Product ) {
+					continue;
+				}
+				get_template_part(
+					'template-parts/cart/group-header',
+					null,
+					array(
+						'group'   => 'gift',
+						'colspan' => 6,
+					)
+				);
+				?>
+				<tr class="woocommerce-cart-form__cart-item cart_item rx-cart-gift">
+					<td class="rx-cart-gift__thumb"><?php echo wp_kses_post( $rx_theme_gift_product->get_image( 'woocommerce_gallery_thumbnail' ) ); ?></td>
+					<td class="rx-cart-gift__text">
+						<span class="rx-cart-gift__chip"><?php esc_html_e( 'Free gift', 'rx-theme' ); ?></span>
+						<span class="rx-cart-gift__name"><?php echo esc_html( $rx_theme_gift_product->get_name() ); ?></span>
+						<?php if ( $rx_theme_gift_product->get_short_description() ) : ?>
+							<span class="rx-cart-gift__meta"><?php echo esc_html( wp_strip_all_tags( $rx_theme_gift_product->get_short_description() ) ); ?></span>
+						<?php endif; ?>
+					</td>
+					<td class="rx-cart-gift__price"><?php esc_html_e( 'Free', 'rx-theme' ); ?></td>
+				</tr>
+			<?php endforeach; ?>
+
 			<?php do_action( 'woocommerce_cart_contents' ); ?>
 
 			<tr>

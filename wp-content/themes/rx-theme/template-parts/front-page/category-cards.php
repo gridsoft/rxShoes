@@ -93,7 +93,18 @@ if ( empty( $rx_theme_ordered_categories ) ) {
 			?>
 			<a class="rx-category-card" href="<?php echo esc_url( $rx_theme_link ); ?>" data-category="<?php echo esc_attr( $rx_theme_category->slug ); ?>">
 				<?php if ( $rx_theme_thumb_id ) : ?>
-					<?php echo wp_get_attachment_image( $rx_theme_thumb_id, 'large', false, array( 'class' => 'rx-category-card__image' ) ); ?>
+					<?php // Below the hero: lazy, and so not WordPress's "first image" high priority (the hero is a CSS background it can't see). ?>
+					<?php
+					echo wp_get_attachment_image(
+						$rx_theme_thumb_id,
+						'large',
+						false,
+						array(
+							'class'   => 'rx-category-card__image',
+							'loading' => 'lazy',
+						)
+					);
+					?>
 				<?php endif; ?>
 
 				<span class="rx-category-card__badge"><?php echo esc_html( $rx_theme_badge_lbl ); ?></span>

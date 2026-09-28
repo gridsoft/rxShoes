@@ -211,6 +211,27 @@ $rx_theme_segments = min( 3, $rx_theme_pairs );
 				</ul>
 			<?php endif; ?>
 
+			<?php
+			// The free gift (inc/free-gift.php): no price maths, no remove button.
+			foreach ( $rx_theme_d['gifts'] ?? array() as $rx_theme_gift ) :
+				$rx_theme_gift_product = $rx_theme_gift['data'] ?? null;
+				if ( ! $rx_theme_gift_product instanceof WC_Product ) {
+					continue;
+				}
+				?>
+				<p class="rx-mini-cart__subheading"><?php esc_html_e( 'Free with your order', 'rx-theme' ); ?></p>
+				<ul class="rx-mini-cart__items">
+					<li class="rx-mini-cart__item rx-mini-cart__item--gift">
+						<span class="rx-mini-cart__thumb" aria-hidden="true"><?php echo wp_kses_post( $rx_theme_gift_product->get_image( 'woocommerce_gallery_thumbnail' ) ); ?></span>
+						<div class="rx-mini-cart__item-text">
+							<p class="rx-mini-cart__item-label"><?php esc_html_e( 'Free gift', 'rx-theme' ); ?></p>
+							<p class="rx-mini-cart__item-name"><?php echo esc_html( $rx_theme_gift_product->get_name() ); ?></p>
+							<p class="rx-mini-cart__item-price"><strong><?php esc_html_e( 'Free', 'rx-theme' ); ?></strong></p>
+						</div>
+					</li>
+				</ul>
+			<?php endforeach; ?>
+
 			<div class="rx-mini-cart__totals">
 				<p class="rx-mini-cart__totals-row">
 					<span><?php echo esc_html( $rx_theme_d['bundles'] ? __( 'Standard retail value', 'rx-theme' ) : __( 'Subtotal', 'rx-theme' ) ); ?></span>

@@ -2,7 +2,7 @@
 
 A running list of things we need a decision, information, or access from you on. Each item explains *why* it matters, not just what to do — feel free to forward this as-is.
 
-Updated: 2026-09-24
+Updated: 2026-09-25
 
 ---
 
@@ -41,14 +41,27 @@ While building the product-page feature tiles we noticed some imported product d
 
 ## Access / info we need from you
 
-### 10. AzuPay account setup
-For PayID this is straightforward, but **PayTo specifically requires "Checkout App V3" to be enabled** on your AzuPay account (per their own documentation) — it won't work otherwise. When you're setting up the AzuPay account, please make sure that's turned on, and send us the API sandbox credentials once you have them so we can start building and testing the payment integration.
+### 10. AzuPay test (sandbox) account
+The PayID payment option is built and working against a simulated AzuPay. To test it against AzuPay's real test system, we need an AzuPay test account, which is free and has to be requested in your business's name:
+1. **Request the test account.** Create a login at the [Azupay Help Centre](https://azupay.atlassian.net/servicedesk/customer/user/signup?destination=portals), then fill in the ["Azupay account for UAT" form](https://azupay.atlassian.net/servicedesk/customer/portal/3/group/3/create/10031). AzuPay says setup takes up to 48 hours.
+2. **On that form, give:**
+   - your company name;
+   - the **PayID domain**: the web address customers' PayIDs will end in, e.g. `pay.rxshoe.com.au`. It must be a domain you own. Tell us which one you choose;
+   - dashboard emails: yours, **plus ours**, so we can see test payments ourselves.
+3. **Ask AzuPay to switch on "Checkout App V3"** (needed for PayTo later; it won't work without it) and the **"Checkout Web App"** (gives customers a QR code to pay from another device).
+4. **Send us the test Client ID and Secret Key** once AzuPay emails them. Please share them securely (e.g. a password-manager share or a one-time secret link), not in plain email or chat.
+
+Going live later needs a separate step: a signed merchant agreement with AzuPay, and live keys. That isn't needed for testing.
 
 ### 11. Product catalog (Excel file)
 Still waiting on this — product names, descriptions, sizes, colours, and 3-5 images per product. Reminder on the image side: if you can put all the images in one shared folder (Google Drive/Dropbox) with predictable filenames (e.g. `SKU-1.jpg`, `SKU-2.jpg`), we can bulk-import everything in one pass rather than uploading each photo by hand — much faster and repeatable if we ever need to rebuild the catalog on staging.
 
 ### 12. Figma file access keeps running out — needs whoever owns the file's team
 To build each page accurately we pull exact colours/spacing/text straight from your Figma file via its API, rather than guessing off a screenshot (guessing caused a real rework earlier — see the hero section history). That access runs out fast and takes 4-5 days to reset each time — we've hit it twice already. We checked: this **isn't fixed by buying yourself a cheaper Figma seat** (we looked into the $12-15/mo Dev seat option specifically — it has the same limit as a full seat). What actually controls it is the *plan* of whichever Figma team the file itself lives in, and you mentioned you don't know who owns that. So the actual next step is finding out who does — likely whoever built the mockup — and either asking them to upgrade that team's plan, or having the file duplicated/moved into a Figma team you control and pay for. Until that's sorted, we can keep working around it using cached screenshots (slower and slightly less precise, but workable), which is what we did for the section built most recently.
+
+
+### 13. Free socks — the real product
+The free pair of socks is now added to every order automatically (one pair, free, can't be removed). It's using a stand-in product for now. Please send us: the **SKU**, a **product photo**, whether we should **track stock** for it (and how many you have) — and, if you'd like it shown, what it's normally worth (so we can show "worth $X — free"). If socks ever run out, carts simply won't include them until they're back in stock.
 
 ---
 

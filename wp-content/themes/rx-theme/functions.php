@@ -31,6 +31,7 @@ require RX_THEME_DIR . '/inc/bundle-offer.php';
 require RX_THEME_DIR . '/inc/biomechanics.php';
 require RX_THEME_DIR . '/inc/brand-tiles.php';
 require RX_THEME_DIR . '/inc/community.php';
+require RX_THEME_DIR . '/inc/home-video.php';
 require RX_THEME_DIR . '/inc/best-sellers.php';
 require RX_THEME_DIR . '/inc/bundle-builder.php';
 require RX_THEME_DIR . '/inc/mini-cart.php';

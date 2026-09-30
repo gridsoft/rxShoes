@@ -58,6 +58,11 @@ $rx_theme_percent = rx_theme_format_percent( $rx_theme_rotation['available'] );
 			</figure>
 		<?php endif; ?>
 
+		<?php
+		// The homepage video (Customizer > RX Homepage > Video), same click-to-play embed.
+		get_template_part( 'template-parts/front-page/video', null, array( 'modifier' => 'checkout' ) );
+		?>
+
 		<?php if ( $rx_theme_rotation['available'] > 0 && $rx_theme_rotation['pairs'] > 1 ) : ?>
 			<p class="rx-checkout-unlocked">
 				<?php

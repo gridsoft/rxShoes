@@ -52,4 +52,10 @@ if ( ! $rx_theme_best_sellers->have_posts() ) {
 	wp_reset_postdata();
 	wc_reset_loop();
 	?>
+
+	<div class="rx-best-sellers__footer">
+		<a class="rx-btn rx-btn--secondary rx-best-sellers__all" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">
+			<?php esc_html_e( 'View all shoes', 'rx-theme' ); ?>
+		</a>
+	</div>
 </section>

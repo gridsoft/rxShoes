@@ -31,6 +31,17 @@ function rx_theme_swap_shop_pagination(): void {
 add_action( 'init', 'rx_theme_swap_shop_pagination', 20 );
 
 /**
+ * 15 products per archive page — five full rows of the 3-column grid
+ * beside the filter sidebar (WooCommerce's default is 16, from 4×4).
+ * Set in code rather than Customize > WooCommerce > Product Catalog so
+ * it ships with the theme instead of living in one site's database.
+ */
+function rx_theme_shop_products_per_page(): int {
+	return 15;
+}
+add_filter( 'loop_shop_per_page', 'rx_theme_shop_products_per_page', 20 );
+
+/**
  * "Next" / "Prev" instead of WooCommerce's default bare arrow entities,
  * with the arrow marked decorative so screen readers hear "Next" once,
  * not "Next" then a redundant arrow glyph.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Shop sidebar markup: Best for, Brands, Price range. Data and URLs come
+ * Shop sidebar markup: Brands, Best for, Price range. Data and URLs come
  * from inc/shop-sidebar.php.
  *
  * On phones the sidebar is a "Filters" disclosure (closed unless a
@@ -51,19 +51,6 @@ $rx_theme_options = static function ( array $options ): void {
 		?>
 	</summary>
 
-	<?php if ( $rx_theme_sidebar['best'] ) : ?>
-		<section class="rx-widget rx-widget--best" aria-labelledby="rx-widget-best">
-			<header class="rx-widget__header">
-				<h2 class="rx-widget__title" id="rx-widget-best"><?php esc_html_e( 'Best for', 'rx-theme' ); ?></h2>
-				<?php if ( array() !== rx_theme_shop_selected_slugs( 'rx_best' ) ) : ?>
-					<a class="rx-widget__aside rx-widget__aside--link" href="<?php echo esc_url( rx_theme_shop_facet_reset_url( 'rx_best' ) ); ?>" rel="nofollow"><?php esc_html_e( 'Reset', 'rx-theme' ); ?></a>
-				<?php endif; ?>
-			</header>
-			<p class="rx-widget__hint"><?php esc_html_e( 'Attribute indexing for training discipline', 'rx-theme' ); ?></p>
-			<?php $rx_theme_options( $rx_theme_sidebar['best'] ); ?>
-		</section>
-	<?php endif; ?>
-
 	<?php if ( $rx_theme_sidebar['brands'] ) : ?>
 		<section class="rx-widget rx-widget--brands" aria-labelledby="rx-widget-brands">
 			<header class="rx-widget__header">
@@ -79,6 +66,19 @@ $rx_theme_options = static function ( array $options ): void {
 				</span>
 			</header>
 			<?php $rx_theme_options( $rx_theme_sidebar['brands'] ); ?>
+		</section>
+	<?php endif; ?>
+
+	<?php if ( $rx_theme_sidebar['best'] ) : ?>
+		<section class="rx-widget rx-widget--best" aria-labelledby="rx-widget-best">
+			<header class="rx-widget__header">
+				<h2 class="rx-widget__title" id="rx-widget-best"><?php esc_html_e( 'Best for', 'rx-theme' ); ?></h2>
+				<?php if ( array() !== rx_theme_shop_selected_slugs( 'rx_best' ) ) : ?>
+					<a class="rx-widget__aside rx-widget__aside--link" href="<?php echo esc_url( rx_theme_shop_facet_reset_url( 'rx_best' ) ); ?>" rel="nofollow"><?php esc_html_e( 'Reset', 'rx-theme' ); ?></a>
+				<?php endif; ?>
+			</header>
+			<p class="rx-widget__hint"><?php esc_html_e( 'Attribute indexing for training discipline', 'rx-theme' ); ?></p>
+			<?php $rx_theme_options( $rx_theme_sidebar['best'] ); ?>
 		</section>
 	<?php endif; ?>
 

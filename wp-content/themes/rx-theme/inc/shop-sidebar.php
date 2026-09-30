@@ -1,6 +1,6 @@
 <?php
 /**
- * Shop sidebar: "Best for", "Brands" and "Price range" widgets beside the
+ * Shop sidebar: "Brands", "Best for" and "Price range" widgets beside the
  * product grid on every product archive (shop, category, tag, brand,
  * search results).
  *

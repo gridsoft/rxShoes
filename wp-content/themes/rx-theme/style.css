@@ -706,6 +706,70 @@ a {
 	text-transform: uppercase;
 	margin: 0.3em 0;
 }
+/* Homepage video (template-parts/front-page/video.php): a 16:9 click-to-
+   play cover that becomes the YouTube/Vimeo player in place. */
+.rx-video {
+	max-width: var( --rx-container-max );
+	margin-inline: auto;
+	padding-block: 3em 0;
+	padding-inline: var( --rx-container-pad );
+}
+/* Checkout: inside the summary column, so no page container spacing. */
+.rx-video--checkout {
+	margin: 0 0 1rem;
+	padding: 0;
+}
+.rx-video__frame {
+	position: relative;
+	max-width: 56rem; /* ~900px wide → ~500px tall, centred */
+	margin-inline: auto;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-ink );
+}
+.rx-video__play,
+.rx-video__iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+.rx-video__play {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	background: none;
+	cursor: pointer;
+}
+.rx-video__poster {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.rx-video__icon {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 4.5rem;
+	height: 4.5rem;
+	padding-left: 0.2rem; /* optically centres the triangle */
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+	color: var( --rx-color-white );
+	box-shadow: 0 6px 24px rgba( 0, 0, 0, 0.3 );
+	transition: transform 0.15s ease;
+}
+.rx-video__play:hover .rx-video__icon,
+.rx-video__play:focus-visible .rx-video__icon {
+	transform: scale( 1.08 );
+}
+
 .rx-category-cards {
 	max-width: var( --rx-container-max );
 	margin-inline: auto;
@@ -794,12 +858,8 @@ a {
 }
 
 /* Power Rotation (template-parts/front-page/power-rotation.php).
-   Colours verified 2026-09-21 against a clean client-supplied export
-   of this exact section, cross-checked with pixel-sampling. Tag tint
-   backgrounds (30% Tier Active / Best Value) are the red/lime tokens
-   at low opacity rather than new hardcoded hex values, since that's
-   visually what they are — a light tint of the same accent colour
-   used solidly elsewhere in the same card. */
+   Minimal offer strip: heading, a white tier box and the two buttons,
+   styled to match the hero's callout and buttons. */
 .rx-rotation {
 	max-width: var( --rx-container-max );
 	margin-inline: auto;
@@ -808,227 +868,77 @@ a {
 	background: var( --rx-color-section );
 	text-align: center;
 }
-.rx-rotation__header {
-	max-width: 55em;
-	margin: 0 auto 2em;
+.rx-rotation__heading {
+	margin: 0 0 1em;
 }
-.rx-rotation__description {
-	font-family: var( --rx-font-body );
-	color: #555;
-	line-height: 1.5;
+.rx-rotation__offer {
+	max-width: 38em;
+	margin: 0 auto 1.25em;
+	padding: 1em 1.25em;
+	background: var( --rx-color-white );
+	border-radius: var( --rx-radius-md );
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.06 );
+}
+.rx-rotation__tiers {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5em 1.5em;
+}
+.rx-rotation__tier {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
 	margin: 0;
 }
-.rx-rotation__grid {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 1em;
-	text-align: left;
-	margin-bottom: 1.5em;
-}
-.rx-rotation-card {
-	background: var( --rx-color-white );
-	padding: 1.5em;
-	display: flex;
-	flex-direction: column;
-	gap: 0.75em;
-}
-.rx-rotation-card__top {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 0.5em;
-}
-.rx-rotation-card__number {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 2.2em;
-	height: 2.2em;
-	background: var( --rx-color-ink );
-	color: var( --rx-color-white );
+.rx-rotation__flag {
+	padding: 0.3em 0.6em;
+	border-radius: var( --rx-radius-sm );
 	font-family: var( --rx-font-display );
 	font-weight: 700;
-	font-size: var( --rx-text-lg );
-	border-radius: var( --rx-radius-xl ); /* 12px */
-}
-/* Tier 2's number badge is blue; tier 3's stays ink but the number
-   itself is lime, not white — confirmed from the reference export. */
-.rx-rotation-card--tier-2 .rx-rotation-card__number {
-	background: var( --rx-color-blue );
-}
-.rx-rotation-card--tier-3 .rx-rotation-card__number {
-	color: var( --rx-color-lime );
-}
-.rx-rotation-card__tags {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	gap: 0.4em;
-}
-.rx-rotation-card__tag {
-	padding: 0.3em 0.6em;
-	font-size: var( --rx-text-xs );
-	font-weight: 700;
+	font-size: 0.75rem;
+	line-height: 1.15;
 	text-transform: uppercase;
-	white-space: nowrap;
 }
-.rx-rotation-card--tier-1 .rx-rotation-card__tag--primary {
-	background: var( --rx-color-gray-200 );
-	color: var( --rx-color-ink );
-}
-.rx-rotation-card--tier-2 .rx-rotation-card__tag--primary {
+.rx-rotation__flag--tier1 {
 	background: var( --rx-color-red );
 	color: var( --rx-color-white );
 }
-.rx-rotation-card--tier-2 .rx-rotation-card__tag--secondary {
-	background: rgba( 229, 57, 53, 0.12 ); /* --rx-color-red tint */
-	color: var( --rx-color-red );
-}
-.rx-rotation-card--tier-3 .rx-rotation-card__tag--primary {
+.rx-rotation__flag--tier2 {
 	background: var( --rx-color-lime );
 	color: var( --rx-color-ink );
 }
-.rx-rotation-card--tier-3 .rx-rotation-card__tag--secondary {
-	background: rgba( 170, 253, 48, 0.15 ); /* --rx-color-lime tint */
-	color: #2e5a0a;
-}
-.rx-rotation-card__title {
+.rx-rotation__tier-text {
 	font-family: var( --rx-font-display );
-	font-weight: 800;
-	font-size: var( --rx-text-lg );
-	text-transform: uppercase;
-	margin: 0;
-}
-.rx-rotation-card__description {
-	font-family: var( --rx-font-body );
-	font-size: var( --rx-text-base );
-	color: #555;
-	line-height: 1.5;
-	margin: 0;
-	/* Grid stretches all 3 cards to match the tallest (card 3's 3-line
-	   description), but with no flex-grow that leftover height just
-	   sat unused after the status line in the shorter cards — the
-	   example box stayed pinned to its own card's natural content
-	   height instead of aligning across cards. Growing the
-	   description absorbs that slack directly above the example box,
-	   which both aligns it across all 3 cards and keeps the gap above/
-	   below it equal (the flex `gap` is already uniform either way). */
-	flex-grow: 1;
-}
-.rx-rotation-card__example {
-	display: flex;
-	flex-direction: column;
-	gap: 0.35em;
-	font-size: var( --rx-text-sm );
-	background: var( --rx-color-gray-50 );
-	padding: 0.625em;
-}
-.rx-rotation-card__example-row {
-	display: flex;
-	justify-content: space-between;
-	gap: 1em;
+	font-weight: 600;
+	font-size: var( --rx-text-xl ); /* 22px */
+	line-height: 1.2;
 	color: var( --rx-color-ink );
 }
-.rx-rotation-card__status {
-	margin: 0;
-	font-size: var( --rx-text-xs );
-	font-weight: 700;
-	text-transform: uppercase;
-	color: #555;
-}
-.rx-rotation-card--tier-2 .rx-rotation-card__status {
-	color: var( --rx-color-red );
-}
-.rx-rotation-card--tier-3 .rx-rotation-card__status {
-	color: var( --rx-color-ink );
-}
-
-/* Example calculator box */
-.rx-rotation-calc {
-	background: var( --rx-color-white );
-	padding: 1.5em;
-	display: flex;
-	flex-direction: column;
-	gap: 1.5em;
-	text-align: left;
-	max-width: 70em;
-	margin-inline: auto;
-}
-.rx-rotation-calc__heading {
-	display: flex;
-	align-items: center;
-	gap: 0.5em;
-	font-family: var( --rx-font-display );
-	font-weight: 700;
-	font-size: var( --rx-text-xl ); /* 22px, confirmed against Figma inspect */
-	line-height: 26px;
-	letter-spacing: 0.66px;
-	text-transform: uppercase;
-	margin: 0 0 0.5em;
-}
-.rx-rotation-calc__icon {
-	width: 1em;
-	height: 1em;
-	background: var( --rx-color-lime );
-	border-radius: var( --rx-radius-sm );
-	flex-shrink: 0;
-}
-.rx-rotation-calc__formula {
-	font-family: var( --rx-font-body );
-	color: #555;
-	margin: 0 0 1em;
-}
-.rx-rotation-calc__original-total {
-	/* Inherit the formula's own font/colour rather than the browser's
-	   default <s> styling — it should read as "part of the same
-	   sentence, crossed out", not a visually distinct element. */
-	font: inherit;
-	color: inherit;
-	
-}
-.rx-rotation-calc__toggle {
-	display: flex;
-	gap: 0.5em;
-}
-.rx-rotation-calc__toggle-option {
-	flex: 1;
-	padding: 0.75em 1em;
-	background: var( --rx-color-gray-100 );
-	color: var( --rx-color-ink );
-	font-family: var( --rx-font-display );
-	font-weight: 700;
-	text-align: center;
-	text-transform: uppercase;
-	font-size: 22px;
-}
-.rx-rotation-calc__toggle-option--active {
-	background: var( --rx-color-ink );
-	color: var( --rx-color-white );
-}
-.rx-rotation-calc__total {
-	background: var( --rx-color-gray-100 );
-	padding: 1.25em 1.5em;
-	text-align: center;
-}
-.rx-rotation-calc__total-label {
-	margin: 0 0 0.4em;
-	font-size: var( --rx-text-xs );
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: #555;
-}
-.rx-rotation-calc__total-price {
-	margin: 0;
-	font-family: var( --rx-font-display );
-	font-weight: 800;
-	font-size: var( --rx-text-3xl );
+.rx-rotation__tier-text--blue {
 	color: var( --rx-color-blue );
 }
-.rx-rotation-calc__save {
-	margin: 0.4em 0 0;
-	font-size: var( --rx-text-base ); /* 14px */
-	font-weight: 700;
-	color: var( --rx-color-red );
+.rx-rotation__note {
+	margin: 0.75em 0 0;
+	font-family: var( --rx-font-body );
+	font-weight: 500;
+	font-size: 0.6875rem; /* 11px */
+	color: #555;
+}
+.rx-rotation__actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+	max-width: 38em;
+	margin-inline: auto;
+}
+.rx-rotation .rx-btn {
+	justify-content: center;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl ); /* 22px */
+	padding: 1em 2.5em;
+	border-radius: var( --rx-radius-sm ); /* 2px */
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.1 );
 }
 
 /* Homepage "Different session. Different shoe." section
@@ -1156,6 +1066,24 @@ a {
 	font-size: 0.6875rem; /* 11px, default tracking: measured 348px wide in Figma */
 	text-transform: uppercase;
 	color: #555;
+}
+.rx-best-sellers__footer {
+	margin-top: 2em;
+	text-align: center;
+}
+/* Same look as the hero / Power Rotation secondary button, with a thin
+   border so the white button still reads on this section's white band. */
+.rx-best-sellers__all {
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl ); /* 22px */
+	text-transform: uppercase;
+	padding: 0.75em 2.5em;
+	border: 1px solid var( --rx-color-ink );
+	border-radius: var( --rx-radius-sm );
+}
+.rx-best-sellers__all:hover {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
 }
 
 /* Homepage "Shop by Brand" (template-parts/front-page/shop-by-brand.php).
@@ -3466,9 +3394,9 @@ body.single-product .rx-swatch--text:not( .is-active, .is-disabled, :hover ) {
 	.rx-rotation {
 		padding-block: 4em;
 	}
-	.rx-rotation__grid {
-		grid-template-columns: repeat( 3, 1fr );
-		gap: 1.5em;
+	.rx-rotation__actions {
+		flex-direction: row;
+		justify-content: center;
 	}
 	.rx-biomech__grid {
 		grid-template-columns: repeat( 3, 1fr );
@@ -3495,19 +3423,6 @@ body.single-product .rx-swatch--text:not( .is-active, .is-disabled, :hover ) {
 	.rx-community__grid {
 		grid-template-columns: repeat( 3, 1fr );
 		gap: 1.5rem;
-	}
-	.rx-rotation-calc__example {
-		flex: 1;
-	}
-	.rx-rotation-calc {
-		flex-direction: row;
-		align-items: stretch;
-	}
-	.rx-rotation-calc__total {
-		flex: 0 0 16em;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 	}
 	.rx-hero {
 		padding-block: 5em;
@@ -6132,175 +6047,413 @@ body.woocommerce-account .lost_reset_password .button {
    stats/features) and why every price here is real cart/Customizer data,
    not the mockup's own numbers. */
 body.rx-bundle-builder-page {
-	background: var( --rx-color-section );
+	background: var( --rx-color-white ); /* white per the 2026-09-29 redesign */
 }
 .rx-bundle-builder {
 	max-width: var( --rx-container-max );
 	margin-inline: auto;
 	padding: 2rem var( --rx-container-pad ) 4rem;
 }
-/* Intro (heading/description) and the tier strip sit side by side as one
-   row — the tier strip is reference material for what the intro copy is
-   promising, not a separate section. */
-.rx-bundle-builder__hero {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 1.5rem 2.5rem;
-	margin-bottom: 1.5rem;
-}
+/* Left column, per the client's Figma redesign (2026-09-29): heading,
+   3-step progress, one card per rotation slot (filled / next / locked),
+   then "Complete your rotation" picks. */
 .rx-bundle-builder__intro {
-	flex: 1 1 26rem;
-	max-width: 34rem;
+	margin-bottom: 0.5rem;
 }
 .rx-bundle-builder__heading {
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
-	margin: 0.25rem 0 0.5rem;
+	margin: 0 0 0.35rem;
 	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-3xl );
+	font-size: clamp( 2.25rem, 6vw, var( --rx-text-3xl ) );
 	font-weight: 800;
-	line-height: 1.05;
+	line-height: 1;
 	text-transform: uppercase;
 	color: var( --rx-color-ink );
-}
-.rx-bundle-builder__heading-dot {
-	flex: none;
-	width: 0.6rem;
-	height: 0.6rem;
-	border-radius: 999px;
-	background: var( --rx-color-blue );
 }
 .rx-bundle-builder__description {
 	margin: 0;
 	color: var( --rx-color-gray-600 );
 }
 
-/* Tier strip: same visual language as the single product page's rotation
-   tiers (.rx-rotation-tier), but read-only here — three real Customizer
-   tiers, highlighted by the shopper's real current pair-count. */
-.rx-bundle-builder__tiers {
+/* Step progress: one segment per slot, filled blue as pairs are added. */
+.rx-bundle-steps__list {
 	display: grid;
-	grid-template-columns: repeat( 3, 1fr );
-	flex: 1 1 24rem;
-	gap: 0.6rem;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	gap: 3px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
-.rx-bundle-tier {
-	position: relative;
+.rx-bundle-steps__step {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: 0.3rem;
-	padding: 0.65rem 0.75rem;
-	border-radius: var( --rx-radius-md );
-	background: var( --rx-color-surface );
-	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
-	text-align: center;
-}
-.rx-bundle-tier--active {
-	background: var( --rx-color-white );
-	box-shadow: inset 0 0 0 2px var( --rx-color-blue );
-}
-/* The 2-pack tier's saving is called out in red, and the 3-pack (best
-   value) tier is always styled as the highlighted choice — blue
-   background, white title, lime saving — regardless of which tier the
-   shopper's real progress currently has active. */
-.rx-bundle-tier:nth-child( 2 ) .rx-bundle-tier__note {
-	color: var( --rx-color-red );
-}
-.rx-bundle-tier--best,
-.rx-bundle-tier--best.rx-bundle-tier--active {
-	background: var( --rx-color-blue );
-	color: var( --rx-color-white );
-	box-shadow: none;
-}
-.rx-bundle-tier--best .rx-bundle-tier__title {
-	color: var( --rx-color-white );
-}
-.rx-bundle-tier--best .rx-bundle-tier__note {
-	color: var( --rx-color-lime );
-}
-.rx-bundle-tier__badge {
-	position: absolute;
-	top: -0.6rem;
-	right: 0.75rem;
-	padding: 0.15rem 0.5rem;
-	border-radius: 999px;
-	background: var( --rx-color-lime );
+	gap: 0.45rem;
 	font-size: var( --rx-text-xs );
 	font-weight: 700;
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
+	text-align: center;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-steps__step:first-child {
+	text-align: left;
 	color: var( --rx-color-ink );
 }
-.rx-bundle-tier__title {
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-lg );
-	font-weight: 700;
-	color: var( --rx-color-ink );
+.rx-bundle-steps__step:last-child {
+	text-align: right;
 }
-.rx-bundle-tier__note {
+.rx-bundle-steps__step::after {
+	content: "";
+	height: 6px;
+	background: var( --rx-color-gray-200 );
+}
+.rx-bundle-steps__step--done::after {
+	background: var( --rx-color-blue );
+}
+.rx-bundle-steps__note {
+	margin: 0.6rem 0 0;
 	font-size: var( --rx-text-sm );
+	text-align: right;
 	color: var( --rx-color-gray-600 );
 }
 
-/* Progress bar: real pair-count / slot-count, not illustrative. */
-.rx-bundle-builder__progress {
-	margin-bottom: 2rem;
+/* Slot cards. */
+.rx-bundle-builder__slots {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	margin-top: 1rem;
 }
-.rx-bundle-builder__progress-top {
+.rx-bundle-slot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 17rem;
+	padding: 1rem;
+	border: 1px dashed var( --rx-color-gray-300 );
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-white );
+	text-align: center;
+}
+.rx-bundle-slot--filled {
+	display: block;
+	border: 1px solid var( --rx-color-gray-200 );
+	background: var( --rx-color-gray-50 );
+	text-align: left;
+}
+/* Editing / adding stays inside the card's own grid cell (filled slot
+   cards and "Complete your rotation" cards alike): just the size/colour
+   pickers and the confirm button, no second image/title, stacked and
+   compacted to fit. */
+.rx-bundle-slot:has( .rx-bundle-pair__edit-toggle:checked ) {
+	border-color: var( --rx-color-blue );
+	background: var( --rx-color-white );
+}
+.rx-bundle-pair__edit-toggle:checked ~ .rx-bundle-slot__body {
+	display: none;
+}
+.rx-bundle-slot .rx-bundle-pair__edit-panel-head,
+.rx-bundle-rec .rx-bundle-pair__edit-panel-head {
+	align-items: baseline;
+}
+.rx-bundle-slot .rx-bundle-pair__edit-panel-title,
+.rx-bundle-rec .rx-bundle-pair__edit-panel-title {
+	font-size: var( --rx-text-sm );
+	text-transform: uppercase;
+}
+.rx-bundle-slot .rx-bundle-pair__edit-layout,
+.rx-bundle-rec .rx-bundle-pair__edit-layout {
+	flex-direction: column;
+	gap: 0;
+}
+.rx-bundle-slot .rx-bundle-pair__edit-media,
+.rx-bundle-rec .rx-bundle-pair__edit-media {
+	display: none;
+}
+.rx-bundle-slot .rx-variations__row + .rx-variations__row,
+.rx-bundle-rec .rx-variations__row + .rx-variations__row {
+	margin-top: 0.75rem;
+}
+.rx-bundle-slot .rx-variations__label,
+.rx-bundle-rec .rx-variations__label {
+	font-size: var( --rx-text-sm );
+}
+.rx-bundle-slot .rx-variation-swatches--colour,
+.rx-bundle-rec .rx-variation-swatches--colour {
+	gap: 0.45rem;
+}
+.rx-bundle-slot .rx-bundle-pair__edit-variations .rx-swatch-card,
+.rx-bundle-slot .rx-bundle-pair__edit-variations .rx-swatch-card__box,
+.rx-bundle-rec .rx-bundle-pair__edit-variations .rx-swatch-card,
+.rx-bundle-rec .rx-bundle-pair__edit-variations .rx-swatch-card__box {
+	width: 1.75rem;
+	height: 1.75rem;
+}
+.rx-bundle-slot .rx-variation-swatches--text,
+.rx-bundle-rec .rx-variation-swatches--text {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 3.25rem, 1fr ) );
+	gap: 0.3rem;
+}
+.rx-bundle-slot .rx-swatch--text,
+.rx-bundle-rec .rx-swatch--text {
+	min-width: 0;
+	min-height: 2.25rem;
+	padding: 0.25rem;
+	font-size: var( --rx-text-xs );
+}
+.rx-bundle-slot .rx-bundle-pair__edit-confirm .single_add_to_cart_button,
+.rx-bundle-rec .rx-bundle-pair__edit-confirm .single_add_to_cart_button {
+	padding: 0.7em 0.75em;
+	font-size: var( --rx-text-sm );
+}
+.rx-bundle-slot__type {
+	display: inline-block;
+	padding: 0.2rem 0.65rem;
+	border: 1px solid var( --rx-color-ink );
+	border-radius: 999px;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-slot__image {
+	display: block;
+	margin: 0.85rem 0;
+	padding-bottom: 0.85rem;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.rx-bundle-slot__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 11rem;
+	aspect-ratio: 4 / 3;
+	object-fit: contain;
+}
+.rx-bundle-slot__title {
+	margin: 0;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	line-height: 1.15;
+	text-transform: uppercase;
+}
+.rx-bundle-slot__title a {
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-bundle-slot__meta {
+	margin: 0.2rem 0 0;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-slot__actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 0.85rem;
+}
+.rx-bundle-slot__action {
+	flex: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.3rem;
+	padding: 0.4rem 0.5rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-white );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+	cursor: pointer;
+}
+.rx-bundle-slot__action:hover,
+.rx-bundle-slot__action:focus-visible {
+	border-color: var( --rx-color-ink );
+}
+.rx-bundle-slot__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-bottom: 1rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	color: var( --rx-color-ink );
+}
+.rx-bundle-slot__heading {
+	margin: 0 0 0.4rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-slot__text {
+	max-width: 14rem;
+	margin: 0;
+	font-size: var( --rx-text-sm );
+	line-height: 1.45;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-slot__select {
+	width: 100%;
+	max-width: 10rem;
+	margin-top: 1.1rem;
+	padding: 0.55rem 0.75rem;
+	border: 1.5px solid var( --rx-color-ink );
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-slot__select:hover,
+.rx-bundle-slot__select:focus-visible {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-bundle-slot--locked .rx-bundle-slot__icon,
+.rx-bundle-slot--locked .rx-bundle-slot__heading {
+	color: var( --rx-color-gray-300 );
+}
+.rx-bundle-slot--locked .rx-bundle-slot__text {
+	margin-top: 0.85rem;
+}
+.rx-bundle-slot__unlock {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.2rem 0.6rem;
+	border-radius: 999px;
+	background: var( --rx-color-blue );
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+
+/* "Complete your rotation" picks. */
+.rx-bundle-recs {
+	margin-top: 1.5rem;
+	padding-top: 2.5rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+}
+.rx-bundle-recs__header {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
 	justify-content: space-between;
-	gap: 0.4rem 1rem;
-	margin-bottom: 0.5rem;
+	gap: 0.25rem 1rem;
+	margin-bottom: 1.25rem;
 }
-.rx-bundle-builder__progress-label {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 0.5rem;
+.rx-bundle-recs__heading {
 	margin: 0;
 	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-md );
-	font-weight: 700;
+	font-size: 1.75rem; /* 28px */
+	font-weight: 800;
 	text-transform: uppercase;
 	color: var( --rx-color-ink );
 }
-.rx-bundle-builder__progress-note {
-	font-family: var( --rx-font-body );
+.rx-bundle-recs__note {
+	margin: 0;
 	font-size: var( --rx-text-sm );
-	font-weight: 400;
-	text-transform: none;
 	color: var( --rx-color-gray-600 );
 }
-.rx-bundle-builder__progress-next {
+.rx-bundle-recs__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+}
+.rx-bundle-rec {
+	padding: 0.85rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-gray-50 );
+}
+.rx-bundle-rec:has( .rx-bundle-pair__add-toggle:checked ) {
+	border-color: var( --rx-color-blue );
+	background: var( --rx-color-white );
+}
+.rx-bundle-pair__add-toggle:checked ~ .rx-bundle-rec__body {
+	display: none;
+}
+.rx-bundle-rec .rx-bundle-pair__add-toggle:checked ~ .rx-bundle-pair__edit-panel {
+	padding: 0;
+}
+.rx-bundle-rec__body {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+.rx-bundle-rec__image {
 	flex: none;
-	margin: 0;
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-md );
+	width: 6.5rem;
+	background: var( --rx-color-white );
+}
+.rx-bundle-rec__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	object-fit: contain;
+}
+.rx-bundle-rec__text {
+	min-width: 0;
+}
+.rx-bundle-rec__type {
+	margin: 0 0 0.15rem;
+	font-size: var( --rx-text-xs );
 	font-weight: 700;
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	letter-spacing: 0.02em;
-	color: var( --rx-color-red );
-	white-space: nowrap;
+	color: var( --rx-color-gray-600 );
 }
-.rx-bundle-builder__progress-bar {
-	display: block;
-	height: 0.5rem;
-	border-radius: 999px;
-	background: var( --rx-color-gray-200 );
-	overflow: hidden;
+.rx-bundle-rec__title {
+	margin: 0 0 0.3rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	font-weight: 700;
+	line-height: 1.15;
+	text-transform: uppercase;
 }
-.rx-bundle-builder__progress-bar span {
-	display: block;
-	height: 100%;
-	border-radius: inherit;
-	background: linear-gradient( 90deg, var( --rx-color-blue ), var( --rx-color-lime ) );
+.rx-bundle-rec__title a {
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-bundle-rec__excerpt {
+	margin: 0 0 0.5rem;
+	font-size: var( --rx-text-sm );
+	line-height: 1.45;
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-rec__add {
+	font-size: 0.6875rem; /* 11px */
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+	cursor: pointer;
+}
+.rx-bundle-rec__add:hover {
+	text-decoration: underline;
 }
 
+@media ( min-width: 34em ) {
+	.rx-bundle-builder__slots {
+		grid-template-columns: repeat( 3, 1fr );
+	}
+	.rx-bundle-recs__grid {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
 /* Main two-column layout: pair cards + sticky order summary. */
 .rx-bundle-builder__layout {
 	display: flex;
@@ -6320,14 +6473,6 @@ body.rx-bundle-builder-page {
 	border-radius: var( --rx-radius-lg );
 	background: var( --rx-color-white );
 	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
-}
-.rx-bundle-pair--empty {
-	padding: 0;
-	overflow: hidden;
-	background: var( --rx-color-surface );
-}
-.rx-bundle-pair--empty:has( .rx-bundle-pair__add-toggle:checked ) {
-	background: var( --rx-color-white );
 }
 .rx-bundle-pair__head {
 	display: flex;
@@ -6519,9 +6664,6 @@ body.rx-bundle-builder-page {
 .rx-bundle-pair__edit-toggle:checked ~ .rx-bundle-pair__edit-panel {
 	display: block;
 }
-.rx-bundle-pair__add-toggle:checked ~ .rx-bundle-pair__empty-grid {
-	display: none;
-}
 .rx-bundle-pair__add-toggle:checked ~ .rx-bundle-pair__edit-panel {
 	display: block;
 	padding: 1.25rem;
@@ -6640,409 +6782,159 @@ body.rx-bundle-builder-page {
 	cursor: not-allowed;
 }
 
-/* Empty slot: a full-width status bar, then an "empty slot" card side by
-   side with a curated recommendation (when one exists). */
-.rx-bundle-pair__status-bar {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.5rem 1rem;
-}
-.rx-bundle-pair__status-title {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.45rem;
-	padding: 0.6rem 1.25rem;
-	background: var( --rx-color-ink );
-	color: var( --rx-color-white );
-	font-size: var( --rx-text-sm );
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
-}
-.rx-bundle-pair__status-bar--urgent .rx-bundle-pair__status-title {
-	background: var( --rx-color-red );
-}
-.rx-bundle-pair__status-note {
-	padding-right: 1.25rem;
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-pair__empty-grid {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	padding: 1.25rem;
-	background: var( --rx-color-surface );
-}
-.rx-bundle-pair__vault {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5rem;
-	padding: 2rem 1.5rem;
-	text-align: center;
-	border-radius: var( --rx-radius-md );
-	background: var( --rx-color-white );
-	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
-}
-.rx-bundle-pair__vault .rx-btn {
-	text-transform: uppercase;
-	letter-spacing: 0.02em;
-}
-.rx-bundle-pair__vault-icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 2.75rem;
-	height: 2.75rem;
-	margin-bottom: 0.35rem;
-	border-radius: var( --rx-radius-md );
-	background: #e4ebff;
-	color: var( --rx-color-blue );
-	transition: background-color 0.15s ease;
-}
-.rx-bundle-pair__vault-icon:hover {
-	background: var( --rx-color-blue );
-	color: var( --rx-color-white );
-}
-.rx-bundle-pair__vault-heading {
-	margin: 0;
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-lg );
-	font-weight: 700;
-	text-transform: uppercase;
-	color: var( --rx-color-ink );
-}
-.rx-bundle-pair__vault-text {
-	margin: 0 0 0.5rem;
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-pair__recommendation {
-	min-width: 0; /* flex item: without this, a long real product name/price forces the box wider than its share of the row instead of wrapping inside it. */
-	padding: 1.25rem;
-	border-radius: var( --rx-radius-md );
-	background: var( --rx-color-white );
-	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
-}
-.rx-bundle-pair__recommendation-head {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.2rem 0.4rem;
-	margin-bottom: 0.75rem;
-}
-.rx-bundle-pair__recommendation-label {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.4rem;
-	margin: 0;
-	font-size: var( --rx-text-sm );
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.02em;
-	color: var( --rx-color-blue );
-}
-.rx-bundle-pair__recommendation-dot {
-	width: 0.5rem;
-	height: 0.5rem;
-	border-radius: 999px;
-	background: var( --rx-color-lime );
-}
-.rx-bundle-pair__recommendation-matches {
-	margin: 0;
-	font-size: var( --rx-text-xs );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-pair__recommendation-row {
-	display: flex;
-	align-items: flex-start;
-	gap: 0.85rem;
-	margin-bottom: 0.75rem;
-}
-.rx-bundle-pair__recommendation-row .rx-bundle-pair__image {
-	flex: none;
-	width: 5.5rem;
-	height: 5.5rem;
-}
-.rx-bundle-pair__recommendation-text {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	min-width: 0;
-	flex: 1;
-}
-.rx-bundle-pair__recommendation-title-row {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 0.75rem;
-}
-.rx-bundle-pair__recommendation-row .rx-bundle-pair__title {
-	min-width: 0;
-	flex: 1;
-	margin: 0;
-	font-size: var( --rx-text-md );
-	overflow-wrap: break-word;
-}
-.rx-bundle-pair__recommendation-price {
-	flex: none;
-	font-weight: 700;
-	color: var( --rx-color-ink );
-	white-space: nowrap;
-}
-.rx-bundle-pair__recommendation-excerpt {
-	margin: 0;
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-pair__recommendation-deal {
-	margin: 0;
-	font-size: var( --rx-text-sm );
-	font-weight: 700;
-	color: var( --rx-color-red );
-}
-.rx-bundle-pair__recommendation-cta {
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	gap: 0.4rem;
-	width: 100%;
-	white-space: normal; /* overrides .rx-btn's nowrap — this button's label includes the real product name, which can be long */
-	text-align: center;
-	line-height: 1.3;
-}
-.rx-bundle-pair__recommendation-cta svg {
-	flex: none;
-	margin-top: 0.15em;
-}
-
-.rx-bundle-builder__info {
-	padding: 1.5rem;
-	border-radius: var( --rx-radius-lg );
-	background: var( --rx-color-ink );
-	color: var( --rx-color-white );
-}
-.rx-bundle-builder__info h2 {
-	margin: 0 0 0.5rem;
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-xl );
-	text-transform: uppercase;
-}
-.rx-bundle-builder__info p {
-	margin: 0;
-	color: var( --rx-color-gray-300 );
-}
-
-/* Order summary sidebar. */
+/* Order summary sidebar (client's Figma redesign, 2026-09-29): real
+   subtotal / bundle discount / total, a "next tier" nudge, checkout. */
 .rx-bundle-builder__summary {
-	padding: 1.5rem;
-	border-radius: var( --rx-radius-lg );
-	background: var( --rx-color-white );
+	padding: 2rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-gray-50 );
 	align-self: start;
 }
-.rx-bundle-builder__summary-eyebrow {
-	margin: 0 0 0.15rem;
-	font-size: var( --rx-text-xs );
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	color: var( --rx-color-gray-600 );
-}
 .rx-bundle-builder__summary-heading {
-	margin: 0 0 1rem;
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-xl );
-	text-transform: uppercase;
-	color: var( --rx-color-ink );
-}
-.rx-bundle-builder__summary-subheading {
-	margin: 1.25rem 0 0.25rem;
-	font-size: var( --rx-text-sm );
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
-	color: var( --rx-color-ink );
-}
-.rx-bundle-summary-note {
-	margin: 0 0 0.5rem;
-	font-size: var( --rx-text-xs );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-summary-empty {
-	margin: 0;
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-summary-list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-.rx-bundle-summary-list--muted {
-	opacity: 0.7;
-}
-.rx-bundle-summary-list__item {
-	padding: 0.5rem 0;
+	margin: 0 0 1.25rem;
+	padding-bottom: 1.25rem;
 	border-bottom: 1px solid var( --rx-color-gray-200 );
-	font-size: var( --rx-text-sm );
-}
-.rx-bundle-summary-list__row {
-	display: flex;
-	justify-content: space-between;
-	gap: 0.75rem;
-}
-.rx-bundle-summary-list__name {
-	color: var( --rx-color-ink );
-	font-weight: 600;
-}
-.rx-bundle-summary-list__price {
-	flex: none;
-	font-weight: 600;
-	color: var( --rx-color-ink );
-}
-.rx-bundle-summary-list__variant {
-	margin: 0.15rem 0 0;
-	font-size: var( --rx-text-xs );
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-summary-list__item--projected {
-	border-bottom-style: dashed;
-}
-.rx-bundle-summary-list__item--projected .rx-bundle-summary-list__name,
-.rx-bundle-summary-list__item--projected .rx-bundle-summary-list__variant {
-	color: var( --rx-color-blue );
-}
-.rx-bundle-summary-list__projected-dot {
-	display: inline-block;
-	width: 0.45rem;
-	height: 0.45rem;
-	margin-right: 0.3rem;
-	border-radius: 999px;
-	background: var( --rx-color-blue );
-}
-.rx-bundle-summary-totals__row {
-	display: flex;
-	justify-content: space-between;
-	gap: 0.75rem;
-	margin: 1rem 0 0;
-	padding-top: 1rem;
-	border-top: 1px solid var( --rx-color-gray-300 );
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-ink );
-}
-
-/* Order-breakdown box — real "if the next slot is filled" preview when a
-   recommendation exists (see $rx_theme_show_projected in
-   page-build-a-bundle.php), otherwise real committed-only totals. Never
-   a real applied checkout discount — see that file's own top comment. */
-.rx-bundle-summary-box {
-	margin-top: 1rem;
-	padding: 1rem;
-	border-radius: var( --rx-radius-md );
-	background: var( --rx-color-surface );
-	box-shadow: inset 0 0 0 1px var( --rx-color-gray-200 );
-}
-.rx-bundle-summary-box__row {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 0.75rem;
-	margin: 0 0 0.5rem;
-	font-size: var( --rx-text-sm );
-	color: var( --rx-color-ink );
-}
-.rx-bundle-summary-box__tier {
-	display: inline-block;
-	margin-left: 0.35rem;
-	padding: 0.1rem 0.4rem;
-	border-radius: var( --rx-radius-sm );
-	background: var( --rx-color-blue );
-	font-size: var( --rx-text-xs );
-	font-weight: 700;
-	color: var( --rx-color-white );
-}
-.rx-bundle-summary-box__savings {
-	flex: none;
-	font-weight: 700;
-	color: var( --rx-color-red );
-}
-.rx-bundle-summary-box__total {
-	margin-top: 0.75rem;
-	padding-top: 0.75rem;
-	border-top: 1px solid var( --rx-color-gray-200 );
-}
-.rx-bundle-summary-box__total-label {
-	display: block;
-	font-size: var( --rx-text-xs );
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
-	color: var( --rx-color-gray-600 );
-}
-.rx-bundle-summary-box__total-amount {
-	display: block;
 	font-family: var( --rx-font-display );
 	font-size: var( --rx-text-2xl );
 	font-weight: 800;
+	line-height: 1;
+	text-transform: uppercase;
 	color: var( --rx-color-ink );
 }
-.rx-bundle-summary-box__total-savings {
-	display: block;
+.rx-bundle-summary__group {
+	margin-bottom: 1.25rem;
+	padding-bottom: 1.25rem;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.rx-bundle-summary__group-title {
+	margin: 0 0 0.6rem;
 	font-size: var( --rx-text-sm );
 	font-weight: 700;
-	color: var( --rx-color-red );
-}
-
-.rx-bundle-builder__cta {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.4rem;
-	margin-top: 1.25rem;
-	padding: 0.9em 1em;
-	text-align: center;
-	font-family: var( --rx-font-display );
-	font-size: var( --rx-text-md );
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	letter-spacing: 0.02em;
+	color: var( --rx-color-blue );
 }
-.rx-bundle-builder__cta-badge {
-	padding: 0.2rem 0.6rem;
-	border-radius: var( --rx-radius-sm );
-	background: var( --rx-color-lime );
-	font-size: var( --rx-text-xs );
-	letter-spacing: 0.02em;
+.rx-bundle-summary__group--other .rx-bundle-summary__group-title {
+	margin-bottom: 0.2rem;
 	color: var( --rx-color-ink );
 }
-.rx-bundle-summary-trust {
+.rx-bundle-summary__group-note {
+	margin: 0 0 0.6rem;
+	font-size: var( --rx-text-sm );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary__list {
 	display: flex;
 	flex-direction: column;
-	gap: 0.3rem;
-	margin: 1rem 0 0;
+	gap: 0.6rem;
+	margin: 0;
 	padding: 0;
 	list-style: none;
-	font-size: var( --rx-text-xs );
+}
+.rx-bundle-summary__item {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	font-size: var( --rx-text-base );
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary__item-name small {
+	display: block;
+	font-size: var( --rx-text-sm );
 	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary__item-price {
+	flex: none;
+	font-weight: 600;
+}
+.rx-bundle-summary__row,
+.rx-bundle-summary__total {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin: 0 0 1rem;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary__row--muted {
+	color: var( --rx-color-gray-300 );
+}
+.rx-bundle-summary__row--discount {
+	color: var( --rx-color-red );
+}
+.rx-bundle-summary__total {
+	margin: 1.25rem 0 0;
+	padding-top: 1.25rem;
+	border-top: 1px solid var( --rx-color-gray-200 );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.rx-bundle-summary__list + .rx-bundle-summary__nudge {
+	margin-top: 1rem;
+}
+.rx-bundle-summary__nudge {
+	padding: 1rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-white );
 	text-align: center;
+}
+.rx-bundle-summary__nudge-text {
+	margin: 0 0 0.6rem;
+	font-size: var( --rx-text-base );
+	color: var( --rx-color-gray-600 );
+}
+.rx-bundle-summary__nudge-text strong {
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary__nudge-bar {
+	display: block;
+	height: 4px;
+	background: var( --rx-color-gray-200 );
+}
+.rx-bundle-summary__nudge-bar span {
+	display: block;
+	height: 100%;
+	background: var( --rx-color-ink );
+}
+.rx-bundle-summary__nudge-tier {
+	margin: 0.6rem 0 0;
+	font-size: var( --rx-text-sm );
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+}
+.rx-bundle-summary__checkout {
+	display: block;
+	margin-top: 2rem;
+	padding: 1rem;
+	background: var( --rx-color-gray-600 );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-align: center;
+	text-transform: uppercase;
+	color: var( --rx-color-white );
+}
+.rx-bundle-summary__checkout--active {
+	background: var( --rx-color-blue );
+}
+.rx-bundle-summary__checkout:hover,
+.rx-bundle-summary__checkout:focus-visible {
+	background: var( --rx-color-ink );
+	color: var( --rx-color-white );
+}
+.rx-bundle-summary__fineprint {
+	margin: 0.9rem 0 0;
+	font-size: var( --rx-text-sm );
+	text-align: center;
+	color: var( --rx-color-gray-600 );
 }
 
 @media ( min-width: 34em ) {
-	.rx-bundle-pair__empty-grid {
-		flex-direction: row;
-	}
-	.rx-bundle-pair__vault {
-		flex: 1;
-	}
-	.rx-bundle-pair__vault-text {
-		max-width: 22rem;
-	}
-	.rx-bundle-pair__recommendation {
-		flex: 1.6;
-	}
 	.rx-bundle-pair__edit-layout {
 		flex-direction: row;
 	}

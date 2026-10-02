@@ -40,6 +40,7 @@ require RX_THEME_DIR . '/inc/cart-page.php';
 require RX_THEME_DIR . '/inc/checkout.php';
 require RX_THEME_DIR . '/inc/my-account.php';
 require RX_THEME_DIR . '/inc/order-details.php';
+require RX_THEME_DIR . '/inc/emails.php';
 
 /**
  * Theme setup: supports, menus, image sizes.

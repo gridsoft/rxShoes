@@ -69,6 +69,10 @@ $rx_theme_header_bundles  = rx_theme_bundle_offer_is_active();
 
 <header id="site-header" class="rx-header">
 	<div class="rx-header__row">
+		<button type="button" class="rx-menu-toggle" aria-controls="rx-mobile-nav" aria-expanded="false" aria-label="<?php esc_attr_e( 'Open menu', 'rx-theme' ); ?>">
+			<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+		</button>
+
 		<a class="rx-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'RX Shoe — home', 'rx-theme' ); ?>">
 			<span class="rx-logo__mark">RX<span class="rx-logo__slash">/</span></span>
 			<span class="rx-logo__word">
@@ -114,3 +118,5 @@ $rx_theme_header_bundles  = rx_theme_bundle_offer_is_active();
 		</div>
 	</div>
 </header>
+
+<?php get_template_part( 'template-parts/header/mobile-nav', null, array( 'bundles' => $rx_theme_header_bundles ) ); ?>

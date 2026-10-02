@@ -163,5 +163,36 @@ function rx_theme_category_badge_label( WP_Term $term ): string {
  * @param WP_Term $term Category term.
  */
 function rx_theme_category_thumbnail_id( WP_Term $term ): int {
-	return absint( get_term_meta( $term->term_id, 'thumbnail_id', true ) );
+	$thumbnail_id = absint( get_term_meta( $term->term_id, 'thumbnail_id', true ) );
+
+	if ( $thumbnail_id ) {
+		return $thumbnail_id;
+	}
+
+	// No category image set yet (Products > Categories > Thumbnail): use the
+	// photo of the category's first in-stock product, so the card is never
+	// an empty grey box. Cached for a day; a set thumbnail always wins.
+	$cache_key = 'rx_cat_thumb_' . $term->term_id;
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return (int) $cached;
+	}
+
+	$product_ids = wc_get_products(
+		array(
+			'status'       => 'publish',
+			'limit'        => 1,
+			'category'     => array( $term->slug ),
+			'stock_status' => 'instock',
+			'orderby'      => 'menu_order',
+			'order'        => 'ASC',
+			'return'       => 'ids',
+		)
+	);
+	$fallback    = $product_ids ? (int) get_post_thumbnail_id( $product_ids[0] ) : 0;
+
+	set_transient( $cache_key, $fallback, DAY_IN_SECONDS );
+
+	return $fallback;
 }

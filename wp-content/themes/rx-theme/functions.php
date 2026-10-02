@@ -97,6 +97,19 @@ function rx_theme_enqueue_assets(): void {
 
 	wp_enqueue_style( 'rx-theme-tokens', RX_THEME_URI . '/assets/css/tokens.css', array(), file_exists( $tokens_file ) ? (string) filemtime( $tokens_file ) : RX_THEME_VERSION );
 	wp_enqueue_style( 'rx-theme-style', get_stylesheet_uri(), array( 'rx-theme-tokens' ), file_exists( $style_file ) ? (string) filemtime( $style_file ) : RX_THEME_VERSION );
+
+	// Mobile / tablet menu panel (template-parts/header/mobile-nav.php).
+	$nav_file = RX_THEME_DIR . '/assets/js/mobile-nav.js';
+	wp_enqueue_script(
+		'rx-theme-mobile-nav',
+		RX_THEME_URI . '/assets/js/mobile-nav.js',
+		array(),
+		file_exists( $nav_file ) ? (string) filemtime( $nav_file ) : RX_THEME_VERSION,
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'rx_theme_enqueue_assets' );
 

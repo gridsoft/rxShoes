@@ -156,7 +156,14 @@ endif;
 					<?php if ( $rx_theme_is_colour ) : ?>
 						<button type="button" class="rx-swatch-card" data-value="<?php echo esc_attr( $rx_theme_term->slug ); ?>" data-name="<?php echo esc_attr( $rx_theme_term->name ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $rx_theme_term->name ); ?>">
 							<span class="rx-swatch-card__box" style="<?php echo esc_attr( rx_theme_colour_swatch_style( $rx_theme_term ) . 'color:' . rx_theme_colour_swatch_label_color( $rx_theme_term ) . ';' ); ?>">
-								<?php echo esc_html( $rx_theme_term->name ); ?>
+								<?php
+								// The name goes inside the box only when there's no colour to show
+								// (placeholder pattern); otherwise it's just the name underneath —
+								// long multi-colour names don't fit in the box.
+								if ( ! rx_theme_colour_swatch_hexes( $rx_theme_term )[0] ) {
+									echo esc_html( $rx_theme_term->name );
+								}
+								?>
 							</span>
 							<span class="rx-swatch-card__name"><?php echo esc_html( $rx_theme_term->name ); ?></span>
 						</button>

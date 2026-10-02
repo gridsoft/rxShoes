@@ -163,6 +163,173 @@ a {
 	margin-left: auto;
 }
 
+/* Mobile / tablet menu (template-parts/header/mobile-nav.php,
+   assets/js/mobile-nav.js): ☰ button left of the logo, panel sliding in
+   from the left. Desktop (62em+) has the inline nav + search instead. */
+.rx-menu-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-left: -0.5rem;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var( --rx-color-ink );
+	cursor: pointer;
+}
+.rx-header__row .rx-logo {
+	margin-right: auto;
+}
+html.rx-no-scroll {
+	overflow: hidden;
+}
+.rx-mobile-nav-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 998;
+	background: rgba( 17, 17, 17, 0.45 );
+}
+.rx-mobile-nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	display: flex;
+	flex-direction: column;
+	width: min( 22rem, 88vw );
+	height: 100vh;
+	height: 100dvh;
+	background: var( --rx-color-white );
+	box-shadow: 8px 0 32px rgba( 0, 0, 0, 0.18 );
+	visibility: hidden;
+	transform: translateX( -100% );
+	transition: transform 0.22s ease, visibility 0s linear 0.22s;
+}
+.rx-mobile-nav.is-open {
+	visibility: visible;
+	transform: none;
+	transition: transform 0.22s ease, visibility 0s;
+}
+.rx-mobile-nav__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem var( --rx-container-pad );
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+}
+.rx-mobile-nav__close {
+	display: inline-flex;
+	width: 2.5rem;
+	height: 2.5rem;
+	align-items: center;
+	justify-content: center;
+	margin-right: -0.5rem;
+	border: 0;
+	background: none;
+	color: var( --rx-color-ink );
+	cursor: pointer;
+}
+.rx-mobile-nav__body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 1rem var( --rx-container-pad ) 2rem;
+}
+.rx-mobile-nav__search input {
+	width: 100%;
+	padding: 0.75rem 0.9rem;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-md );
+	font-size: 1rem; /* 16px: stops iOS zooming into the field */
+}
+.rx-mobile-nav__list {
+	margin: 1rem 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-mobile-nav__list a {
+	display: block;
+	padding: 0.85rem 0;
+	border-bottom: 1px solid var( --rx-color-gray-200 );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-xl );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-mobile-nav__list .current-menu-item > a {
+	color: var( --rx-color-blue );
+}
+.rx-mobile-nav .rx-mobile-nav__bundle {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding: 0.9rem 1rem;
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-lg );
+	text-transform: uppercase;
+}
+.rx-mobile-nav__heading {
+	margin: 1.75rem 0 0.5rem;
+	font-size: var( --rx-text-xs );
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --rx-color-blue );
+}
+.rx-mobile-nav__brands {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.4rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-mobile-nav__brands a {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 0.75rem;
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	font-family: var( --rx-font-display );
+	font-size: var( --rx-text-md );
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-mobile-nav__brands span {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-xs );
+	font-weight: 600;
+	color: var( --rx-color-gray-600 );
+}
+.rx-mobile-nav__account {
+	margin: 1.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-mobile-nav__account a {
+	display: block;
+	padding: 0.6rem 0;
+	font-weight: 600;
+	color: var( --rx-color-ink );
+}
+@media ( min-width: 62em ) {
+	.rx-menu-toggle,
+	.rx-mobile-nav,
+	.rx-mobile-nav-backdrop {
+		display: none;
+	}
+	.rx-header__row .rx-logo {
+		margin-right: 0;
+	}
+}
+
 /* Logo */
 .rx-logo {
 	display: inline-flex;
@@ -530,7 +697,8 @@ a {
 	padding-inline: var( --rx-container-pad );
 	background-color: var( --rx-color-section ); /* exact Figma section fill */
 	background-image:
-		linear-gradient( to right, #fff 0%, rgba( 255, 255, 255, 0.8 ) 50%, rgba( 255, 255, 255, 0 ) 100% ),
+		/* Phones: the text column covers most of the photo, so a stronger wash keeps it readable. */
+		linear-gradient( to right, rgba( 255, 255, 255, 0.95 ) 0%, rgba( 255, 255, 255, 0.85 ) 60%, rgba( 255, 255, 255, 0.6 ) 100% ),
 		var( --rx-hero-image-sm, var( --rx-hero-image, none ) );
 	background-size: cover;
 	background-position: center;
@@ -665,6 +833,7 @@ a {
    "Build a Bundle" button hasn't been measured node-by-node yet and
    may turn out to use different sizing. */
 .rx-hero .rx-btn {
+	justify-content: center; /* the bundle button is inline-flex; centre its label like the white one */
 	font-family: var( --rx-font-display );
 	font-size: var( --rx-text-xl ); /* 22px */
 	padding: 1em 2.5em;
@@ -2106,6 +2275,11 @@ a {
 	overflow-wrap: anywhere;
 }
 .rx-swatch-card__name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2; /* long colourway names ("EXPRESSIVE PINK/BLACK/FTWR WHITE") stay two lines */
+	overflow: hidden;
+	overflow-wrap: anywhere;
 	font-size: var( --rx-text-xs );
 	font-weight: 600;
 	line-height: 1.3;
@@ -2208,10 +2382,11 @@ a {
 }
 .rx-rotation-box__ribbon {
 	position: absolute;
-	top: 0.9rem;
-	right: -2.25rem;
-	width: 9rem;
+	top: 2.35rem;
+	right: -3.45rem;
+	width: 13rem; /* wide enough that "Australian exclusive" isn't cut off by the corner */
 	padding: 0.2rem 0;
+	white-space: nowrap;
 	background: var( --rx-color-lime );
 	font-size: var( --rx-text-xs );
 	font-weight: 700;
@@ -2240,6 +2415,7 @@ a {
 }
 .rx-rotation-box__description {
 	margin: 0 0 1rem;
+	padding-right: 3rem; /* clear of the corner ribbon on narrow screens */
 	font-size: var( --rx-text-sm );
 	color: var( --rx-color-gray-600 );
 }
@@ -4016,6 +4192,12 @@ body.woocommerce-cart .woocommerce-info .button {
 .cart-collaterals {
 	max-width: 26rem;
 }
+/* Tablet (one column, but wider than the box): totals sit right, under the items. */
+@media ( min-width: 30em ) and ( max-width: 61.99em ) {
+	.cart-collaterals {
+		margin-left: auto;
+	}
+}
 .cart_totals {
 	padding: 1.25rem;
 	border-radius: var( --rx-radius-lg );
@@ -4197,6 +4379,11 @@ body.woocommerce-cart .woocommerce-info {
 }
 .rx-cart-card .rx-bundle-pair__type-badge {
 	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding-inline: 0.35rem;
+	letter-spacing: 0; /* "WEIGHTLIFTING" fits the narrow phone thumbnail */
 }
 .rx-cart-card .product-name {
 	grid-area: info;
@@ -7534,6 +7721,13 @@ body.rx-bundle-builder-page {
 }
 .rx-mini-cart__cta--dark {
 	background: var( --rx-color-ink );
+}
+/* Phones: one line per button ("Proceed to checkout — $199.00 AUD"). */
+@media ( max-width: 29.99em ) {
+	.rx-mini-cart__cta {
+		font-size: 1.1rem;
+		letter-spacing: 0.02em;
+	}
 }
 .rx-mini-cart__cta--blue {
 	min-height: calc( 3.125rem * var( --rx-mc-scale ) );

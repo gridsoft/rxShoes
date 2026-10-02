@@ -71,9 +71,30 @@ if ( $rx_theme_is_bundle ) {
 	);
 }
 
+/*
+ * Colour => photo map, so picking a colour swaps the gallery photo right
+ * away (assets/js/variation-swatches.js). WooCommerce itself only swaps
+ * it once colour AND size are chosen, and on products with over 30
+ * variations it doesn't even have the variation data in the page until
+ * then. One entry per colour: the first variation of that colour with a
+ * photo, in the same shape WooCommerce's own variation data uses.
+ */
+$rx_theme_colour_images = array();
+foreach ( $product->get_children() as $rx_theme_child_id ) {
+	$rx_theme_colour_slug = (string) get_post_meta( $rx_theme_child_id, 'attribute_pa_colour', true );
+	$rx_theme_image_id    = (int) get_post_thumbnail_id( $rx_theme_child_id );
+
+	if ( '' !== $rx_theme_colour_slug && $rx_theme_image_id && ! isset( $rx_theme_colour_images[ $rx_theme_colour_slug ] ) ) {
+		$rx_theme_colour_images[ $rx_theme_colour_slug ] = array(
+			'image_id' => $rx_theme_image_id,
+			'image'    => wc_get_product_attachment_props( $rx_theme_image_id ),
+		);
+	}
+}
+
 do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
-<form class="variations_form cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
+<form class="variations_form cart"<?php echo $rx_theme_colour_images ? ' data-rx-colour-images="' . esc_attr( wp_json_encode( $rx_theme_colour_images ) ) . '"' : ''; ?> action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $rx_theme_variations_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above with wc_esc_json(). ?>">
 	<?php do_action( 'woocommerce_before_variations_form' ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>

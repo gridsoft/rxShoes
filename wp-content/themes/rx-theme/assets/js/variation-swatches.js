@@ -93,6 +93,42 @@
 		$form.on( 'woocommerce_update_variation_values reset_data found_variation', syncAll );
 
 		syncAll();
+		initColourImages( $form );
+	}
+
+	/*
+	 * Show the chosen colour's photo as soon as a colour is picked, before
+	 * a size is. WooCommerce only swaps the photo for a complete
+	 * colour + size match; with just a colour chosen it resets the photo
+	 * (reset_image). Running after that reset, this puts the colour's own
+	 * photo (data-rx-colour-images, printed by add-to-cart/variable.php)
+	 * back through WooCommerce's own image updater, so the slider,
+	 * thumbnail and zoom all follow as they do for a full match — including
+	 * jumping the slider back to the first slide (where the colour's photo
+	 * goes) when the shopper had browsed to another thumbnail.
+	 */
+	function initColourImages( $form ) {
+		var images = $form.data( 'rx-colour-images' );
+		var $colour = $form.find( 'select[name="attribute_pa_colour"]' );
+
+		if ( ! images || ! $colour.length || typeof $form.wc_variations_image_update !== 'function' ) {
+			return;
+		}
+
+		function showColourImage() {
+			var entry = images[ $colour.val() ];
+
+			if ( entry && entry.image && entry.image.src ) {
+				$form.wc_variations_image_update( entry );
+
+				if ( typeof $form.wc_maybe_trigger_slide_position_reset === 'function' ) {
+					$form.wc_maybe_trigger_slide_position_reset( entry );
+				}
+			}
+		}
+
+		$form.on( 'reset_image', showColourImage );
+		showColourImage();
 	}
 
 	$( function () {

@@ -2446,6 +2446,159 @@ body.single-product .rx-swatch--text:not( .is-active, .is-disabled, :hover ) {
 .rx-single-product__gallery .woocommerce-product-gallery__image img {
 	border-radius: var( --rx-radius-md );
 }
+
+/* Gallery slider (WooCommerce's FlexSlider, enabled in functions.php):
+   the selected photo on top, a scrolling strip of thumbnails underneath
+   (five visible on desktop), prev/next arrows over the photo. The base
+   rules below are the ones WooCommerce's own stylesheet would supply —
+   that stylesheet is disabled for this theme. */
+.rx-single-product__gallery .woocommerce-product-gallery {
+	position: relative;
+}
+.rx-single-product__gallery .woocommerce-product-gallery__wrapper {
+	margin: 0;
+	padding: 0;
+}
+.rx-single-product__gallery .flex-viewport {
+	border-radius: var( --rx-radius-sm );
+}
+.rx-single-product__gallery .flex-control-thumbs {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: calc( ( 100% - 2rem ) / 5 );
+	gap: 0.5rem;
+	margin: 0.75rem 0 0;
+	padding: 0 0 0.75rem; /* gap between the thumbnails and the scrollbar */
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: thin;
+	list-style: none;
+}
+.rx-single-product__gallery .flex-control-thumbs li {
+	scroll-snap-align: start;
+}
+.rx-single-product__gallery .flex-control-thumbs img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1;
+	border: 1px solid var( --rx-color-gray-200 );
+	border-radius: var( --rx-radius-sm );
+	background: var( --rx-color-surface );
+	object-fit: cover;
+	opacity: 0.7;
+	cursor: pointer;
+	transition: opacity 0.15s ease;
+}
+.rx-single-product__gallery .flex-control-thumbs img:hover,
+.rx-single-product__gallery .flex-control-thumbs img.flex-active {
+	opacity: 1;
+}
+.rx-single-product__gallery .flex-control-thumbs img.flex-active {
+	border: 2px solid var( --rx-color-ink );
+}
+.rx-single-product__gallery .flex-direction-nav {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.rx-single-product__gallery .flex-direction-nav a {
+	position: absolute;
+	top: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-top: calc( var( --rx-gallery-arrow-top, 50% ) - 1.25rem ); /* % of width: half the square photo */
+	border-radius: 999px;
+	background: var( --rx-color-white );
+	box-shadow: 0 2px 8px rgba( 0, 0, 0, 0.12 );
+	font-size: 0; /* hides the "Previous image" text; kept for screen readers via aria */
+	color: var( --rx-color-ink );
+	text-decoration: none;
+}
+.rx-single-product__gallery .flex-direction-nav a::before {
+	content: '';
+	width: 0.6rem;
+	height: 0.6rem;
+	border-top: 2px solid currentColor;
+	border-left: 2px solid currentColor;
+}
+.rx-single-product__gallery .flex-direction-nav .flex-prev {
+	left: 0.75rem;
+}
+.rx-single-product__gallery .flex-direction-nav .flex-prev::before {
+	margin-left: 0.2rem;
+	transform: rotate( -45deg );
+}
+.rx-single-product__gallery .flex-direction-nav .flex-next {
+	right: 0.75rem;
+}
+.rx-single-product__gallery .flex-direction-nav .flex-next::before {
+	margin-right: 0.2rem;
+	transform: rotate( 135deg );
+}
+.rx-single-product__gallery .flex-direction-nav .flex-disabled {
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+/* Fullscreen button (WooCommerce's lightbox trigger, top right of the
+   photo — the badges sit top left) and hover zoom. */
+.rx-single-product__gallery .woocommerce-product-gallery__trigger {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: var( --rx-radius-md );
+	background: var( --rx-color-white );
+	box-shadow: 0 2px 8px rgba( 0, 0, 0, 0.12 );
+	color: var( --rx-color-ink );
+	text-decoration: none;
+	transition: transform 0.15s ease;
+}
+.rx-single-product__gallery .woocommerce-product-gallery__trigger span {
+	display: none; /* WooCommerce's 🔍 emoji; the icon below replaces it */
+}
+.rx-single-product__gallery .woocommerce-product-gallery__trigger::before {
+	content: '';
+	width: 1.1rem;
+	height: 1.1rem;
+	background: currentColor;
+	-webkit-mask: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/%3E%3C/svg%3E" ) center / contain no-repeat;
+	mask: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/%3E%3C/svg%3E" ) center / contain no-repeat;
+}
+.rx-single-product__gallery .woocommerce-product-gallery__trigger:hover,
+.rx-single-product__gallery .woocommerce-product-gallery__trigger:focus-visible {
+	transform: scale( 1.06 );
+}
+.rx-single-product__gallery .woocommerce-product-gallery__image {
+	position: relative;
+	cursor: zoom-in;
+}
+.rx-single-product__gallery .zoomImg {
+	background: var( --rx-color-surface );
+}
+
+/* Full-screen lightbox (PhotoSwipe): site ink backdrop, larger arrows. */
+.pswp__bg {
+	background: var( --rx-color-ink );
+}
+.pswp__counter {
+	font-family: var( --rx-font-body );
+	font-size: var( --rx-text-base );
+	opacity: 0.85;
+}
+.pswp__caption__center {
+	text-align: center;
+	font-family: var( --rx-font-body );
+}
 /* Performance dispersion profile (template-parts/product/performance-
    profile.php), in the PDP summary under "Best for", per the client's
    reference: ratings as five dots + "N/5" (two columns when there's
@@ -2823,23 +2976,12 @@ body.single-product .rx-swatch--text:not( .is-active, .is-disabled, :hover ) {
 		object-fit: contain;
 	}
 	.rx-single-product__gallery .flex-control-thumbs {
-		display: grid;
-		grid-template-columns: repeat( 5, minmax( 0, 1fr ) );
+		grid-auto-columns: calc( ( 100% - 4rem ) / 5 );
 		gap: 1rem;
-		margin: 1rem 0 0;
-		padding: 0;
-		list-style: none;
+		margin-top: 1rem;
 	}
-	.rx-single-product__gallery .flex-control-thumbs img {
-		width: 100%;
-		aspect-ratio: 1;
-		border: 1px solid var( --rx-color-gray-200 );
-		background: var( --rx-color-surface );
-		object-fit: cover;
-		cursor: pointer;
-	}
-	.rx-single-product__gallery .flex-control-thumbs img.flex-active {
-		border: 2px solid var( --rx-color-ink );
+	.rx-single-product__gallery .woocommerce-product-gallery {
+		--rx-gallery-arrow-top: 37.4%; /* half of the 684x512 photo box */
 	}
 
 	.rx-single-product__brand {

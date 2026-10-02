@@ -197,8 +197,9 @@ function rx_theme_shop_pa_size_slugs_matching( string $gender, string $value ): 
 	}
 
 	$quoted  = preg_quote( $value, '/' );
+	// Men's also covers US-with-EU labels ("7 US (40 EU)", LUXIAOJUN's sizing).
 	$pattern = 'men' === $gender
-		? "/^M{$quoted}(\\s+W\\d+(\\.\\d+)?)?$/i"
+		? "/^(M{$quoted}(\\s+W\\d+(\\.\\d+)?)?|{$quoted} US \\(.*\\))$/i"
 		: "/^(M\\d+(\\.\\d+)?\\s+)?W{$quoted}$/i";
 
 	$slugs = array();

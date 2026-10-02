@@ -39,6 +39,87 @@ function rx_theme_enqueue_variation_swatches_script(): void {
 add_action( 'wp_enqueue_scripts', 'rx_theme_enqueue_variation_swatches_script' );
 
 /**
+ * No WooCommerce "Sale!" flash on the product page: the gallery already
+ * carries the theme's own badges (spec, rotation eligible), and the plain
+ * flash rendered as stray unstyled text over them.
+ */
+function rx_theme_remove_single_sale_flash(): void {
+	remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
+}
+add_action( 'init', 'rx_theme_remove_single_sale_flash' );
+
+/**
+ * Previous / next arrows on the main gallery image, alongside the
+ * thumbnail strip.
+ *
+ * @param array<string,mixed> $options FlexSlider options.
+ * @return array<string,mixed>
+ */
+function rx_theme_gallery_slider_options( array $options ): array {
+	$options['directionNav'] = true;
+	$options['prevText']     = __( 'Previous image', 'rx-theme' );
+	$options['nextText']     = __( 'Next image', 'rx-theme' );
+
+	return $options;
+}
+add_filter( 'woocommerce_single_product_carousel_options', 'rx_theme_gallery_slider_options' );
+
+/**
+ * Put every product's variation data in the page (WooCommerce's default
+ * stops at 30 variations and fetches a variation only once colour AND
+ * size are chosen). With the data present, picking a colour greys out
+ * the sizes that colour doesn't come in, or has sold out of, straight
+ * away — the catalogue has models with 100-200+ colour/size variations.
+ *
+ * @return int Variation count up to which the data is embedded.
+ */
+function rx_theme_ajax_variation_threshold(): int {
+	return 400;
+}
+add_filter( 'woocommerce_ajax_variation_threshold', 'rx_theme_ajax_variation_threshold' );
+
+/**
+ * Sold-out colour/size combinations are unavailable, not just labelled
+ * "Out of stock" after being picked: WooCommerce then greys that size out
+ * for the chosen colour (the swatch shows its "Sold out" state).
+ *
+ * @param bool                 $active    Whether the variation can be chosen.
+ * @param WC_Product_Variation $variation Variation.
+ */
+function rx_theme_variation_active_only_in_stock( $active, $variation ): bool {
+	return $active && $variation->is_in_stock();
+}
+add_filter( 'woocommerce_variation_is_active', 'rx_theme_variation_active_only_in_stock', 10, 2 );
+
+/**
+ * Full-screen lightbox behaviour: a quick fade in/out (WooCommerce's
+ * default is an instant cut), a near-opaque backdrop so the photo
+ * stands alone, looping between photos, and swipe down to close.
+ *
+ * @param array<string,mixed> $options PhotoSwipe options.
+ * @return array<string,mixed>
+ */
+function rx_theme_gallery_lightbox_options( array $options ): array {
+	return array_merge(
+		$options,
+		array(
+			'bgOpacity'             => 0.94,
+			'showHideOpacity'       => true,
+			'showAnimationDuration' => 250,
+			'hideAnimationDuration' => 200,
+			'loop'                  => true,
+			'closeOnVerticalDrag'   => true,
+			'fullscreenEl'          => true,
+			'zoomEl'                => true,
+			'counterEl'             => true,
+			'tapToClose'            => false,
+			'clickToCloseNonZoomable' => false,
+		)
+	);
+}
+add_filter( 'woocommerce_single_product_photoswipe_options', 'rx_theme_gallery_lightbox_options' );
+
+/**
  * Colour always shown before size, regardless of the order the product's
  * own attributes happen to be saved in — the older dev-test products
  * (built by a different script, before the import command existed) have

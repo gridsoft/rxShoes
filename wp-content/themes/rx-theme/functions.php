@@ -58,6 +58,14 @@ function rx_theme_setup(): void {
 	// WooCommerce integration. Gallery features off for now — custom PDP
 	// gallery arrives with the Figma build (Milestone 3).
 	add_theme_support( 'woocommerce' );
+	// Product page gallery (WooCommerce's own, styled in style.css): main
+	// image with a thumbnail strip underneath, hover zoom, and a
+	// full-screen lightbox (PhotoSwipe — swipe / pinch-zoom on phones,
+	// arrow keys and Esc on desktop). Zoom also provides the lightbox's
+	// fullscreen button; WooCommerce only adds that button with zoom on.
+	add_theme_support( 'wc-product-gallery-slider' );
+	add_theme_support( 'wc-product-gallery-zoom' );
+	add_theme_support( 'wc-product-gallery-lightbox' );
 
 	register_nav_menus(
 		array(
